@@ -14,3 +14,5 @@ The above command builds a file 'build/libs/api.war' which can be deployed to a 
 ## Running
 
 To run this application, you will need a Jakarta EE server. The server will come with instructions that will tell you how to deploy the api.war file built by this application
+
+The application can often be deployed by uploading api.war to the server's builtin web management interface - both TomEE and Glassfish support this. 
