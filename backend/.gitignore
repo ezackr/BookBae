@@ -1,0 +1,8 @@
+*.class
+*.jar
+*.war
+hs_err_pid*
+.gradle
+/build/
+!gradle-wrapper.jar
+.gradletasknamecache

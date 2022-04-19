@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+war.baseName = "api"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'jakarta.ws.rs:jakarta.ws.rs-api:3.0.0'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider:2.13.0'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    //TODO: connection pool
+    //testCompile 'junit:junit:4.12'
+}
