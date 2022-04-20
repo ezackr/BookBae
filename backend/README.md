@@ -19,4 +19,4 @@ The application can often be deployed by uploading api.war to the server's built
 
 ## User Authentication
 
-As written, the application uses JWT - the client gets a JWT token from the /login endpoint and 
+As written, the application uses JWT - the client gets a JWT token from the /login endpoint and places it in the Authorization header for all subsequent API calls.
