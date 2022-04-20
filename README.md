@@ -2,9 +2,10 @@
 
 ## Project Overview:
    
-INSERT OVERVIEW
+Our goal is to create a dating/friendship app that matches people based on their literary preferences, aptly named “BookBae.” A user’s profile on BookBae includes all the normal aspects of a dating profile, in addition to a “bookshelf.” A bookshelf is a collection of books the user selects to represent themselves. This lets users showcase their interests and personality in a unique way.
+We intend for BookBae to be swipe-based. Users are prompted to swipe on profiles of other users that like similar genres and meet their set parameters. Like most swipe-based dating apps, swiping right conveys interest, while swiping left conveys disinterest. If two users both swipe right on each other, they are "matched" and can begin a conversation in-app. Users are encouraged to draw on their similar literary preferences to start their conversation.
   
-  
+<br/>
 ## Layout:
 
 The repository is primarily organized by functionality, with the main sections being frontend, backend, and database. A short description of each internal folder is provided below:
@@ -29,7 +30,7 @@ The *Prototypes* folder stores semi-relevant code that demonstrates a core proje
 
 The *Reports* folder stores the weekly project report markdown files. These reports provide status updates for the TAs and outlines the next project meeting. Additionally, the reports have weekly goals, progress reports, and future goals for next week.
   
-  
+<br/>
 ## Other:
 
 ### Branch Protection:
