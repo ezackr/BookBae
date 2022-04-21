@@ -14,12 +14,9 @@ public class RestApplication extends Application {
     private BasicDataSource dataSource;
 
     public RestApplication() {
-        try {
-            Class.forName("org.h2.Driver");
-        } catch (ClassNotFoundException e) {} //TODO: replace this with a real driver
-        
         this.dataSource = new BasicDataSource();
         this.dataSource.setUrl("jdbc:h2:mem:db1");
+        this.dataSource.setDriverClassName("org.h2.Driver"); //testme`
         // could initialize the testing db here
         // but in a real-world situation would be loading a pre-configured database
         //TODO: find out how to get runtime configuration info to do tests
