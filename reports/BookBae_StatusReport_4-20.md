@@ -8,7 +8,7 @@ This Week (4/13 - 4/20)
 
 Next Week (4/21 - 4/27)
 - Next week we will complete the git setup deliverable. We will meet during class time on Thursday (4/21) to receive feedback from Ardi and begin working on the writeup. We will then meet once during the weekend to continue working on the writeup, focusing on the areas that require us to reach a consensus. On Tuesday we will meet to share our progress on our individual milestones.  
-
+ 
 **Individual Contributions**
 
 Last Week
