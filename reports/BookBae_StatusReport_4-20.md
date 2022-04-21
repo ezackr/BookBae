@@ -18,3 +18,9 @@ This Week
 - Elliot created an app to demo the Google Book API he found. Isabelle created a Figma prototype of our UI following Friday's meeting. Emily drafted an ER diagram and worked with CSE advisors to secure an Android phone. Joshua created a rest application to demo the server. Helena identified some ways to implement the chat feature. 
 
 Next Week
+- Everyone: Test Figma prototype with friends and family to get feedback; Participate in meetings; Work towards git set up writeup; Complete Project Description section
+- Isabelle: Refine figma prototype
+- Emily: Finalize ER diagram; Complete Software Architecture section
+- Helena: Complete Software Design section
+- Joshua: Prototype the api that the server provides to the client
+- Elliot: Complete Coding Style Guidelines section
