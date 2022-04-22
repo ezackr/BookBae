@@ -22,7 +22,7 @@ The *Backend* folder stores all code relevant to the backend of the project. Thi
 
 ### Database:
 
-The *Database* folder holds relevant code for the app to interact with user data. This includes a SQL file to create the database, files connecting to the database, and more.
+The *Database* folder holds SQL to manipulate the database. This includes a SQL file to create the database, files to test the database, and more.
 
 ### Prototypes:
 
