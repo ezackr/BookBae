@@ -10,8 +10,12 @@ import jakarta.inject.Inject;
 @Path("/user")
 public class UserResource {
     
-    @Inject
     private RestApplication application;
+
+    @Inject
+    public UserResource(RestApplication application) {
+        this.application = application;
+    }
 
     @GET @Produces("text/plain")
     public String helloWorld() {

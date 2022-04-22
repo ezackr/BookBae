@@ -17,6 +17,10 @@ dependencies {
     implementation 'com.h2database:h2:2.1.212' //TODO: get a real database driver, not H2
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
-    //testCompile 'junit:junit:4.12'
-    //TODO: test things
+    testImplementation 'com.h2database:h2:2.1.212'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+}
+
+test {
+    useJUnitPlatform()
 }
