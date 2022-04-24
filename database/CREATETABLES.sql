@@ -17,7 +17,7 @@ CREATE TABLE user_info
 
 CREATE TABLE prompt
 (
-    id INT NOT NULL,
+    id TINYINT NOT NULL,
     question VARCHAR(100) NOT NULL,
     answer VARCHAR(250) NOT NULL,
     user_id UNIQUEIDENTIFIER NOT NULL,
@@ -27,9 +27,9 @@ CREATE TABLE prompt
 
 CREATE TABLE preference
 (
-    low_target_age CHAR(1) NOT NULL,
-    high_target_age CHAR(1) NOT NULL,
-    within_x_miles INT NOT NULL,
+    low_target_age TINYINT NOT NULL,
+    high_target_age TINYINT NOT NULL,
+    within_x_miles SMALLINT NOT NULL,
     user_id UNIQUEIDENTIFIER NOT NULL,
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES user_info(id)
@@ -78,7 +78,7 @@ CREATE TABLE likes
 
 CREATE TABLE chat
 (
-    id INT NOT NULL,
+    id UNIQUEIDENTIFIER NOT NULL,
     user_id1 UNIQUEIDENTIFIER NOT NULL,
     user_id2 UNIQUEIDENTIFIER NOT NULL,
     PRIMARY KEY (id),
@@ -91,7 +91,7 @@ CREATE TABLE chat_line
     id INT NOT NULL,
     line_text TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
-    chat_id INT NOT NULL,
+    chat_id UNIQUEIDENTIFIER NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (chat_id) REFERENCES chat(id)
 );
