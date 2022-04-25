@@ -9,7 +9,6 @@ CREATE TABLE user_info
     email VARCHAR(254) NOT NULL,
     zipcode CHAR(5) NOT NULL,
     bio VARCHAR(500) NOT NULL,
-    profile_photo_url VARCHAR NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (phone_num),
     UNIQUE (email)
@@ -45,13 +44,6 @@ CREATE TABLE target_gender
 CREATE TABLE user_book
 (
     book_id VARCHAR(12) NOT NULL,
-    user_id UNIQUEIDENTIFIER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user_info(id)
-);
-
-CREATE TABLE photo
-(
-    url VARCHAR(500) NOT NULL,
     user_id UNIQUEIDENTIFIER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user_info(id)
 );
