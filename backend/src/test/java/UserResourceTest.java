@@ -10,13 +10,13 @@ public class UserResourceTest {
     void helloWorldTest() {
         RestApplication application = new MockRestApplication();
         UserResource resource = new UserResource(application);
-        assertEquals(resource.helloWorld(), "hi!");
+        assertEquals("hi!", resource.helloWorld());
     }
 
     @Test
     void getUserTest() {
         RestApplication application = new MockRestApplication();
         UserResource resource = new UserResource(application);
-        assertEquals(resource.getUser(), "{}");
+        assertEquals("{}", resource.getUser());
     }
 }
