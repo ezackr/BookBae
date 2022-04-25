@@ -23,5 +23,5 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    systemProperty 'bookbae.testServer', project.findProperty('testServer') ?: ''
+    systemProperty 'bookbae.testServer', project.findProperty('testServer')
 }
