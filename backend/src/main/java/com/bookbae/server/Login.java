@@ -9,6 +9,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
+import com.bookbae.server.json.LoginData;
 
 
 @Path("/login")

@@ -1,4 +1,4 @@
-package com.bookbae.server;
+package com.bookbae.server.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
