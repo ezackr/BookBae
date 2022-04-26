@@ -29,12 +29,12 @@ public class JWTSecurityFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext ctx) throws IOException {
         String authHeader = ctx.getHeaderString("Authorization");
         if(authHeader == null) {
-            Response reauth = Response.status(401).build();
+            Response reauth = Response.status(Response.Status.UNAUTHORIZED).build();
             ctx.abortWith(reauth);
             return;
         }
         if(authHeader.length() <= "Bearer ".length()) {
-            Response forbidden = Response.status(403).build();
+            Response forbidden = Response.status(Response.Status.FORBIDDEN).build();
             ctx.abortWith(forbidden);
             return;
         }
@@ -46,11 +46,11 @@ public class JWTSecurityFilter implements ContainerRequestFilter {
                 new JWTSecurityContext(ctx.getSecurityContext(), new JWSBackedPrincipal(jws.getBody()));
             ctx.setSecurityContext(newCtx);
         } catch (ExpiredJwtException e) {
-            Response reauth = Response.status(401).build();
+            Response reauth = Response.status(Response.Status.UNAUTHORIZED).build();
             ctx.abortWith(reauth);
             return;
         } catch (JwtException e) {
-            Response forbidden = Response.status(403).build();
+            Response forbidden = Response.status(Response.Status.FORBIDDEN).build();
             ctx.abortWith(forbidden);
             return;
         }

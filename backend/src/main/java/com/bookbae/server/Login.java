@@ -24,7 +24,7 @@ public class Login {
             String jws = Jwts.builder().setSubject(data.getUsername()).signWith(Login.key).compact();
             return Response.ok(jws).build();
         } else {
-            return Response.status(403).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 }
