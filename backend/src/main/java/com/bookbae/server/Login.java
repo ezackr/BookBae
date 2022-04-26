@@ -10,6 +10,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
+import java.sql.Connection;
+import java.sql.SQLException;
 import com.bookbae.server.json.AccountCredentials;
 
 
@@ -40,7 +42,7 @@ public class Login {
             //        return Response.ok(jws).build();
             //TODO: return JSON object
             // else Response.status(Response.Status.FORBIDDEN).build()
-            return Response.ok().build;
+            return Response.ok().build();
         } catch (SQLException e) {
             return Response.serverError().build();
         }

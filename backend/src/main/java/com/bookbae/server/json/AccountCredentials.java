@@ -18,7 +18,6 @@ public class AccountCredentials {
         try {
             userid = UUID.fromString(username);
         } catch (IllegalArgumentException e) {
-            userid = "";
             isValid = false;
         }
     }
