@@ -9,7 +9,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
-import com.bookbae.server.json.LoginData;
+import com.bookbae.server.json.AccountCredentials;
 
 
 @Path("/login")
@@ -19,7 +19,7 @@ public class Login {
     @POST
     @Consumes("application/json")
     @Produces("text/plain")
-    public Response tryLogin(LoginData data) {
+    public Response tryLogin(AccountCredentials data) {
         if(1 == 1) { //TODO: check username/password stored in data
             String jws = Jwts.builder().setSubject(data.getUsername()).signWith(Login.key).compact();
             return Response.ok(jws).build();
