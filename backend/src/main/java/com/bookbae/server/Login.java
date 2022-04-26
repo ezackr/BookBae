@@ -5,7 +5,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.Response;
-import com.bookbae.server.LoginData;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;

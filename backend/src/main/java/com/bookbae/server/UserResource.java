@@ -6,6 +6,7 @@ import jakarta.ws.rs.GET;
 import java.sql.Connection;
 import java.sql.SQLException;
 import jakarta.inject.Inject;
+import com.bookbae.server.security.SecuredResource;
 
 @Path("/user")
 public class UserResource {
@@ -28,6 +29,7 @@ public class UserResource {
         return "{}";
     }
 
+    @SecuredResource
     @Produces("application/json")
     @GET @Path("/bookshelf")
     public String getBookshelf() {
