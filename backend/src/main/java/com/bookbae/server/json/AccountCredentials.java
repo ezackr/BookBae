@@ -1,19 +1,26 @@
 package com.bookbae.server.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.UUID;
 
 public class AccountCredentials {
-    private String username;
+    private UUID userid;
     private String password; //TODO: PBKDF2 or something?
+    private boolean isValid = true;
 
     @JsonProperty("username")
     public String getUsername() {
-        return username;
+        return userid.toString();
     }
 
     @JsonProperty("username")
     public void setUsername(String username) {
-        this.username = username;
+        try {
+            userid = UUID.fromString(username);
+        } catch (IllegalArgumentException e) {
+            userid = "";
+            isValid = false;
+        }
     }
 
     @JsonProperty("password")
@@ -24,5 +31,9 @@ public class AccountCredentials {
     @JsonProperty("password")
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isValid() {
+        return this.isValid;
     }
 }
