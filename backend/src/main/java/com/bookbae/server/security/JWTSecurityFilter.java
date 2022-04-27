@@ -1,10 +1,12 @@
 package com.bookbae.server.security;
 
+import com.bookbae.server.RestApplication;
 import jakarta.ws.rs.ext.Provider;
-import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.Response;
@@ -23,7 +25,8 @@ import io.jsonwebtoken.JwtException;
 @SecuredResource
 public class JWTSecurityFilter implements ContainerRequestFilter {
 
-    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    @Inject
+    private RestApplication application;
 
     @Override
     public void filter(ContainerRequestContext ctx) throws IOException {
@@ -39,9 +42,10 @@ public class JWTSecurityFilter implements ContainerRequestFilter {
             return;
         }
         String authString = authHeader.substring("Bearer ".length());
+
         try {
             Jws<Claims> jws = Jwts.parserBuilder()
-                .setSigningKey(key).build().parseClaimsJws(authString);
+                .setSigningKey(application.getKey()).build().parseClaimsJws(authString);
             SecurityContext newCtx = 
                 new JWTSecurityContext(ctx.getSecurityContext(), new JWSBackedPrincipal(jws.getBody()));
             ctx.setSecurityContext(newCtx);

@@ -18,12 +18,13 @@ import com.bookbae.server.json.LoginResponse;
 
 @Path("/login")
 public class Login {
-    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private SecretKey key;
     private RestApplication application;
 
     @Inject
     public Login(RestApplication application) {
         this.application = application;
+        this.key = application.getKey();
     }
     
     @POST
@@ -45,7 +46,7 @@ public class Login {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         String jws = Jwts.builder().setSubject(data.getUsername())
-                         .signWith(Login.key).compact();
+                         .signWith(this.key).compact();
         return Response.ok(new LoginResponse(jws)).build();
     }
 }
