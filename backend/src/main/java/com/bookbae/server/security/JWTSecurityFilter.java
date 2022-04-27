@@ -50,12 +50,10 @@ public class JWTSecurityFilter implements ContainerRequestFilter {
                 new JWTSecurityContext(ctx.getSecurityContext(), new JWSBackedPrincipal(jws.getBody()));
             ctx.setSecurityContext(newCtx);
         } catch (ExpiredJwtException e) {
-            Response reauth = Response.status(Response.Status.UNAUTHORIZED).build();
-            ctx.abortWith(reauth);
+            ctx.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;
         } catch (JwtException e) {
-            Response forbidden = Response.status(Response.Status.FORBIDDEN).build();
-            ctx.abortWith(forbidden);
+            ctx.abortWith(Response.status(Response.Status.FORBIDDEN).build());
             return;
         }
     }
