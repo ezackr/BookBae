@@ -32,13 +32,11 @@ public class JWTSecurityFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext ctx) throws IOException {
         String authHeader = ctx.getHeaderString("Authorization");
         if(authHeader == null) {
-            Response reauth = Response.status(Response.Status.UNAUTHORIZED).build();
-            ctx.abortWith(reauth);
+            ctx.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;
         }
         if(authHeader.length() <= "Bearer ".length()) {
-            Response forbidden = Response.status(Response.Status.FORBIDDEN).build();
-            ctx.abortWith(forbidden);
+            ctx.abortWith(Response.status(Response.Status.FORBIDDEN).build());
             return;
         }
         String authString = authHeader.substring("Bearer ".length());
