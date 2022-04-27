@@ -27,10 +27,6 @@ public class RestApplication extends Application {
         rand.nextBytes(keyBytes);
     }
 
-    public String getString() {
-        return "never gonna give u up";
-    }
-
     public Connection getConnection() throws SQLException {
         return this.dataSource.getConnection();
     }

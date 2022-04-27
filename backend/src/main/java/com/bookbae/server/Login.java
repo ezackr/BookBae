@@ -42,7 +42,7 @@ public class Login {
         } catch (SQLException e) {
             return Response.serverError().build();
         }
-        if(1==1) { //TODO: if generated hash is not equal to stored hash
+        if(1==2) { //TODO: if generated hash is not equal to stored hash or if user doesn't exist
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         String jws = Jwts.builder().setSubject(data.getUsername())

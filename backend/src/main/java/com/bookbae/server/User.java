@@ -2,11 +2,16 @@ package com.bookbae.server;
 
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.GET;
 import java.sql.Connection;
 import java.sql.SQLException;
 import jakarta.inject.Inject;
+import java.util.UUID;
 import com.bookbae.server.security.SecuredResource;
+import com.bookbae.server.json.UserResponse;
 
 @Path("/user")
 public class User {
@@ -18,48 +23,25 @@ public class User {
         this.application = application;
     }
 
-    @GET @Produces("text/plain")
-    public String helloWorld() {
-        return "hi!";
-    }
-
-    @Produces("application/json")
-    @GET @Path("/settings")
-    public String getUser() {
-        return "{}";
-    }
-
     @SecuredResource
+    @GET
     @Produces("application/json")
-    @GET @Path("/bookshelf")
-    public String getBookshelf() {
-        return "{}";
-    }
-
-    @Produces("application/json")
-    @GET @Path("/matches")
-    public String getMatches() {
-        return "{}";
-    }
-
-    @Produces("application/json")
-    @GET @Path("/application")
-    public String getApplication() {
-        return "{ \"application\": \"" + this.application.getString() + "\", " + "\"id\": \"" + this.application.toString() + "\"}";
-    }
-
-    @Produces("application/json")
-    @GET @Path("/database")
-    public String getDatabase() {
-        String str;
+    public Response getUser(@Context SecurityContext ctx) {
+        if(ctx == null) {
+            // Shouldn't happen
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        UserResponse resp = new UserResponse();
         try {
             Connection conn = this.application.getConnection();
-            //TODO: SQL stuff
+            //ctx.getUserPrincipal().getName(); gets the UUID
+            //Then use the UUID to look up an entry in the table?
+            //Then populate the resp object with the values in this row?
             conn.close();
-            str = "{\"connection\": \"" + conn.toString() + "\"}";
         } catch (SQLException e) {
-            str = "{\"connection\": \"none\", \"error\": \"" + e.toString() + "\"}";
+            return Response.serverError().build();
         }
-        return str;
+        resp.setUserId(UUID.fromString(ctx.getUserPrincipal().getName()));
+        return Response.ok(resp).build();
     }
 }
