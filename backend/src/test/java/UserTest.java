@@ -1,22 +1,22 @@
 import org.junit.jupiter.api.Test;
 
 import com.bookbae.server.RestApplication;
-import com.bookbae.server.UserResource;
+import com.bookbae.server.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserResourceTest {
+public class UserTest {
     @Test
     void helloWorldTest() {
         RestApplication application = new MockRestApplication();
-        UserResource resource = new UserResource(application);
+        User resource = new User(application);
         assertEquals("hi!", resource.helloWorld());
     }
 
     @Test
     void getUserTest() {
         RestApplication application = new MockRestApplication();
-        UserResource resource = new UserResource(application);
+        User resource = new User(application);
         assertEquals("{}", resource.getUser());
     }
 }

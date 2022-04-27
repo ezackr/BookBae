@@ -9,12 +9,12 @@ import jakarta.inject.Inject;
 import com.bookbae.server.security.SecuredResource;
 
 @Path("/user")
-public class UserResource {
+public class User {
     
     private RestApplication application;
 
     @Inject
-    public UserResource(RestApplication application) {
+    public User(RestApplication application) {
         this.application = application;
     }
 
