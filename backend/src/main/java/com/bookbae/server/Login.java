@@ -12,7 +12,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
 import java.sql.Connection;
 import java.sql.SQLException;
-import com.bookbae.server.json.AccountCredentials;
+import com.bookbae.server.json.LoginRequest;
+import com.bookbae.server.json.LoginResponse;
 
 
 @Path("/login")
@@ -27,27 +28,24 @@ public class Login {
     
     @POST
     @Consumes("application/json")
-    @Produces("text/plain")
-    public Response tryLogin(AccountCredentials data) {
+    @Produces("application/json")
+    public Response tryLogin(LoginRequest data) {
         if(!data.isValid()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         try {
             Connection conn = this.application.getConnection();
             // Statement s = conn.getStatement();
-            // select user_id hash salt from table
-            // use data.passowrd() + salt to get tryHash
-            // if they are equal, log in to the server
-            //     -> String jws = Jwts.builder().setSubject(data.getUsername()).signWith(Login.key).compact();
-            //        return Response.ok(jws).build();
-            //TODO: return JSON object
-            // else Response.status(Response.Status.FORBIDDEN).build()
-            return Response.ok().build();
+            // select user_id hash salt from table using username (which is a uniqueidentifier)
+            // use data.passowrd() + salt to generate hash
         } catch (SQLException e) {
             return Response.serverError().build();
         }
-
-        
-        
+        if(1==1) { //TODO: if generated hash is not equal to stored hash
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        String jws = Jwts.builder().setSubject(data.getUsername())
+                         .signWith(Login.key).compact();
+        return Response.ok(new LoginResponse(jws)).build();
     }
 }

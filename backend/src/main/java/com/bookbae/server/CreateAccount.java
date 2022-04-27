@@ -6,7 +6,6 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.core.Response;
 import jakarta.inject.Inject;
-import com.bookbae.server.json.AccountCredentials;
 import com.bookbae.server.json.AccountCreationRequest;
 import com.bookbae.server.json.AccountCreationResponse;
 import java.util.UUID;
