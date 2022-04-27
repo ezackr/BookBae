@@ -18,7 +18,7 @@ public class JWSBackedPrincipal implements Principal {
     }
 
     public String toString() {
-        return "{\"username\": \"" + subject + "\"}";
+        return "username: " + subject;
     }
 
     public boolean equals(Object obj) {
