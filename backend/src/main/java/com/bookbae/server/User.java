@@ -64,6 +64,7 @@ public class User {
         } catch (SQLException e) {
             return Response.serverError().build();
         }
+        resp.setUserId(UUID.fromString(ctx.getUserPrincipal().getName()));
         return Response.ok(resp).build();
     }
 }
