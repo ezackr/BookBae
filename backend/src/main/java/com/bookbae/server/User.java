@@ -6,13 +6,16 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PUT;
 import java.sql.Connection;
 import java.sql.SQLException;
 import jakarta.inject.Inject;
 import java.util.UUID;
 import com.bookbae.server.security.SecuredResource;
 import com.bookbae.server.json.UserResponse;
+import com.bookbae.server.json.UserRequest;
 
+@SecuredResource
 @Path("/user")
 public class User {
     
@@ -23,12 +26,12 @@ public class User {
         this.application = application;
     }
 
-    @SecuredResource
     @GET
     @Produces("application/json")
     public Response getUser(@Context SecurityContext ctx) {
         if(ctx == null) {
             // Shouldn't happen
+            // TODO: log this condition
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         UserResponse resp = new UserResponse();
@@ -42,6 +45,25 @@ public class User {
             return Response.serverError().build();
         }
         resp.setUserId(UUID.fromString(ctx.getUserPrincipal().getName()));
+        return Response.ok(resp).build();
+    }
+
+    @PUT
+    @Produces("application/json")
+    public Response putUser(@Context SecurityContext ctx, UserRequest req) {
+        if(ctx == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        UserResponse resp = new UserResponse(req);
+        try {
+            Connection conn = this.application.getConnection();
+            // Do the same as above but update the stuff
+            // Return the updated version
+            // Don't update the UUID that would be a bad bug
+            conn.close();
+        } catch (SQLException e) {
+            return Response.serverError().build();
+        }
         return Response.ok(resp).build();
     }
 }

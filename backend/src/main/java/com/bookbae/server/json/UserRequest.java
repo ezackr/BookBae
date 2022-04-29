@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserResponse {
+public class UserRequest {
     protected UUID userid;
     protected String name;
     protected String preferredGender;
@@ -16,20 +16,6 @@ public class UserResponse {
     protected String email;
     protected String zipcode;
 
-    public UserResponse() {}
-
-    public UserResponse(UserRequest req) {
-        this.userid = req.userid;
-        this.name = req.name;
-        this.preferredGender = req.preferredGender;
-        this.favGenre = req.favGenre;
-        this.birthday = req.birthday;
-        this.bio = req.bio;
-        this.phoneNumber = req.phoneNumber;
-        this.email = req.email;
-        this.zipcode = req.zipcode;
-    }
-
     @JsonProperty("username")
     public String getUserId() {
         return userid.toString();
@@ -38,6 +24,15 @@ public class UserResponse {
     @JsonProperty("username")
     public void setUserId(UUID userid) {
         this.userid = userid;
+    }
+
+    @JsonProperty("username")
+    public void setUserId(String userid) {
+        try {
+            this.userid = UUID.fromString(userid);
+        } catch (Exception e) {
+            this.userid = null;
+        }
     }
 
     @JsonProperty("name")
