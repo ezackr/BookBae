@@ -30,13 +30,15 @@ public class CreateAccount {
             Connection conn = this.application.getConnection();
             // generate salt
             // hash password from req with salt 
-            // Generate UUID somehow
-            // insert new row (?) into login_data that has the UUID, hash, salt
+            // insert new row (?) into login_data that has the hash and salt
+            // Get UUID from newly created row
             // Possibly populate user_info as well
             conn.close();
         } catch (SQLException e) {
             return Response.serverError().build();
         }
+        // Get UUID from above and return it
+        // Possibly return more stuff in accountcreationresponse if frontend team requests it
         return Response.ok(new AccountCreationResponse(UUID.randomUUID())).build();
     }
 }

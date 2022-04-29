@@ -38,7 +38,8 @@ public class Login {
             Connection conn = this.application.getConnection();
             // Statement s = conn.getStatement();
             // select user_id hash salt from table using username (which is a uniqueidentifier)
-            // use data.passowrd() + salt to generate hash
+            // use data.password() + salt to generate hash
+            // if username uuid doesn't exist in table, say so
         } catch (SQLException e) {
             return Response.serverError().build();
         }
