@@ -40,6 +40,7 @@ public class Login {
             // select user_id hash salt from table using username (which is a uniqueidentifier)
             // use data.password() + salt to generate hash
             // if username uuid doesn't exist in table, say so
+            conn.close();
         } catch (SQLException e) {
             return Response.serverError().build();
         }
