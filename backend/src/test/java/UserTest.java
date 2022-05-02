@@ -21,8 +21,8 @@ public class UserTest {
         UUID userid = UUID.randomUUID();
         var resp = resource.getUser(new MockSecurityContext(userid.toString()));
         var entity = (UserResponse) resp.getEntity();
-        assertEquals(userid.toString(), entity.getUserId());
         assertEquals(200, resp.getStatus());
+        assertEquals(userid.toString(), entity.getUserId());
     }
 
     @Test
