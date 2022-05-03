@@ -19,12 +19,12 @@ import com.bookbae.server.json.LoginResponse;
 @Path("/login")
 public class Login {
     private SecretKey key;
-    private RestApplication application;
+    private DatabasePoolService database;
 
     @Inject
-    public Login(RestApplication application) {
-        this.application = application;
-        this.key = application.getKey();
+    public Login(DatabasePoolService database, SecretKeyService keys) {
+        this.database = database;
+        this.key = keys.getKey();
     }
     
     @POST
@@ -35,7 +35,7 @@ public class Login {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         try {
-            Connection conn = this.application.getConnection();
+            Connection conn = this.database.getConnection();
             // Statement s = conn.getStatement();
             // select user_id hash salt from table using username (which is a uniqueidentifier)
             // use data.password() + salt to generate hash

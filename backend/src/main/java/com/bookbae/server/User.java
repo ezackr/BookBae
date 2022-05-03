@@ -19,11 +19,11 @@ import com.bookbae.server.json.UserRequest;
 @Path("/user")
 public class User {
     
-    private RestApplication application;
+    private DatabasePoolService database;
 
     @Inject
-    public User(RestApplication application) {
-        this.application = application;
+    public User(DatabasePoolService database) {
+        this.database = database;
     }
 
     @GET
@@ -36,7 +36,7 @@ public class User {
         }
         UserResponse resp = new UserResponse();
         try {
-            Connection conn = this.application.getConnection();
+            Connection conn = this.database.getConnection();
             //ctx.getUserPrincipal().getName(); gets the UUID
             //Then use the UUID to look up an entry in the table?
             //Then populate the resp object with the values in this row?
@@ -56,7 +56,7 @@ public class User {
         }
         UserResponse resp = new UserResponse(req);
         try {
-            Connection conn = this.application.getConnection();
+            Connection conn = this.database.getConnection();
             // Do the same as above but update the stuff
             // Return the updated version
             // Don't update the UUID that would be a bad bug

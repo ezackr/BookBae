@@ -13,7 +13,7 @@ public class UserTest {
     private User resource;
     @BeforeEach
     void init() {
-        resource = new User(new MockRestApplication());
+        resource = new User(new MockDatabaseService());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class UserTest {
     @Test
     void sqlFailureTest() {
         UUID userid = UUID.randomUUID();
-        resource = new User(new SQLFailRestApplication());
+        resource = new User(new SQLFailService());
         var resp = resource.getUser(new MockSecurityContext(userid.toString()));
         assertEquals(500, resp.getStatus());
     }

@@ -14,7 +14,7 @@ public class CreateAccountTest {
     private CreateAccount resource;
     @BeforeEach
     void init() {
-        resource = new CreateAccount(new MockRestApplication());
+        resource = new CreateAccount(new MockDatabaseService());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class CreateAccountTest {
 
     @Test
     void sqlFailureTest() {
-        resource = new CreateAccount(new SQLFailRestApplication());
+        resource = new CreateAccount(new SQLFailService());
         var req = new AccountCreationRequest();
         var resp = resource.tryCreate(req);
         assertEquals(500, resp.getStatus());

@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import com.bookbae.server.RestApplication;
+import com.bookbae.server.DatabasePoolService;
+import com.bookbae.server.SecretKeyService;
+import com.bookbae.server.service.SecretKeyServiceImpl;
 import com.bookbae.server.Login;
 import com.bookbae.server.json.LoginRequest;
 import com.bookbae.server.json.LoginResponse;
@@ -14,13 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class LoginTest {
 
+    private DatabasePoolService database;
+    private SecretKeyService keys;
     private Login resource;
-    private RestApplication application;
 
     @BeforeEach
     void init() {
-        application = new MockRestApplication();
-        resource = new Login(application);
+        database = new MockDatabaseService();
+        keys     = new SecretKeyServiceImpl();
+        resource = new Login(database, keys);
     }
 
     @Test
@@ -30,7 +34,7 @@ public class LoginTest {
         assertEquals(200, resp.getStatus());
         assertDoesNotThrow(() -> {
             Jws<Claims> jws = Jwts.parserBuilder()
-                .setSigningKey(application.getKey()).build().parseClaimsJws(entity.getAuthToken());
+                .setSigningKey(keys.getKey()).build().parseClaimsJws(entity.getAuthToken());
         });
     }
 
@@ -44,7 +48,7 @@ public class LoginTest {
 
     @Test
     void sqlFailureTest() {
-        resource = new Login(new SQLFailRestApplication());
+        resource = new Login(new SQLFailService(), keys);
         var resp = resource.tryLogin(getRequest());
         assertEquals(500, resp.getStatus());
     }

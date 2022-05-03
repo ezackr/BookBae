@@ -15,11 +15,11 @@ import java.sql.SQLException;
 @Path("/create")
 public class CreateAccount {
 
-    private RestApplication application;
+    private DatabasePoolService database;
 
     @Inject
-    public CreateAccount(RestApplication application) {
-        this.application = application;
+    public CreateAccount(DatabasePoolService database) {
+        this.database = database;
     }
 
     @POST
@@ -27,7 +27,7 @@ public class CreateAccount {
     @Produces("application/json")
     public Response tryCreate(AccountCreationRequest req) {
         try {
-            Connection conn = this.application.getConnection();
+            Connection conn = this.database.getConnection();
             // generate salt
             // hash password from req with salt 
             // insert new row (?) into login_data that has the hash and salt
