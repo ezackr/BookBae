@@ -10,6 +10,7 @@ import jakarta.ws.rs.PUT;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import jakarta.inject.Inject;
 import java.util.UUID;
 import com.bookbae.server.security.SecuredResource;

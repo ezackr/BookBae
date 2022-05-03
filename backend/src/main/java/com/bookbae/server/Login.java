@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import com.bookbae.server.json.LoginRequest;
 import com.bookbae.server.json.LoginResponse;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -46,6 +47,7 @@ public class Login {
             String retrieveSaltString = "SELECT salt " +
                     "FROM login_info " +
                     "WHERE user_id = ?";
+            System.out.println("Connection: " + conn);
             // PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
             // retrieveSaltStatement.setString(1, userId);
             // ResultSet resultSet = retrieveSaltStatement.executeQuery();
@@ -79,6 +81,7 @@ public class Login {
 
             conn.close();
         } catch (SQLException e) {
+            System.out.println("ERROR: " + e);
             return Response.serverError().build();
         }
 

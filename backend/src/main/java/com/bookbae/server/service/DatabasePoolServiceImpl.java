@@ -16,7 +16,7 @@ public class DatabasePoolServiceImpl implements DatabasePoolService {
 
     public DatabasePoolServiceImpl() {
         this.dataSource = new BasicDataSource();
-        this.dataSource.setUrl(getConnectionUrl());
+        this.dataSource.setUrl(this.getConnectionUrl());
         this.dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         this.dataSource.setPoolPreparedStatements(true);
     }

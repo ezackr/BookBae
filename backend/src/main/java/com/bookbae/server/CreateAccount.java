@@ -58,6 +58,7 @@ public class CreateAccount {
 
             conn.close();
         } catch (SQLException e) {
+            System.out.println(e);
             return Response.serverError().build();
         }
         // Get UUID from above and return it

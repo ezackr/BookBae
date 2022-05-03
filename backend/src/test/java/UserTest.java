@@ -30,7 +30,7 @@ public class UserTest {
         UUID userid = UUID.randomUUID();
         var req = new UserRequest();
         req.setUserId(userid.toString());
-        req.setZipcode("80210"); // Is this right?
+        req.setZipcode("80210"); // Is this right? yup!
         var resp = resource.putUser(new MockSecurityContext(userid.toString()), req);
         var entity = (UserResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
