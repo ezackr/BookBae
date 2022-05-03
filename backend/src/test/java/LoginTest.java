@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import com.bookbae.server.RestApplication;
+import com.bookbae.server.DatabasePoolService;
+import com.bookbae.server.SecretKeyService;
 import com.bookbae.server.Login;
 import com.bookbae.server.json.LoginRequest;
 import com.bookbae.server.json.LoginResponse;
@@ -22,7 +23,7 @@ public class LoginTest {
     void init() {
         database = new MockDatabaseService();
         keys     = new SecretKeyService();
-        resource = new Login(database, sks);
+        resource = new Login(database, keys);
     }
 
     @Test

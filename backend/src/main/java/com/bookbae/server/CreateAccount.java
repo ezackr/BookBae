@@ -19,7 +19,7 @@ public class CreateAccount {
 
     @Inject
     public CreateAccount(DatabasePoolService database) {
-        this.application = application;
+        this.database = database;
     }
 
     @POST

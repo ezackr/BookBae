@@ -1,6 +1,6 @@
 package com.bookbae.server.security;
 
-import com.bookbae.server.RestApplication;
+import com.bookbae.server.SecretKeyService;
 import jakarta.ws.rs.ext.Provider;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestFilter;
