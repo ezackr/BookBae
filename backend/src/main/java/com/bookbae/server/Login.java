@@ -12,9 +12,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import com.bookbae.server.json.LoginRequest;
 import com.bookbae.server.json.LoginResponse;
-
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Path("/login")
 public class Login {
@@ -34,19 +35,49 @@ public class Login {
         if(!data.isValid()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+
+        String userId = ""; // data.getUsername();
+        String password = "password"; // data.getPassword();
+
         try {
             Connection conn = this.database.getConnection();
-            // Statement s = conn.getStatement();
-            // select user_id hash salt from table using username (which is a uniqueidentifier)
-            // use data.password() + salt to generate hash
-            // if username uuid doesn't exist in table, say so
+
+            // retrieve user's salt
+            String retrieveSaltString = "SELECT salt FROM login_info WHERE user_id = ?";
+            // PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
+            // retrieveSaltStatement.setString(1, userId);
+            // ResultSet resultSet = retrieveSaltStatement.executeQuery();
+
+           // salt not found; user does not exist
+           // if (!resultSet.next()) {
+           //     resultSet.close();
+           //     return Response.status(Response.Status.FORBIDDEN).build();
+           // }
+
+            // salt found; user exists
+            // String salt = resultSet.getString("salt");
+            // resultSet.close();
+
+            // check if login information is correct
+            // String hashedPw = BCrypt.hashpw(password, salt);
+             String checkLoginInfoString = "SELECT user_id FROM login_info WHERE" +
+                    " user_id = ? AND password = ?;";
+            //PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
+            // checkLoginInfoStatement.setString(1, userId);
+            // checkLoginInfoStatement.setString(2, password);
+            // resultSet = checkLoginInfoStatement.executeQuery();
+
+            // password is incorrect
+            //if (!resultSet.next()){
+            //    resultSet.close();
+            //    return Response.status(Response.Status.FORBIDDEN).build();
+            //}
+
             conn.close();
         } catch (SQLException e) {
             return Response.serverError().build();
         }
-        if(1==2) { //TODO: if generated hash is not equal to stored hash or if user doesn't exist
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+
         String jws = Jwts.builder().setSubject(data.getUsername())
                          .signWith(this.key).compact();
         return Response.ok(new LoginResponse(jws)).build();
