@@ -3,9 +3,9 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class MockRestApplication extends RestApplication {
+public class MockDatabaseService extends DatabasePoolService {
     private BasicDataSource mockDataSource;
-    public MockRestApplication() {
+    public MockDatabaseService() {
         this.mockDataSource = new BasicDataSource();
         this.mockDataSource.setUrl("jdbc:h2:mem:tests");
         this.mockDataSource.setDriverClassName("org.h2.Driver");
