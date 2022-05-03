@@ -51,7 +51,6 @@ CREATE TABLE user_book
 CREATE TABLE login_info
 (
     salt TEXT NOT NULL,
-    password TEXT NOT NULL,
     hash TEXT NOT NULL,
     user_id UNIQUEIDENTIFIER NOT NULL,
     PRIMARY KEY (user_id),
