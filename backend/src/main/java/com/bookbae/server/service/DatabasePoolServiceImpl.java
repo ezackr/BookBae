@@ -26,27 +26,14 @@ public class DatabasePoolServiceImpl implements DatabasePoolService {
         return this.dataSource.getConnection();
     }
 
-    private String getConnectionUrl() {
-
-        // grab database credentials from dbconn.properties file
-        Properties configProps = new Properties();
-        try {
-            configProps.load(new FileInputStream("dbconn.properties"));
-        } catch(FileNotFoundException e) {
-            System.out.println(e);
-        } catch(IOException e) {
-            System.out.println(e);
-        }
-
-        String serverURL = configProps.getProperty("bookbae.server_url");
-        String dbName = configProps.getProperty("bookbae.database_name");
-        String adminName = configProps.getProperty("bookbae.username");
-        String password = configProps.getProperty("bookbae.password");
-        String connectionUrl =
-                String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;" +
+    private static String getConnectionUrl() {
+        String serverURL = System.getProperty("bookbae.server_url");
+        String dbName = System.getProperty("bookbae.database_name");
+        String adminName = System.getProperty("bookbae.username");
+        String password = System.getProperty("bookbae.password");
+        return String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;" +
                                 "trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;" +
                                 "loginTimeout=30;",
                         serverURL, dbName, adminName, password);
-        return connectionUrl;
     }
 }
