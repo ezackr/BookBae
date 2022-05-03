@@ -9,6 +9,7 @@ public class UserRequest {
     protected UUID userid;
     protected String name;
     protected String preferredGender;
+    protected String gender;
     protected String favGenre;
     protected String birthday;
     protected String bio;
@@ -53,6 +54,16 @@ public class UserRequest {
     @JsonProperty("preferredGender")
     public void setPreferredGender(String preferredGender) {
         this.preferredGender = preferredGender;
+    }
+
+    @JsonProperty("gender")
+    public String getGender() {
+        return gender;
+    }
+
+    @JsonProperty("gender")
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @JsonProperty("favGenre")

@@ -35,16 +35,16 @@ public class CreateAccount {
         String password = "password"; // req.getPassword();
         String salt = BCrypt.gensalt();
         String hashedPw = BCrypt.hashpw(password, salt);
-        UUID newUUID = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
 
         try {
             Connection conn = this.database.getConnection();
 
             // insert user into db with default NULL for unset values
             String insertUserInfoString = "INSERT INTO user_info" +
-                    " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL);";
+                    " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL, NULL);";
             // PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
-            // insertUserStatement.setString(1, newUUID);
+            // insertUserStatement.setString(1, userId);
             // insertUserStatement.setString(2, phone);
             // insertUserStatement.setString(3, email);
             // insertUserStatement.executeUpdate();
@@ -54,7 +54,7 @@ public class CreateAccount {
             // PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
             // insertLoginInfoStatement.setString(1, salt);
             // insertLoginInfoStatement.setString(2, hashedPw);
-            // insertLoginInfoStatement.setString(3, newUUID);
+            // insertLoginInfoStatement.setString(3, userId);
             // insertLoginInfoStatement.executeUpdate();
 
             conn.close();
@@ -63,6 +63,6 @@ public class CreateAccount {
         }
         // Get UUID from above and return it
         // Possibly return more stuff in accountcreationresponse if frontend team requests it
-        return Response.ok(new AccountCreationResponse(newUUID)).build();
+        return Response.ok(new AccountCreationResponse(userId)).build();
     }
 }

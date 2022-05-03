@@ -9,6 +9,7 @@ public class UserResponse {
     protected UUID userid;
     protected String name;
     protected String preferredGender;
+    protected String gender;
     protected String favGenre;
     protected String birthday;
     protected String bio;
@@ -22,6 +23,7 @@ public class UserResponse {
         this.userid = req.userid;
         this.name = req.name;
         this.preferredGender = req.preferredGender;
+        this.gender = req.gender;
         this.favGenre = req.favGenre;
         this.birthday = req.birthday;
         this.bio = req.bio;
@@ -60,10 +62,18 @@ public class UserResponse {
         this.preferredGender = preferredGender;
     }
 
-    @JsonProperty("favGenre")
-    public String getFavGenre() {
-        return favGenre;
+    @JsonProperty("gender")
+    public String getGender() {
+        return gender;
     }
+
+    @JsonProperty("gender")
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    @JsonProperty("favGenre")
+    public String getFavGenre() { return favGenre; }
 
     @JsonProperty("favGenre")
     public void setFavGenre(String favGenre) {

@@ -9,6 +9,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PUT;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import jakarta.inject.Inject;
 import java.util.UUID;
 import com.bookbae.server.security.SecuredResource;
@@ -37,14 +38,36 @@ public class User {
         UserResponse resp = new UserResponse();
         try {
             Connection conn = this.database.getConnection();
-            //ctx.getUserPrincipal().getName(); gets the UUID
-            //Then use the UUID to look up an entry in the table?
-            //Then populate the resp object with the values in this row?
+
+            // retrieve user info
+            UUID userId = UUID.fromString(ctx.getUserPrincipal().getName()); //TODO: is there a way for getName to return as a UUID?
+            String retrieveUserInfoString = "SELECT * FROM user_info WHERE user_id = ?";
+            // PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(retrieveUserInfoString);
+            // retrieveUserInfoStatement.setString(1, userId);
+            // ResultSet resultSet = retrieveUserInfoStatement.executeQuery();
+
+            // invalid user id
+            // if(!resultSet.next()){
+            //    resultSet.close();
+            //    return Response.status(Response.Status.FORBIDDEN).build();
+            //}
+
+            // populate resp object
+            resp.setUserId(userId);
+            // resp.setName(resultSet.getString("name"));
+            // resp.setPreferredGender(resultSet.getString("preferred_gender"));
+            // resp.setGender(resultSet.getString("gender"));
+            //resp.setFavGenre(resultSet.getString("fav_genre"));
+            // resp.setBirthday(resultSet.getDate("birthday"));
+            // resp.setBio(resultSet.getString("bio"));
+            // resp.setPhoneNumber(resultSet.getString("phone_num"));
+            // resp.setEmail(resultSet.getString("email"));
+            // resp.setZipcode(resultSet.getString("zipcode"));
+
             conn.close();
         } catch (SQLException e) {
             return Response.serverError().build();
         }
-        resp.setUserId(UUID.fromString(ctx.getUserPrincipal().getName()));
         return Response.ok(resp).build();
     }
 
@@ -57,14 +80,42 @@ public class User {
         UserResponse resp = new UserResponse(req);
         try {
             Connection conn = this.database.getConnection();
-            // Do the same as above but update the stuff
-            // Return the updated version
-            // Don't update the UUID that would be a bad bug
+
+            // update user info
+            UUID userId = UUID.fromString(ctx.getUserPrincipal().getName());
+            String updateUserInfoString = "UPDATE user_info SET " +
+                    "name = ?, preferred_gender = ?, gender = ?, fav_genre = ?," +
+                    "birthday = ?, bio = ?, phone_num = ?, email = ?, zipcode = ?" +
+                    " WHERE used_id = ?";
+            // PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
+            // updateUserInfoStatement.setString(1, req.getName());
+            // updateUserInfoStatement.setString(2, req.getPreferredGender());
+            // updateUserInfoStatement.setString(3, req.getGender());
+            // updateUserInfoStatement.setString(4, req.getFavGenre());
+            // updateUserInfoStatement.setDate(5, req.getBirthday());
+            // updateUserInfoStatement.setString(6, req.getBio());
+            // updateUserInfoStatement.setString(7, req.getPhoneNumber());
+            // updateUserInfoStatement.setString(8, req.getEmail());
+            // updateUserInfoStatement.setString(9, req.getZipcode());
+            // updateUserInfoStatement.setString(10, userId);
+            // updateUserInfoStatement.executeUpdate();
+
+            // populate resp object
+            resp.setUserId(userId);
+            resp.setName(req.getName());
+            resp.setPreferredGender(req.getPreferredGender());
+            resp.setGender(req.getGender());
+            resp.setFavGenre(req.getFavGenre());
+            resp.setBirthday(req.getBirthday());
+            resp.setBio(req.getBio());
+            resp.setPhoneNumber(req.getPhoneNumber());
+            resp.setEmail(req.getEmail());
+            resp.setZipcode(req.getZipcode());
+
             conn.close();
         } catch (SQLException e) {
             return Response.serverError().build();
         }
-        resp.setUserId(UUID.fromString(ctx.getUserPrincipal().getName()));
         return Response.ok(resp).build();
     }
 }

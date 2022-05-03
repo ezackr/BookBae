@@ -9,6 +9,7 @@ CREATE TABLE user_info
     email VARCHAR(254) NOT NULL,
     zipcode CHAR(5),
     bio VARCHAR(500),
+    preferred_gender CHAR(10) NOT NULL,
     PRIMARY KEY (user_id)
 );
 
@@ -29,13 +30,6 @@ CREATE TABLE preference
     within_x_miles SMALLINT NOT NULL,
     user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES user_info(user_id)
-);
-
-CREATE TABLE target_gender
-(
-    gender CHAR(2) NOT NULL,
-    user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 );
 
