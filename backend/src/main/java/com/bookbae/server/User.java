@@ -41,7 +41,9 @@ public class User {
 
             // retrieve user info
             UUID userId = UUID.fromString(ctx.getUserPrincipal().getName()); //TODO: is there a way for getName to return as a UUID?
-            String retrieveUserInfoString = "SELECT * FROM user_info WHERE user_id = ?";
+            String retrieveUserInfoString = "SELECT * " +
+                    "FROM user_info " +
+                    "WHERE user_id = ?";
             // PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(retrieveUserInfoString);
             // retrieveUserInfoStatement.setString(1, userId);
             // ResultSet resultSet = retrieveUserInfoStatement.executeQuery();
@@ -83,10 +85,10 @@ public class User {
 
             // update user info
             UUID userId = UUID.fromString(ctx.getUserPrincipal().getName());
-            String updateUserInfoString = "UPDATE user_info SET " +
-                    "name = ?, preferred_gender = ?, gender = ?, fav_genre = ?," +
-                    "birthday = ?, bio = ?, phone_num = ?, email = ?, zipcode = ?" +
-                    " WHERE used_id = ?";
+            String updateUserInfoString = "UPDATE user_info " +
+                    "SET name = ?, preferred_gender = ?, gender = ?, fav_genre = ?," +
+                    "birthday = ?, bio = ?, phone_num = ?, email = ?, zipcode = ? " +
+                    "WHERE used_id = ?";
             // PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
             // updateUserInfoStatement.setString(1, req.getName());
             // updateUserInfoStatement.setString(2, req.getPreferredGender());

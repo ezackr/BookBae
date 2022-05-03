@@ -49,8 +49,7 @@ public class CreateAccount {
             // insertUserStatement.setString(3, email);
             // insertUserStatement.executeUpdate();
 
-            String insertLoginInfoString = "INSERT INTO login_info" +
-                    " VALUES (?, ?, ?);";
+            String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
             // PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
             // insertLoginInfoStatement.setString(1, salt);
             // insertLoginInfoStatement.setString(2, hashedPw);

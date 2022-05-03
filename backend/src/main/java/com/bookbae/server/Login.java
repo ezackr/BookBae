@@ -43,7 +43,9 @@ public class Login {
             Connection conn = this.database.getConnection();
 
             // retrieve user's salt
-            String retrieveSaltString = "SELECT salt FROM login_info WHERE user_id = ?";
+            String retrieveSaltString = "SELECT salt " +
+                    "FROM login_info " +
+                    "WHERE user_id = ?";
             // PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
             // retrieveSaltStatement.setString(1, userId);
             // ResultSet resultSet = retrieveSaltStatement.executeQuery();
@@ -60,8 +62,10 @@ public class Login {
 
             // check if login information is correct
             // String hashedPw = BCrypt.hashpw(password, salt);
-             String checkLoginInfoString = "SELECT user_id FROM login_info WHERE" +
-                    " user_id = ? AND password = ?;";
+             String checkLoginInfoString = "SELECT user_id " +
+                     "FROM login_info " +
+                     "WHERE user_id = ? " +
+                     "AND password = ?;";
             //PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
             // checkLoginInfoStatement.setString(1, userId);
             // checkLoginInfoStatement.setString(2, password);
