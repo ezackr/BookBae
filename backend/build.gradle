@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     implementation 'com.h2database:h2:2.1.212' //TODO: get a real database driver, not H2
     implementation 'com.microsoft.sqlserver:mssql-jdbc:7.2.2.jre11' //sql driver
+    implementation 'org.springframework.security:spring-security-crypto:5.6.2' // bcrypt
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
     testImplementation 'com.h2database:h2:2.1.212'

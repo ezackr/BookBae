@@ -11,6 +11,8 @@ import com.bookbae.server.json.AccountCreationResponse;
 import java.util.UUID;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Path("/create")
 public class CreateAccount {
@@ -26,19 +28,41 @@ public class CreateAccount {
     @Consumes("application/json")
     @Produces("application/json")
     public Response tryCreate(AccountCreationRequest req) {
+
+        // new account data
+        String phone = "1234567890"; // req.getPhone();
+        String email = "email@uw.edu"; // req.getEmail();
+        String password = "password"; // req.getPassword();
+        String salt = BCrypt.gensalt();
+        String hashedPw = BCrypt.hashpw(password, salt);
+        UUID newUUID = UUID.randomUUID();
+
         try {
             Connection conn = this.database.getConnection();
-            // generate salt
-            // hash password from req with salt 
-            // insert new row (?) into login_data that has the hash and salt
-            // Get UUID from newly created row
-            // Possibly populate user_info as well
+
+            // insert user into db with default NULL for unset values
+            String insertUserInfoString = "INSERT INTO user_info" +
+                    " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL);";
+            // PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
+            // insertUserStatement.setString(1, newUUID);
+            // insertUserStatement.setString(2, phone);
+            // insertUserStatement.setString(3, email);
+            // insertUserStatement.executeUpdate();
+
+            String insertLoginInfoString = "INSERT INTO login_info" +
+                    " VALUES (?, ?, ?);";
+            // PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
+            // insertLoginInfoStatement.setString(1, salt);
+            // insertLoginInfoStatement.setString(2, hashedPw);
+            // insertLoginInfoStatement.setString(3, newUUID);
+            // insertLoginInfoStatement.executeUpdate();
+
             conn.close();
         } catch (SQLException e) {
             return Response.serverError().build();
         }
         // Get UUID from above and return it
         // Possibly return more stuff in accountcreationresponse if frontend team requests it
-        return Response.ok(new AccountCreationResponse(UUID.randomUUID())).build();
+        return Response.ok(new AccountCreationResponse(newUUID)).build();
     }
 }
