@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 
 const LoginScreen = () => {
-  const [email, onChangeEmail] = React.useState(null);
+  const [username, onChangeUsername] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
 
   const handleLogin = async () => {
     console.log('Login!');
     try {
-      let response = await fetch('http://hostname/api/v1/user?' + email);
+      let response = await fetch('http://hostname/api/v1/user?' + username);
       let json = await response.json();
       return json.username;
     } catch (error) {
@@ -38,9 +38,9 @@ const LoginScreen = () => {
       <TextInput
         style={styles.input}
         numberOfLines={1}
-        onChangeText={onChangeEmail}
-        value={email}
-        placeholder="Email"
+        onChangeText={onChangeUsername}
+        value={username}
+        placeholder="Username"
         keyboardType="default"
       />
       <TextInput
