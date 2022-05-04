@@ -21,13 +21,10 @@ jobs:
       with:
         distribution: temurin
         java-version: 11
-    - run: |
-        cd frontend
-        npm ci
-    - run: |
-        cd frontend
-        npm test
-      working-directory: frontend
+    - run: npm ci
+      working-directory: ./frontend/BookBae
+    - run: npm test
+      working-directory: ./frontend/BookBae
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
