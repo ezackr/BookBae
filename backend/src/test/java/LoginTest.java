@@ -4,7 +4,7 @@ import com.bookbae.server.DatabasePoolService;
 import com.bookbae.server.SecretKeyService;
 import com.bookbae.server.service.SecretKeyServiceImpl;
 import com.bookbae.server.Login;
-import com.bookbae.server.json.LoginRequest;
+import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.LoginResponse;
 import java.util.UUID;
 import io.jsonwebtoken.Jws;
@@ -39,23 +39,15 @@ public class LoginTest {
     }
 
     @Test
-    void invalidLoginTest() {
-        var req = getRequest();
-        req.setUsername("bad username");
-        var resp = resource.tryLogin(req);
-        assertEquals(400, resp.getStatus());
-    }
-
-    @Test
     void sqlFailureTest() {
         resource = new Login(new SQLFailService(), keys);
         var resp = resource.tryLogin(getRequest());
         assertEquals(500, resp.getStatus());
     }
 
-    private LoginRequest getRequest() {
-        var req = new LoginRequest();
-        req.setUsername(UUID.randomUUID().toString());
+    private AccountRequest getRequest() {
+        var req = new AccountRequest();
+        req.setEmail("test@example.com");
         req.setPassword("hunter2");
         return req;
     }

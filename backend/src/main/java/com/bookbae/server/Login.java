@@ -14,7 +14,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
-import com.bookbae.server.json.LoginRequest;
+import java.util.UUID;
+import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.LoginResponse;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -32,13 +33,10 @@ public class Login {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response tryLogin(LoginRequest data) {
-        if(!data.isValid()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+    public Response tryLogin(AccountRequest data) {
 
-        String userId = ""; // data.getUsername();
-        String password = "password"; // data.getPassword();
+        String email = data.getEmail();
+        String password = data.getPassword();
 
         try {
             Connection conn = this.database.getConnection();
@@ -46,7 +44,7 @@ public class Login {
             // retrieve user's salt
             String retrieveSaltString = "SELECT salt " +
                     "FROM login_info " +
-                    "WHERE user_id = ?";
+                    "WHERE user_id = ?"; // TODO: email instead of userid or find userid from email
             System.out.println("Connection: " + conn);
             // PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
             // retrieveSaltStatement.setString(1, userId);
@@ -85,8 +83,9 @@ public class Login {
             return Response.serverError().build();
         }
 
-        String jws = Jwts.builder().setSubject(data.getUsername())
-                         .signWith(this.key).compact();
+                                               //TODO: v replace with uniqueidentifier from database
+        String jws = Jwts.builder().setSubject(UUID.randomUUID().toString())
+                         .signWith(this.key).compact(); //TODO: add expiry date
         return Response.ok(new LoginResponse(jws)).build();
     }
 }

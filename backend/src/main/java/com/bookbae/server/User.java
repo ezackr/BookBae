@@ -39,9 +39,8 @@ public class User {
         UserResponse resp = new UserResponse();
         try {
             Connection conn = this.database.getConnection();
-
             // retrieve user info
-            UUID userId = UUID.fromString(ctx.getUserPrincipal().getName()); //TODO: is there a way for getName to return as a UUID?
+            UUID userId = UUID.fromString(ctx.getUserPrincipal().getName()); //TODO: is there a way for getName to return as a UUID? no
             String retrieveUserInfoString = "SELECT * " +
                     "FROM user_info " +
                     "WHERE user_id = ?";
@@ -56,15 +55,13 @@ public class User {
             //}
 
             // populate resp object
-            resp.setUserId(userId);
+            // resp.setEmail(resultSet.getString("email"));
             // resp.setName(resultSet.getString("name"));
             // resp.setPreferredGender(resultSet.getString("preferred_gender"));
             // resp.setGender(resultSet.getString("gender"));
             //resp.setFavGenre(resultSet.getString("fav_genre"));
             // resp.setBirthday(resultSet.getDate("birthday"));
             // resp.setBio(resultSet.getString("bio"));
-            // resp.setPhoneNumber(resultSet.getString("phone_num"));
-            // resp.setEmail(resultSet.getString("email"));
             // resp.setZipcode(resultSet.getString("zipcode"));
 
             conn.close();
@@ -103,16 +100,15 @@ public class User {
             // updateUserInfoStatement.setString(10, userId);
             // updateUserInfoStatement.executeUpdate();
 
-            // populate resp object
-            resp.setUserId(userId);
+            // populate resp object TODO: rmeove this should be populated already
+                    //See above where resp takes req as a constructor arg
+            resp.setEmail(req.getEmail());
             resp.setName(req.getName());
             resp.setPreferredGender(req.getPreferredGender());
             resp.setGender(req.getGender());
             resp.setFavGenre(req.getFavGenre());
             resp.setBirthday(req.getBirthday());
             resp.setBio(req.getBio());
-            resp.setPhoneNumber(req.getPhoneNumber());
-            resp.setEmail(req.getEmail());
             resp.setZipcode(req.getZipcode());
 
             conn.close();

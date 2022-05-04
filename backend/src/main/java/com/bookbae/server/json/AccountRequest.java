@@ -2,20 +2,9 @@ package com.bookbae.server.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AccountCreationRequest {
-    private String phone;
+public class AccountRequest {
     private String email;
     private String password;
-
-    @JsonProperty("phone")
-    public String getPhone() {
-        return phone;
-    }
-
-    @JsonProperty("phone")
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
     @JsonProperty("email")
     public String getEmail() {

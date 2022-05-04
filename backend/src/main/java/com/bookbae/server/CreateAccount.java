@@ -6,8 +6,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.core.Response;
 import jakarta.inject.Inject;
-import com.bookbae.server.json.AccountCreationRequest;
-import com.bookbae.server.json.AccountCreationResponse;
+import com.bookbae.server.json.AccountRequest;
 import java.util.UUID;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,10 +26,9 @@ public class CreateAccount {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response tryCreate(AccountCreationRequest req) {
+    public Response tryCreate(AccountRequest req) {
 
         // new account data
-        String phone = "1234567890"; // req.getPhone();
         String email = "email@uw.edu"; // req.getEmail();
         String password = "password"; // req.getPassword();
         String salt = BCrypt.gensalt();
@@ -38,13 +36,14 @@ public class CreateAccount {
         UUID userId = UUID.randomUUID();
 
         try {
+            // maybe make a transaction here? IDK how transactions work
             Connection conn = this.database.getConnection();
-
+            // Check if email exists in db first
             // insert user into db with default NULL for unset values
             String insertUserInfoString = "INSERT INTO user_info" +
                     " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL, NULL);";
             // PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
-            // insertUserStatement.setString(1, userId);
+            // insertUserStatement.setString(1, userId); // Not right, userId is type uniqueidentifier I think
             // insertUserStatement.setString(2, phone);
             // insertUserStatement.setString(3, email);
             // insertUserStatement.executeUpdate();
@@ -62,7 +61,7 @@ public class CreateAccount {
             return Response.serverError().build();
         }
         // Get UUID from above and return it
-        // Possibly return more stuff in accountcreationresponse if frontend team requests it
-        return Response.ok(new AccountCreationResponse(userId)).build();
+        // Possibly return stuff in accountcreationresponse if frontend team requests it
+        return Response.ok().build();
     }
 }
