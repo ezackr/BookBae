@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import LoginScreen from './screens/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createStackNavigator();
 
