@@ -29,4 +29,4 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: assembleDebug
-        build-root-directory: frontend/android
+        build-root-directory: ./frontend/BookBae/android
