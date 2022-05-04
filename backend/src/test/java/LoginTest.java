@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import com.bookbae.server.DatabasePoolService;
 import com.bookbae.server.SecretKeyService;
@@ -16,19 +17,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class LoginTest {
-
-    private DatabasePoolService database;
+    private MockDatabaseService database;
     private SecretKeyService keys;
     private Login resource;
 
     @BeforeEach
     void init() {
-        database = new MockDatabaseService();
+        database = new MockDatabaseService("loginTest");
         keys     = new SecretKeyServiceImpl();
         resource = new Login(database, keys);
+        database.init();
     }
 
-    @Disabled
+    @AfterEach
+    void teardown() {
+        database.teardown();
+    }
+
     @Test
     void loginTest() {
         var resp = resource.tryLogin(getRequest());
@@ -40,7 +45,6 @@ public class LoginTest {
         });
     }
 
-    @Disabled
     @Test
     void sqlFailureTest() {
         resource = new Login(new SQLFailService(), keys);

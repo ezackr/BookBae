@@ -23,9 +23,9 @@ public class MockDatabaseService implements DatabasePoolService {
 ");";
     private static String makeMeSad = "DROP TABLE user_info;";
 
-    public MockDatabaseService() {
+    public MockDatabaseService(String name) {
         this.dataSource = new BasicDataSource();
-        this.dataSource.setUrl("jdbc:h2:mem:tests");
+        this.dataSource.setUrl("jdbc:h2:mem:" + name);
         this.dataSource.setDriverClassName("org.h2.Driver");
         this.dataSource.setPoolPreparedStatements(true);
     }

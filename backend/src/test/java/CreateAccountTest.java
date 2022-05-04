@@ -15,7 +15,7 @@ public class CreateAccountTest {
     private CreateAccount resource;
     @BeforeEach
     void init() {
-        database = new MockDatabaseService();
+        database = new MockDatabaseService("createAccountTest");
         resource = new CreateAccount(database);
         database.init();
     }
