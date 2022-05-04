@@ -1,0 +1,32 @@
+name: Frontend CI
+on: 
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'backend/**'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - 'backend/**'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js v12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - run: npm ci
+      working-directory: ./frontend/BookBae
+    - run: npm test
+      working-directory: ./frontend/BookBae
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: assembleDebug
+        build-root-directory: frontend/BookBae/android
