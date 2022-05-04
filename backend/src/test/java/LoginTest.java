@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import com.bookbae.server.DatabasePoolService;
 import com.bookbae.server.SecretKeyService;
 import com.bookbae.server.service.SecretKeyServiceImpl;
@@ -27,6 +28,7 @@ public class LoginTest {
         resource = new Login(database, keys);
     }
 
+    @Disabled
     @Test
     void loginTest() {
         var resp = resource.tryLogin(getRequest());
@@ -38,6 +40,7 @@ public class LoginTest {
         });
     }
 
+    @Disabled
     @Test
     void sqlFailureTest() {
         resource = new Login(new SQLFailService(), keys);

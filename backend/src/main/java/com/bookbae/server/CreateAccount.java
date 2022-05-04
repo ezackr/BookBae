@@ -31,6 +31,7 @@ public class CreateAccount {
         // new account data
         String email = "email@uw.edu"; // req.getEmail();
         String password = "password"; // req.getPassword();
+        String phone = "deleteme";
         String salt = BCrypt.gensalt();
         String hashedPw = BCrypt.hashpw(password, salt);
         UUID userId = UUID.randomUUID();
@@ -43,12 +44,16 @@ public class CreateAccount {
             String insertUserInfoString = "INSERT INTO user_info" +
                     " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL, NULL);";
             // PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
-            // insertUserStatement.setString(1, userId); // Not right, userId is type uniqueidentifier I think
+            // insertUserStatement.setString(1, userId.toString()); // Not right, userId is type uniqueidentifier I think
             // insertUserStatement.setString(2, phone);
             // insertUserStatement.setString(3, email);
             // insertUserStatement.executeUpdate();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user_info WHERE email = ?;");
+            stmt.setString(1, req.getEmail());
+            stmt.executeQuery();
+            stmt.close();
 
-            String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
+            // String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
             // PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
             // insertLoginInfoStatement.setString(1, salt);
             // insertLoginInfoStatement.setString(2, hashedPw);
@@ -57,7 +62,7 @@ public class CreateAccount {
 
             conn.close();
         } catch (SQLException e) {
-            System.out.println(e);
+            e.printStackTrace();
             return Response.serverError().build();
         }
         // Get UUID from above and return it

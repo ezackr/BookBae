@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import com.bookbae.server.RestApplication;
 import com.bookbae.server.User;
 import com.bookbae.server.json.UserResponse;
@@ -18,6 +19,7 @@ public class UserTest {
         userid = UUID.randomUUID();
     }
 
+    @Disabled
     @Test
     void getUserTest() {
         var resp = resource.getUser(new MockSecurityContext(userid.toString()));
@@ -25,6 +27,7 @@ public class UserTest {
         assertEquals(200, resp.getStatus());
     }
 
+    @Disabled
     @Test
     void putUserTest() {
         var req = new UserRequest();

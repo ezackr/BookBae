@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import java.util.UUID;
 import com.bookbae.server.RestApplication;
 import com.bookbae.server.CreateAccount;
@@ -10,10 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateAccountTest {
+    private MockDatabaseService database;
     private CreateAccount resource;
     @BeforeEach
     void init() {
-        resource = new CreateAccount(new MockDatabaseService());
+        database = new MockDatabaseService();
+        resource = new CreateAccount(database);
+        database.init();
+    }
+
+    @AfterEach
+    void teardown() {
+        database.teardown();
     }
 
     @Test
