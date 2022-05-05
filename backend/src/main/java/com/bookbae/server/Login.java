@@ -30,7 +30,7 @@ public class Login {
     private static String checkLoginInfoString = "SELECT user_id " +
             "FROM login_info " +
             "WHERE user_id = ? " +
-            "AND password = ?;";
+            "AND hash = ?;";
 
     @Inject
     public Login(DatabasePoolService database, SecretKeyService keys) {
@@ -45,6 +45,7 @@ public class Login {
 
         String email = data.getEmail();
         String password = data.getPassword();
+        String userId = "";
 
         try {
             Connection conn = this.database.getConnection();
@@ -58,7 +59,7 @@ public class Login {
              if (!resultSet.next()) {
                  return Response.status(Response.Status.FORBIDDEN).build();
              }
-            String userId = resultSet.getString("user_id");
+            userId = resultSet.getString("user_id"); // not null! woo
 
             // get user's salt
             PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
@@ -78,16 +79,16 @@ public class Login {
             String hashedPw = BCrypt.hashpw(password, salt);
 
             //throws 500 error
-//            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
-//            checkLoginInfoStatement.setString(1, userId);
-//            checkLoginInfoStatement.setString(2, hashedPw);
-//            resultSet = checkLoginInfoStatement.executeQuery();
+            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
+            checkLoginInfoStatement.setString(1, userId);
+            checkLoginInfoStatement.setString(2, hashedPw);
+            resultSet = checkLoginInfoStatement.executeQuery();
 
             // password is incorrect
-            //if (!resultSet.next()){
-            //    resultSet.close();
-            //    return Response.status(Response.Status.FORBIDDEN).build();
-            //}
+            if (!resultSet.next()){
+                resultSet.close();
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
 
             conn.close();
         } catch (SQLException e) {
@@ -95,8 +96,7 @@ public class Login {
             return Response.serverError().build();
         }
 
-                                               //TODO: v replace with uniqueidentifier from database
-        String jws = Jwts.builder().setSubject(UUID.randomUUID().toString())
+        String jws = Jwts.builder().setSubject(userId)
                          .signWith(this.key).compact(); //TODO: add expiry date
         return Response.ok(new LoginResponse(jws)).build();
     }

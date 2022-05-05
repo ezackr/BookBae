@@ -4,12 +4,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import com.bookbae.server.RestApplication;
 import com.bookbae.server.User;
+import com.bookbae.server.Login;
 import com.bookbae.server.CreateAccount;
 import com.bookbae.server.json.UserResponse;
+import com.bookbae.server.json.LoginResponse;
 import com.bookbae.server.json.UserRequest;
 import jakarta.ws.rs.core.SecurityContext;
 import com.bookbae.server.json.AccountRequest;
 import java.util.UUID;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import com.bookbae.server.service.SecretKeyServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,8 +41,22 @@ public class UserTest {
 
     @Test
     void getUserTest() {
-        createAccountResource.tryCreate(getRequest());
-        var resp = userResource.getUser(new MockSecurityContext(userid.toString()));
+        var keys = new SecretKeyServiceImpl();
+        var login = getRequest();
+        createAccountResource.tryCreate(login);
+        var loginResource = new Login(database, keys);
+        var acct = (LoginResponse) loginResource.tryLogin(login).getEntity();
+        var token = acct.getAuthToken();
+        Jws<Claims> jws;
+        try { 
+            jws = Jwts.parserBuilder()
+            .setSigningKey(keys.getKey())
+            .build()
+            .parseClaimsJws(token);
+        } catch (Exception ex) { return; }
+        String subj = jws.getBody().getSubject();
+        // assume ^ work
+        var resp = userResource.getUser(new MockSecurityContext(subj));
         var entity = (UserResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
     }
