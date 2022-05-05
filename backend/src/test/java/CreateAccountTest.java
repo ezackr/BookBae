@@ -38,6 +38,8 @@ public class CreateAccountTest {
     void sqlFailureTest() {
         resource = new CreateAccount(new SQLFailService());
         var req = new AccountRequest();
+        req.setEmail("email@example.com");
+        req.setPassword("hunter2");
         var resp = resource.tryCreate(req);
         assertEquals(500, resp.getStatus());
     }

@@ -6,6 +6,7 @@ import com.bookbae.server.DatabasePoolService;
 import com.bookbae.server.SecretKeyService;
 import com.bookbae.server.service.SecretKeyServiceImpl;
 import com.bookbae.server.Login;
+import com.bookbae.server.CreateAccount;
 import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.LoginResponse;
 import java.util.UUID;
@@ -19,13 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 public class LoginTest {
     private MockDatabaseService database;
     private SecretKeyService keys;
-    private Login resource;
+
+    private CreateAccount createAccountResource;
+    private Login loginResource;
 
     @BeforeEach
     void init() {
         database = new MockDatabaseService("loginTest");
+        createAccountResource = new CreateAccount(database);
         keys     = new SecretKeyServiceImpl();
-        resource = new Login(database, keys);
+        loginResource = new Login(database, keys);
         database.init();
     }
 
@@ -36,7 +40,8 @@ public class LoginTest {
 
     @Test
     void loginTest() {
-        var resp = resource.tryLogin(getRequest());
+        createAccountResource.tryCreate(getRequest());
+        var resp = loginResource.tryLogin(getRequest());
         var entity = (LoginResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
         assertDoesNotThrow(() -> {
@@ -47,8 +52,9 @@ public class LoginTest {
 
     @Test
     void sqlFailureTest() {
-        resource = new Login(new SQLFailService(), keys);
-        var resp = resource.tryLogin(getRequest());
+        createAccountResource.tryCreate(getRequest());
+        loginResource = new Login(new SQLFailService(), keys);
+        var resp = loginResource.tryLogin(getRequest());
         assertEquals(500, resp.getStatus());
     }
 

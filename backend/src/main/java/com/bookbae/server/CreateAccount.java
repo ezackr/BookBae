@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 @Path("/create")
 public class CreateAccount {
 
+    private static String insertUserInfoString = "INSERT INTO user_info" +
+            " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL, NULL);";
+    private static String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
     private DatabasePoolService database;
 
     @Inject
@@ -29,36 +32,29 @@ public class CreateAccount {
     public Response tryCreate(AccountRequest req) {
 
         // new account data
-        String email = "email@uw.edu"; // req.getEmail();
-        String password = "password"; // req.getPassword();
+        String email = req.getEmail();
+        String password = req.getPassword();
         String phone = "deleteme";
         String salt = BCrypt.gensalt();
         String hashedPw = BCrypt.hashpw(password, salt);
-        UUID userId = UUID.randomUUID();
+        String userId = UUID.randomUUID().toString();
 
         try {
             // maybe make a transaction here? IDK how transactions work
             Connection conn = this.database.getConnection();
             // Check if email exists in db first
             // insert user into db with default NULL for unset values
-            String insertUserInfoString = "INSERT INTO user_info" +
-                    " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL, NULL);";
-            // PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
-            // insertUserStatement.setString(1, userId.toString()); // Not right, userId is type uniqueidentifier I think
-            // insertUserStatement.setString(2, phone);
-            // insertUserStatement.setString(3, email);
-            // insertUserStatement.executeUpdate();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user_info WHERE email = ?;");
-            stmt.setString(1, req.getEmail());
-            stmt.executeQuery();
-            stmt.close();
+            PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
+            insertUserStatement.setString(1, userId);
+            insertUserStatement.setString(2, phone);
+            insertUserStatement.setString(3, email);
+            insertUserStatement.executeUpdate();
 
-            // String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
-            // PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
-            // insertLoginInfoStatement.setString(1, salt);
-            // insertLoginInfoStatement.setString(2, hashedPw);
-            // insertLoginInfoStatement.setString(3, userId);
-            // insertLoginInfoStatement.executeUpdate();
+            PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
+            insertLoginInfoStatement.setString(1, salt);
+            insertLoginInfoStatement.setString(2, hashedPw);
+            insertLoginInfoStatement.setString(3, userId);
+            insertLoginInfoStatement.executeUpdate();
 
             conn.close();
         } catch (SQLException e) {

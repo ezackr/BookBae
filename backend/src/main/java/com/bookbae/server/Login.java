@@ -23,6 +23,14 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class Login {
     private SecretKey key;
     private DatabasePoolService database;
+    private static String getUserIdFromEmailString = "SELECT user_id FROM user_info WHERE email = ?;";
+    private static String retrieveSaltString = "SELECT salt " +
+            "FROM login_info " +
+            "WHERE user_id = ?";
+    private static String checkLoginInfoString = "SELECT user_id " +
+            "FROM login_info " +
+            "WHERE user_id = ? " +
+            "AND password = ?;";
 
     @Inject
     public Login(DatabasePoolService database, SecretKeyService keys) {
@@ -41,35 +49,39 @@ public class Login {
         try {
             Connection conn = this.database.getConnection();
 
-            // retrieve user's salt
-            String retrieveSaltString = "SELECT salt " +
-                    "FROM login_info " +
-                    "WHERE user_id = ?"; // TODO: email instead of userid or find userid from email
-            System.out.println("Connection: " + conn);
-            // PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
-            // retrieveSaltStatement.setString(1, userId);
-            // ResultSet resultSet = retrieveSaltStatement.executeQuery();
+            // get user id
+            PreparedStatement getUserIdStatement = conn.prepareStatement(getUserIdFromEmailString);
+            getUserIdStatement.setString(1, email);
+            ResultSet resultSet = getUserIdStatement.executeQuery();
 
-           // salt not found; user does not exist
-           // if (!resultSet.next()) {
-           //     resultSet.close();
-           //     return Response.status(Response.Status.FORBIDDEN).build();
-           // }
+            // user id not found; user does not exist
+             if (!resultSet.next()) {
+                 return Response.status(Response.Status.FORBIDDEN).build();
+             }
+            String userId = resultSet.getString("user_id");
+
+            // get user's salt
+            PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
+            retrieveSaltStatement.setString(1, userId);
+            resultSet = retrieveSaltStatement.executeQuery();
+
+           // salt not found
+            if (!resultSet.next()) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
 
             // salt found; user exists
-            // String salt = resultSet.getString("salt");
-            // resultSet.close();
+            String salt = resultSet.getString("salt");
+            resultSet.close();
 
             // check if login information is correct
-            // String hashedPw = BCrypt.hashpw(password, salt);
-             String checkLoginInfoString = "SELECT user_id " +
-                     "FROM login_info " +
-                     "WHERE user_id = ? " +
-                     "AND password = ?;";
-            //PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
-            // checkLoginInfoStatement.setString(1, userId);
-            // checkLoginInfoStatement.setString(2, password);
-            // resultSet = checkLoginInfoStatement.executeQuery();
+            String hashedPw = BCrypt.hashpw(password, salt);
+
+            //throws 500 error
+//            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
+//            checkLoginInfoStatement.setString(1, userId);
+//            checkLoginInfoStatement.setString(2, hashedPw);
+//            resultSet = checkLoginInfoStatement.executeQuery();
 
             // password is incorrect
             //if (!resultSet.next()){
@@ -79,7 +91,7 @@ public class Login {
 
             conn.close();
         } catch (SQLException e) {
-            System.out.println("ERROR: " + e);
+            e.printStackTrace();
             return Response.serverError().build();
         }
 
