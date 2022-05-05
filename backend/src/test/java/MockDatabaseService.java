@@ -3,31 +3,36 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
 
 public class MockDatabaseService implements DatabasePoolService {
     private BasicDataSource dataSource;
-    private static String makeMeHappy = "CREATE TABLE user_info\n" +
-"(\n" +
-"    user_id UUID NOT NULL,\n" +
-"    name VARCHAR(64) NOT NULL,\n" +
-"    gender VARCHAR(2) NOT NULL,\n" +
-"    phone_num VARCHAR(15) NOT NULL,\n" +
-"    fav_genre VARCHAR(20) NOT NULL,\n" +
-"    birthday DATE NOT NULL,\n" +
-"    email VARCHAR(254) NOT NULL,\n" +
-"    zipcode CHAR(5) NOT NULL,\n" +
-"    bio VARCHAR(500) NOT NULL,\n" +
-"    PRIMARY KEY (user_id),\n" +
-"    UNIQUE (phone_num),\n" +
-"    UNIQUE (email)\n" +
-");";
-    private static String makeMeSad = "DROP TABLE user_info;";
 
+    private static String createTables = makeSQLH2Compatible(readFromFile("/database/CREATETABLES.sql"));
+    private static String dropTables = readFromFile("/database/DROPTABLES.sql");
     public MockDatabaseService(String name) {
         this.dataSource = new BasicDataSource();
         this.dataSource.setUrl("jdbc:h2:mem:" + name);
         this.dataSource.setDriverClassName("org.h2.Driver");
         this.dataSource.setPoolPreparedStatements(true);
+
+    }
+
+    private static String readFromFile (String fileName){
+        String fileContents = "";
+        try {
+            fileContents = Files.readString(Path.of(fileName));
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return fileContents;
+    }
+
+    // UNIQUEIDENTIFIER is Microsoft's naming convention, must change to UUID for H2
+    private static String makeSQLH2Compatible(String str){
+        return str.replace("UNIQUEIDENTIFIER", "UUID");
     }
 
     @Override
