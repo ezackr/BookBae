@@ -7,28 +7,9 @@ import {
   TextInput,
 } from 'react-native';
 
-const LoginScreen = () => {
-  const [username, onChangeUsername] = React.useState(null);
+const LoginScreen = ({navigation}) => {
+  const [email, onChangeEmail] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
-
-  const handleLogin = async () => {
-    console.log('Login!');
-    try {
-      let response = await fetch('http://hostname/api/v1/user?' + username);
-      let json = await response.json();
-      return json.username;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handlePasswordReset = async () => {
-    console.log('Reset Password!');
-  };
-
-  const handleCreateAccount = async () => {
-    console.log('Create Account!');
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,9 +19,9 @@ const LoginScreen = () => {
       <TextInput
         style={styles.input}
         numberOfLines={1}
-        onChangeText={onChangeUsername}
-        value={username}
-        placeholder="Username"
+        onChangeText={onChangeEmail}
+        value={email}
+        placeholder="Email"
         keyboardType="default"
       />
       <TextInput
@@ -52,13 +33,19 @@ const LoginScreen = () => {
         keyboardType="default"
         secureTextEntry={true}
       />
-      <Pressable style={styles.button} onPress={() => handleLogin()}>
+      <Pressable
+        style={styles.button}
+        onPress={() => navigation.navigate('HomeScreen')}>
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => handlePasswordReset()}>
+      <Pressable
+        style={styles.button}
+        onPress={() => console.log('Forgot Password!')}>
         <Text style={styles.buttonText}>Forgot Password</Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => handleCreateAccount()}>
+      <Pressable
+        style={styles.button}
+        onPress={() => console.log('Create Account!')}>
         <Text style={styles.buttonText}>Create Account</Text>
       </Pressable>
     </SafeAreaView>
@@ -70,7 +57,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'dodgerblue',
+    backgroundColor: '#fffdd3',
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 'bold',
