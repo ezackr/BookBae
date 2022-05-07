@@ -40,7 +40,7 @@ public class LoginTest {
     }
 
     @Test
-    void loginTest() {
+    void successfulLoginTest() {
         createAccountResource.tryCreate(accountRequest);
         var resp = loginResource.tryLogin(accountRequest);
         var entity = (LoginResponse) resp.getEntity();
@@ -49,6 +49,14 @@ public class LoginTest {
             Jws<Claims> jws = Jwts.parserBuilder()
                 .setSigningKey(keys.getKey()).build().parseClaimsJws(entity.getAuthToken());
         });
+    }
+
+    @Test
+    void failedLoginTest() {
+        createAccountResource.tryCreate(accountRequest);
+        accountRequest.setEmail("wrongemail@gmail.com");
+        var resp = loginResource.tryLogin(accountRequest);
+        assertEquals(403, resp.getStatus());
     }
 
     @Test
