@@ -52,9 +52,17 @@ public class LoginTest {
     }
 
     @Test
-    void failedLoginTest() {
+    void wrongEmailLoginTest() {
         createAccountResource.tryCreate(accountRequest);
         accountRequest.setEmail("wrongemail@gmail.com");
+        var resp = loginResource.tryLogin(accountRequest);
+        assertEquals(403, resp.getStatus());
+    }
+
+    @Test
+    void wrongPasswordLoginTest() {
+        createAccountResource.tryCreate(accountRequest);
+        accountRequest.setPassword("wrongpassword");
         var resp = loginResource.tryLogin(accountRequest);
         assertEquals(403, resp.getStatus());
     }
