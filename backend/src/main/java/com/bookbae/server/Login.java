@@ -47,9 +47,7 @@ public class Login {
         String password = data.getPassword();
         String userId = "";
 
-        try {
-            Connection conn = this.database.getConnection();
-
+        try (Connection conn = this.database.getConnection()) {
             // get user id
             PreparedStatement getUserIdStatement = conn.prepareStatement(getUserIdFromEmailString);
             getUserIdStatement.setString(1, email);
@@ -88,8 +86,6 @@ public class Login {
                 resultSet.close();
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
-
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();

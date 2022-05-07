@@ -42,10 +42,8 @@ public class CreateAccount {
         String hashedPw = BCrypt.hashpw(password, salt);
         String userId = UUID.randomUUID().toString();
 
-        try {
+        try (Connection conn = this.database.getConnection()) {
             // maybe make a transaction here? IDK how transactions work
-            Connection conn = this.database.getConnection();
-
             // Check if email exists in db first
             PreparedStatement checkIfUserAlreadyExistsStatement = conn.prepareStatement(checkIfUserAlreadyExistsString);
             checkIfUserAlreadyExistsStatement.setString(1, email);
@@ -68,8 +66,6 @@ public class CreateAccount {
             insertLoginInfoStatement.setString(2, hashedPw);
             insertLoginInfoStatement.setString(3, userId);
             insertLoginInfoStatement.executeUpdate();
-
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();

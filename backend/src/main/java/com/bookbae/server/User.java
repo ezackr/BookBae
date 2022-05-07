@@ -46,9 +46,7 @@ public class User {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         UserResponse resp = new UserResponse();
-        try {
-            Connection conn = this.database.getConnection();
-
+        try (Connection conn = this.database.getConnection()) {
             // retrieve user info
             String userId = ctx.getUserPrincipal().getName();
             PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(retrieveUserInfoString);
@@ -69,8 +67,6 @@ public class User {
              resp.setBirthday(Objects.toString(resultSet.getDate("birthday"))); // saves birthday as a string if not null
              resp.setBio(resultSet.getString("bio"));
              resp.setZipcode(resultSet.getString("zipcode"));
-
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();
@@ -85,9 +81,7 @@ public class User {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         UserResponse resp = new UserResponse(req);
-        try {
-            Connection conn = this.database.getConnection();
-
+        try (Connection conn = this.database.getConnection()) {
             // update user info
             String userId = ctx.getUserPrincipal().getName();
             PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
@@ -101,8 +95,6 @@ public class User {
             updateUserInfoStatement.setString(8, req.getZipcode());
             updateUserInfoStatement.setString(9, userId);
             updateUserInfoStatement.executeUpdate();
-
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();
