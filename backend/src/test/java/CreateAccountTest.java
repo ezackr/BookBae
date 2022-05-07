@@ -27,7 +27,7 @@ public class CreateAccountTest {
 
     @Test
     void creationTest() {
-        var req = getAccountRequest();
+        var req = getExampleAccountRequest();
         var resp = resource.tryCreate(req);
         assertEquals(200, resp.getStatus());
     }
@@ -35,12 +35,12 @@ public class CreateAccountTest {
     @Test
     void sqlFailureTest() {
         resource = new CreateAccount(new SQLFailService());
-        var req = getAccountRequest();
+        var req = getExampleAccountRequest();
         var resp = resource.tryCreate(req);
         assertEquals(500, resp.getStatus());
     }
 
-    private AccountRequest getAccountRequest() {
+    private AccountRequest getExampleAccountRequest() {
         var req = new AccountRequest();
         req.setEmail("test@example.com");
         req.setPassword("hunter2");

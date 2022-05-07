@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 public class LoginTest {
     private MockDatabaseService database;
     private SecretKeyService keys;
-
+    private AccountRequest accountRequest;
     private CreateAccount createAccountResource;
     private Login loginResource;
 
@@ -30,6 +30,7 @@ public class LoginTest {
         createAccountResource = new CreateAccount(database);
         keys     = new SecretKeyServiceImpl();
         loginResource = new Login(database, keys);
+        accountRequest = getExampleAccountRequest();
         database.init();
     }
 
@@ -40,8 +41,8 @@ public class LoginTest {
 
     @Test
     void loginTest() {
-        createAccountResource.tryCreate(getRequest());
-        var resp = loginResource.tryLogin(getRequest());
+        createAccountResource.tryCreate(accountRequest);
+        var resp = loginResource.tryLogin(accountRequest);
         var entity = (LoginResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
         assertDoesNotThrow(() -> {
@@ -52,13 +53,13 @@ public class LoginTest {
 
     @Test
     void sqlFailureTest() {
-        createAccountResource.tryCreate(getRequest());
+        createAccountResource.tryCreate(accountRequest);
         loginResource = new Login(new SQLFailService(), keys);
-        var resp = loginResource.tryLogin(getRequest());
+        var resp = loginResource.tryLogin(accountRequest);
         assertEquals(500, resp.getStatus());
     }
 
-    private AccountRequest getRequest() {
+    private AccountRequest getExampleAccountRequest() {
         var req = new AccountRequest();
         req.setEmail("test@example.com");
         req.setPassword("hunter2");
