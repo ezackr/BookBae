@@ -17,6 +17,7 @@ import java.util.UUID;
 import com.bookbae.server.security.SecuredResource;
 import com.bookbae.server.json.UserResponse;
 import com.bookbae.server.json.UserRequest;
+import java.util.Objects;
 
 @SecuredResource
 @Path("/user")
@@ -47,6 +48,7 @@ public class User {
         UserResponse resp = new UserResponse();
         try {
             Connection conn = this.database.getConnection();
+
             // retrieve user info
             String userId = ctx.getUserPrincipal().getName();
             PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(retrieveUserInfoString);
@@ -64,7 +66,7 @@ public class User {
              resp.setPreferredGender(resultSet.getString("preferred_gender"));
              resp.setGender(resultSet.getString("gender"));
              resp.setFavGenre(resultSet.getString("fav_genre"));
-             // resp.setBirthday(resultSet.getDate("birthday").toString());
+             resp.setBirthday(Objects.toString(resultSet.getDate("birthday"))); // saves birthday as a string if not null
              resp.setBio(resultSet.getString("bio"));
              resp.setZipcode(resultSet.getString("zipcode"));
 
