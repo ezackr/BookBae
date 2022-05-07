@@ -108,10 +108,11 @@ public class MockDatabaseService implements DatabasePoolService {
         this.dataSource.setDriverClassName("org.h2.Driver");
         this.dataSource.setPoolPreparedStatements(true);
 
+        // System.out.println(Path.of(ClassLoader.getSystemResource("CREATETABLES.sql").getFile())); //getClass().getResource("/CREATETABLES.sql").getFile());
     }
 
-    private static String readFromFile (String fileName){
-        // System.out.println(new File("").getAbsolutePath());
+    private static String readFromFile (String fileName) {
+
         String fileContents = "";
         try {
             fileContents = Files.readString(Path.of(fileName));
@@ -123,7 +124,9 @@ public class MockDatabaseService implements DatabasePoolService {
 
     // UNIQUEIDENTIFIER is Microsoft's naming convention, must change to UUID for H2
     private static String makeSQLH2Compatible(String str){
-        return str.replace("UNIQUEIDENTIFIER", "UUID");
+        str = str.replace("UNIQUEIDENTIFIER default NEWID()", "UUID");
+        str = str.replace("UNIQUEIDENTIFIER", "UUID");
+        return str;
     }
 
     @Override
