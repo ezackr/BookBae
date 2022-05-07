@@ -39,10 +39,11 @@ public class UserTest {
         database.teardown();
     }
 
+    // This tests getting a basic user with only login information saved
     @Test
     void getUserTest() {
         var keys = new SecretKeyServiceImpl();
-        var login = getRequest();
+        var login = getAccountRequest();
         createAccountResource.tryCreate(login);
         var loginResource = new Login(database, keys);
         var acct = (LoginResponse) loginResource.tryLogin(login).getEntity();
@@ -59,11 +60,35 @@ public class UserTest {
         var resp = userResource.getUser(new MockSecurityContext(subj));
         var entity = (UserResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
+        assertEquals(login.getEmail() , entity.getEmail());
     }
 
     @Test
     void putUserTest() {
-        createAccountResource.tryCreate(getRequest());
+        createAccountResource.tryCreate(getAccountRequest());
+        var req = getUserRequest();
+        var resp = userResource.putUser(new MockSecurityContext(userid.toString()), req);
+        var entity = (UserResponse) resp.getEntity();
+        assertEquals(200, resp.getStatus());
+        assertEquals(req.getZipcode(), entity.getZipcode());
+    }
+
+    @Test
+    void sqlFailureTest() {
+        createAccountResource.tryCreate(getAccountRequest());
+        userResource = new User(new SQLFailService());
+        var resp = userResource.getUser(new MockSecurityContext(userid.toString()));
+        assertEquals(500, resp.getStatus());
+    }
+
+    private AccountRequest getAccountRequest() {
+        var req = new AccountRequest();
+        req.setEmail("test@example.com");
+        req.setPassword("hunter2");
+        return req;
+    }
+
+    private UserRequest getUserRequest() {
         var req = new UserRequest();
         req.setEmail("email@uw.edu");
         req.setName("Name Name");
@@ -73,25 +98,7 @@ public class UserTest {
         req.setBirthday("2000-01-01");
         req.setBio("bio");
         req.setZipcode("80210");
-
-        var resp = userResource.putUser(new MockSecurityContext(userid.toString()), req);
-        var entity = (UserResponse) resp.getEntity();
-        assertEquals(200, resp.getStatus());
-        assertEquals(req.getZipcode(), entity.getZipcode());
-    }
-
-    @Test
-    void sqlFailureTest() {
-        createAccountResource.tryCreate(getRequest());
-        userResource = new User(new SQLFailService());
-        var resp = userResource.getUser(new MockSecurityContext(userid.toString()));
-        assertEquals(500, resp.getStatus());
-    }
-
-    private AccountRequest getRequest() {
-        var req = new AccountRequest();
-        req.setEmail("test@example.com");
-        req.setPassword("hunter2");
         return req;
     }
+
 }
