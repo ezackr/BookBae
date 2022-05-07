@@ -11,10 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateAccountTest {
+
+    private AccountRequest accountRequest;
     private MockDatabaseService database;
     private CreateAccount resource;
+
     @BeforeEach
     void init() {
+        accountRequest = getExampleAccountRequest();
         database = new MockDatabaseService("createAccountTest");
         resource = new CreateAccount(database);
         database.init();
@@ -26,17 +30,23 @@ public class CreateAccountTest {
     }
 
     @Test
-    void creationTest() {
-        var req = getExampleAccountRequest();
-        var resp = resource.tryCreate(req);
+    void successfulCreationTest() {
+        var resp = resource.tryCreate(accountRequest);
         assertEquals(200, resp.getStatus());
+    }
+
+    @Test
+    void duplicateAccountTest() {
+        var firstTryResp = resource.tryCreate(accountRequest);
+        assertEquals(200, firstTryResp.getStatus());
+        var secondTryResp = resource.tryCreate(accountRequest);
+        assertEquals(403, secondTryResp.getStatus());
     }
 
     @Test
     void sqlFailureTest() {
         resource = new CreateAccount(new SQLFailService());
-        var req = getExampleAccountRequest();
-        var resp = resource.tryCreate(req);
+        var resp = resource.tryCreate(accountRequest);
         assertEquals(500, resp.getStatus());
     }
 
