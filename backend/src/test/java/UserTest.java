@@ -42,25 +42,13 @@ public class UserTest {
     // This tests getting a basic user with only login information saved
     @Test
     void getUserTest() {
-        var keys = new SecretKeyServiceImpl();
-        var login = getAccountRequest();
-        createAccountResource.tryCreate(login);
-        var loginResource = new Login(database, keys);
-        var acct = (LoginResponse) loginResource.tryLogin(login).getEntity();
-        var token = acct.getAuthToken();
-        Jws<Claims> jws;
-        try { 
-            jws = Jwts.parserBuilder()
-            .setSigningKey(keys.getKey())
-            .build()
-            .parseClaimsJws(token);
-        } catch (Exception ex) { return; }
-        String subj = jws.getBody().getSubject();
-        // assume ^ work
-        var resp = userResource.getUser(new MockSecurityContext(subj));
+        var accountRequest = getAccountRequest();
+        String userId = getMockUserId(accountRequest);
+        assert !userId.equals("");
+        var resp = userResource.getUser(new MockSecurityContext(userId));
         var entity = (UserResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
-        assertEquals(login.getEmail() , entity.getEmail());
+        assertEquals(accountRequest.getEmail() , entity.getEmail());
     }
 
     @Test
@@ -70,7 +58,6 @@ public class UserTest {
         var resp = userResource.putUser(new MockSecurityContext(userid.toString()), req);
         var entity = (UserResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
-        assertEquals(req.getZipcode(), entity.getZipcode());
     }
 
     @Test
@@ -79,6 +66,27 @@ public class UserTest {
         userResource = new User(new SQLFailService());
         var resp = userResource.getUser(new MockSecurityContext(userid.toString()));
         assertEquals(500, resp.getStatus());
+    }
+
+    private String getMockUserId(AccountRequest accountRequest) {
+        var keys = new SecretKeyServiceImpl();
+        createAccountResource.tryCreate(accountRequest);
+        var loginResource = new Login(database, keys);
+        var acct = (LoginResponse) loginResource.tryLogin(accountRequest).getEntity();
+        var token = acct.getAuthToken();
+        Jws<Claims> jws;
+        try {
+            jws = Jwts.parserBuilder()
+                    .setSigningKey(keys.getKey())
+                    .build()
+                    .parseClaimsJws(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+        String subj = jws.getBody().getSubject();
+        // assume ^ work
+        return subj;
     }
 
     private AccountRequest getAccountRequest() {
