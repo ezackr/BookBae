@@ -28,8 +28,8 @@ public class User {
             "WHERE user_id = ?;";
     private static String updateUserInfoString = "UPDATE user_info " +
             "SET name = ?, preferred_gender = ?, gender = ?, fav_genre = ?," +
-            "birthday = ?, bio = ?, phone_num = ?, email = ?, zipcode = ? " +
-            "WHERE used_id = ?;";
+            "birthday = ?, bio = ?, email = ?, zipcode = ? " +
+            "WHERE user_id = ?;";
 
     @Inject
     public User(DatabasePoolService database) {
@@ -55,19 +55,18 @@ public class User {
 
             // invalid user id
              if(!resultSet.next()){
-                 System.out.println("USER NOT FOUND");
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
 
-            // populate resp object
-            // resp.setEmail(resultSet.getString("email"));
-            // resp.setName(resultSet.getString("name"));
-            // resp.setPreferredGender(resultSet.getString("preferred_gender"));
-            // resp.setGender(resultSet.getString("gender"));
-            // resp.setFavGenre(resultSet.getString("fav_genre"));
-            // resp.setBirthday(resultSet.getDate("birthday"));
-            // resp.setBio(resultSet.getString("bio"));
-            // resp.setZipcode(resultSet.getString("zipcode"));
+             // populate resp object
+             resp.setEmail(resultSet.getString("email"));
+             resp.setName(resultSet.getString("name"));
+             resp.setPreferredGender(resultSet.getString("preferred_gender"));
+             resp.setGender(resultSet.getString("gender"));
+             resp.setFavGenre(resultSet.getString("fav_genre"));
+             // resp.setBirthday(resultSet.getDate("birthday").toString());
+             resp.setBio(resultSet.getString("bio"));
+             resp.setZipcode(resultSet.getString("zipcode"));
 
             conn.close();
         } catch (SQLException e) {
@@ -89,18 +88,17 @@ public class User {
 
             // update user info
             String userId = ctx.getUserPrincipal().getName();
-            // PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
-            // updateUserInfoStatement.setString(1, req.getName());
-            // updateUserInfoStatement.setString(2, req.getPreferredGender());
-            // updateUserInfoStatement.setString(3, req.getGender());
-            // updateUserInfoStatement.setString(4, req.getFavGenre());
-            // updateUserInfoStatement.setDate(5, java.sql.Date.valueOf(req.getBirthday()));
-            // updateUserInfoStatement.setString(6, req.getBio());
-            // updateUserInfoStatement.setString(7, req.getPhoneNumber());
-            // updateUserInfoStatement.setString(8, req.getEmail());
-            // updateUserInfoStatement.setString(9, req.getZipcode());
-            // updateUserInfoStatement.setString(10, userId);
-            // updateUserInfoStatement.executeUpdate();
+            PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
+            updateUserInfoStatement.setString(1, req.getName());
+            updateUserInfoStatement.setString(2, req.getPreferredGender());
+            updateUserInfoStatement.setString(3, req.getGender());
+            updateUserInfoStatement.setString(4, req.getFavGenre());
+            updateUserInfoStatement.setDate(5, java.sql.Date.valueOf(req.getBirthday()));
+            updateUserInfoStatement.setString(6, req.getBio());
+            updateUserInfoStatement.setString(7, req.getEmail());
+            updateUserInfoStatement.setString(8, req.getZipcode());
+            updateUserInfoStatement.setString(9, userId);
+            updateUserInfoStatement.executeUpdate();
 
             conn.close();
         } catch (SQLException e) {

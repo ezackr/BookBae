@@ -78,7 +78,6 @@ public class Login {
             // check if login information is correct
             String hashedPw = BCrypt.hashpw(password, salt);
 
-            //throws 500 error
             PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
             checkLoginInfoStatement.setString(1, userId);
             checkLoginInfoStatement.setString(2, hashedPw);
