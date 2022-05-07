@@ -10,11 +10,14 @@ import com.bookbae.server.json.AccountRequest;
 import java.util.UUID;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Path("/create")
 public class CreateAccount {
+
+    private static String checkIfUserAlreadyExistsString = "SELECT * FROM user_info WHERE email = ?;";
 
     private static String insertUserInfoString = "INSERT INTO user_info" +
             " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL, NULL);";
@@ -42,7 +45,17 @@ public class CreateAccount {
         try {
             // maybe make a transaction here? IDK how transactions work
             Connection conn = this.database.getConnection();
+
             // Check if email exists in db first
+            PreparedStatement checkIfUserAlreadyExistsStatement = conn.prepareStatement(checkIfUserAlreadyExistsString);
+            checkIfUserAlreadyExistsStatement.setString(1, email);
+            ResultSet resultSet = checkIfUserAlreadyExistsStatement.executeQuery();
+
+            // email already in use, cannot create user
+            if (resultSet.next()) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+
             // insert user into db with default NULL for unset values
             PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
             insertUserStatement.setString(1, userId);
