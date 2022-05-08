@@ -6,33 +6,24 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserRequest {
-    protected UUID userid;
+
+    protected String email;
     protected String name;
     protected String preferredGender;
+    protected String gender;
     protected String favGenre;
     protected String birthday;
     protected String bio;
-    protected String phoneNumber;
-    protected String email;
     protected String zipcode;
 
-    @JsonProperty("username")
-    public String getUserId() {
-        return userid.toString();
+    @JsonProperty("email")
+    public String getEmail() {
+        return email;
     }
 
-    @JsonProperty("username")
-    public void setUserId(UUID userid) {
-        this.userid = userid;
-    }
-
-    @JsonProperty("username")
-    public void setUserId(String userid) {
-        try {
-            this.userid = UUID.fromString(userid);
-        } catch (Exception e) {
-            this.userid = null;
-        }
+    @JsonProperty("email")
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @JsonProperty("name")
@@ -53,6 +44,16 @@ public class UserRequest {
     @JsonProperty("preferredGender")
     public void setPreferredGender(String preferredGender) {
         this.preferredGender = preferredGender;
+    }
+
+    @JsonProperty("gender")
+    public String getGender() {
+        return gender;
+    }
+
+    @JsonProperty("gender")
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @JsonProperty("favGenre")
@@ -83,26 +84,6 @@ public class UserRequest {
     @JsonProperty("bio")
     public void setBio(String bio) {
         this.bio = bio;
-    }
-
-    @JsonProperty("phoneNumber")
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    @JsonProperty("phoneNumber")
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    @JsonProperty("email")
-    public String getEmail() {
-        return email;
-    }
-
-    @JsonProperty("email")
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @JsonProperty("zipcode")

@@ -12,14 +12,25 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
 import java.sql.Connection;
 import java.sql.SQLException;
-import com.bookbae.server.json.LoginRequest;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.util.UUID;
+import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.LoginResponse;
-
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Path("/login")
 public class Login {
     private SecretKey key;
     private DatabasePoolService database;
+    private static String getUserIdFromEmailString = "SELECT user_id FROM user_info WHERE email = ?;";
+    private static String retrieveSaltString = "SELECT salt " +
+            "FROM login_info " +
+            "WHERE user_id = ?";
+    private static String checkLoginInfoString = "SELECT user_id " +
+            "FROM login_info " +
+            "WHERE user_id = ? " +
+            "AND hash = ?;";
 
     @Inject
     public Login(DatabasePoolService database, SecretKeyService keys) {
@@ -30,25 +41,58 @@ public class Login {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response tryLogin(LoginRequest data) {
-        if(!data.isValid()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        try {
-            Connection conn = this.database.getConnection();
-            // Statement s = conn.getStatement();
-            // select user_id hash salt from table using username (which is a uniqueidentifier)
-            // use data.password() + salt to generate hash
-            // if username uuid doesn't exist in table, say so
-            conn.close();
+    public Response tryLogin(AccountRequest data) {
+
+        String email = data.getEmail();
+        String password = data.getPassword();
+        String userId = "";
+
+        try (Connection conn = this.database.getConnection()) {
+            // get user id
+            PreparedStatement getUserIdStatement = conn.prepareStatement(getUserIdFromEmailString);
+            getUserIdStatement.setString(1, email);
+            ResultSet resultSet = getUserIdStatement.executeQuery();
+
+            // user id not found; user does not exist
+             if (!resultSet.next()) {
+                 return Response.status(Response.Status.FORBIDDEN).build();
+             }
+            userId = resultSet.getString("user_id"); // not null! woo
+
+            // get user's salt
+            PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
+            retrieveSaltStatement.setString(1, userId);
+            resultSet = retrieveSaltStatement.executeQuery();
+
+           // salt not found
+            if (!resultSet.next()) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+
+            // salt found; user exists
+            String salt = resultSet.getString("salt");
+            resultSet.close();
+
+            // check if login information is correct
+            String hashedPw = BCrypt.hashpw(password, salt);
+
+            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
+            checkLoginInfoStatement.setString(1, userId);
+            checkLoginInfoStatement.setString(2, hashedPw);
+            resultSet = checkLoginInfoStatement.executeQuery();
+
+            // password is incorrect
+            if (!resultSet.next()){
+                resultSet.close();
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
         } catch (SQLException e) {
+            e.printStackTrace();
             return Response.serverError().build();
         }
-        if(1==2) { //TODO: if generated hash is not equal to stored hash or if user doesn't exist
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-        String jws = Jwts.builder().setSubject(data.getUsername())
-                         .signWith(this.key).compact();
+
+        String jws = Jwts.builder().setSubject(userId)
+                         .signWith(this.key).compact(); //TODO: add expiry date
         return Response.ok(new LoginResponse(jws)).build();
     }
 }

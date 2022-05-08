@@ -47,3 +47,19 @@ The `authToken` returned from the login endpoint is a JWT token that should be k
 Attempting to access a secured resource with an expired JWT will return a response with an UNAUTHORIZED status code, and attempting to access a secured resource with an invalid JWT will return UNAUTHORIZED. If a client recieves an unauthorized response, it should attempt to get a fresh JWT by hitting the /login endpoint again. 
 
 To access a secured resource, the JWT must be passed in the "Authorization" HTTP header. The header must have a value of `Bearer <insert token here>`, where the token is the value of the `authToken` field recieved from the /login endpoint.
+
+## Glassfish Caveat
+
+When running on Glassfish (and likely other servers too) you need to configure some system properties. Specifically, you need to set the following four properties appropriately:
+
+- bookbae.server_url
+- bookbae.database_name
+- bookbae.username
+- bookbae.password
+
+Additionally, you need to unset the following properties (so Glassfish uses the system defaults, which are appropriate for now):
+
+- javax.net.ssl.keyStore
+- javax.net.ssl.trustStore
+
+These changes can be made under the options tab found by following Configurations > server-config > JVM Settings

@@ -6,38 +6,36 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
-    protected UUID userid;
+    protected String email;
     protected String name;
     protected String preferredGender;
+    protected String gender;
     protected String favGenre;
     protected String birthday;
     protected String bio;
-    protected String phoneNumber;
-    protected String email;
     protected String zipcode;
 
     public UserResponse() {}
 
     public UserResponse(UserRequest req) {
-        this.userid = req.userid;
+        this.email = req.email;
         this.name = req.name;
         this.preferredGender = req.preferredGender;
+        this.gender = req.gender;
         this.favGenre = req.favGenre;
         this.birthday = req.birthday;
         this.bio = req.bio;
-        this.phoneNumber = req.phoneNumber;
-        this.email = req.email;
         this.zipcode = req.zipcode;
     }
 
-    @JsonProperty("username")
-    public String getUserId() {
-        return userid.toString();
+    @JsonProperty("email")
+    public String getEmail() {
+        return email;
     }
 
-    @JsonProperty("username")
-    public void setUserId(UUID userid) {
-        this.userid = userid;
+    @JsonProperty("email")
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @JsonProperty("name")
@@ -60,10 +58,18 @@ public class UserResponse {
         this.preferredGender = preferredGender;
     }
 
-    @JsonProperty("favGenre")
-    public String getFavGenre() {
-        return favGenre;
+    @JsonProperty("gender")
+    public String getGender() {
+        return gender;
     }
+
+    @JsonProperty("gender")
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    @JsonProperty("favGenre")
+    public String getFavGenre() { return favGenre; }
 
     @JsonProperty("favGenre")
     public void setFavGenre(String favGenre) {
@@ -88,26 +94,6 @@ public class UserResponse {
     @JsonProperty("bio")
     public void setBio(String bio) {
         this.bio = bio;
-    }
-
-    @JsonProperty("phoneNumber")
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    @JsonProperty("phoneNumber")
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    @JsonProperty("email")
-    public String getEmail() {
-        return email;
-    }
-
-    @JsonProperty("email")
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @JsonProperty("zipcode")
