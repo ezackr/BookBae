@@ -11,6 +11,18 @@ const LoginScreen = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
 
+  const handleLogin = async () => {
+    navigation.navigate('HomeScreen');
+  };
+
+  const handleCreateAccount = () => {
+    navigation.navigate('CreateAccountScreen');
+  };
+
+  const handleForgotPassword = () => {
+    navigation.navigate('ResetPasswordScreen');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title} numberOfLines={1}>
@@ -33,19 +45,13 @@ const LoginScreen = ({navigation}) => {
         keyboardType="default"
         secureTextEntry={true}
       />
-      <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate('HomeScreen')}>
+      <Pressable style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
-      <Pressable
-        style={styles.button}
-        onPress={() => console.log('Forgot Password!')}>
+      <Pressable style={styles.button} onPress={handleForgotPassword}>
         <Text style={styles.buttonText}>Forgot Password</Text>
       </Pressable>
-      <Pressable
-        style={styles.button}
-        onPress={() => console.log('Create Account!')}>
+      <Pressable style={styles.button} onPress={handleCreateAccount}>
         <Text style={styles.buttonText}>Create Account</Text>
       </Pressable>
     </SafeAreaView>
