@@ -20,6 +20,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.util.Random;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -31,6 +32,7 @@ public class RecommendsTest {
     private Login loginResource;
     private User userResource;
     private Recommends recommendsResource;
+    private int numAccountRequests = 20; // arbitrarily set to 20
     private AccountRequest[] accountRequests;
     private UserRequest[] userRequests;
     private String[] userIds;
@@ -49,7 +51,7 @@ public class RecommendsTest {
         rand = new Random();
 
         // create a bunch of semi-random users
-        accountRequests = getExampleAccountRequests(20); // arbitrarily set to 20
+        accountRequests = getExampleAccountRequests(numAccountRequests);
         userRequests = getExampleUserRequests(accountRequests);
         userIds = new String[accountRequests.length];
 
@@ -70,9 +72,9 @@ public class RecommendsTest {
         // arbitrarily chose to get recommendations for the 0-th user
         var resp = recommendsResource.getRecommends(new MockSecurityContext(userIds[0]));
         assertEquals(200, resp.getStatus());
-        // System.out.println(resp.entries); TODO: @Joshua: stupid question, how do I get the arraylist out of this response?
+        ArrayList<UserResponse> entities = (ArrayList<UserResponse>) resp.getEntity();// should return all but the user themselves
+        assertEquals(numAccountRequests - 1, entities.size());
     }
-
 
     // create an account with the given AccountRequest, put the User
     private String createMockUser(AccountRequest accountRequest, UserRequest userRequest) {

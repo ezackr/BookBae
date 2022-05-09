@@ -61,7 +61,7 @@ public class Recommends {
                 nextUserResponse.setBio(resultSet.getString("bio"));
                 // nextUserResponse.setZipcode(resultSet.getString("zipcode")); Do not return zipcode!
                 entries.add(nextUserResponse);
-            } while(!resultSet.next());
+            } while(resultSet.next());
 
         } catch (SQLException e) {
             e.printStackTrace();
