@@ -6,12 +6,15 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
+import Client from '../Client.js';
 
 const LoginScreen = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
 
   const handleLogin = async () => {
+    Client.logIn({email: email, password: password});
+    console.log(Client.authToken);
     navigation.navigate('HomeScreen');
   };
 
