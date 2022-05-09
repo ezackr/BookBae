@@ -15,7 +15,12 @@ const LoginScreen = ({navigation}) => {
   const handleLogin = async () => {
     Client.logIn({email: email, password: password});
     console.log(Client.authToken);
-    navigation.navigate('HomeScreen');
+    if (Client.authToken !== undefined) {
+      navigation.navigate('HomeScreen');
+    } else {
+      console.log('error');
+      // toggleErrorMessage();
+    }
   };
 
   const handleCreateAccount = () => {

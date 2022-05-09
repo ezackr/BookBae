@@ -1,7 +1,7 @@
 // Utility class for making requests to server
 class Client {
-  static IP = 'change';
-  static PORT = 'change';
+  static IP = '127.0.0.1';
+  static PORT = '8080';
   static CONTEXT = 'api';
   static VERSION = 'v1';
 
@@ -57,7 +57,7 @@ class Client {
     })
       .then(response => response.json())
       .catch(error => {
-        console.error('Failed to log in:', error);
+        // console.error('Failed to log in:', error);
       });
   }
 }
