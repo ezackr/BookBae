@@ -63,6 +63,7 @@ public class LikeTest {
         database.teardown();
     }
 
+    //should probably go back and add a test that makes sure that a like was added to the database
     @Test
     void basicLikeTest() {
         LikeRequest likeRequest = new LikeRequest();
