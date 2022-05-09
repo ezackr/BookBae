@@ -38,7 +38,6 @@ The application offers a number of API endpoints accessible from the root path. 
 - /create
     - POST
         - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
-        - Produces: `{“username”: “<username>”}`
 - /login
     - POST
         - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
