@@ -20,7 +20,7 @@ class Client {
   }
 
   static async setUserInfo(loginInfo) {
-    return fetch(Client.ROOT_PATH + 'user', {
+    return await fetch(Client.ROOT_PATH + 'user', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ class Client {
   }
 
   static async createUser(accountInfo) {
-    return fetch(Client.ROOT_PATH + 'create', {
+    return await fetch(Client.ROOT_PATH + 'create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ class Client {
   }
 
   static async logIn(credentials) {
-    this.authToken = fetch(Client.ROOT_PATH + 'login', {
+    this.authToken = await fetch(Client.ROOT_PATH + 'login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,9 +56,7 @@ class Client {
       body: JSON.stringify(credentials),
     })
       .then(response => response.json())
-      .catch(error => {
-        // console.error('Failed to log in:', error);
-      });
+      .catch(() => {});
   }
 }
 

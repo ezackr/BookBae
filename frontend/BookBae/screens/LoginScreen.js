@@ -14,7 +14,6 @@ const LoginScreen = ({navigation}) => {
 
   const handleLogin = async () => {
     Client.logIn({email: email, password: password});
-    console.log(Client.authToken);
     if (Client.authToken !== undefined) {
       navigation.navigate('HomeScreen');
     } else {
