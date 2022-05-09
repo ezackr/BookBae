@@ -9,6 +9,7 @@ import com.bookbae.server.Login;
 import com.bookbae.server.CreateAccount;
 import com.bookbae.server.User;
 import com.bookbae.server.Like;
+import com.bookbae.server.Recommends;
 import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.UserRequest;
 import com.bookbae.server.json.LikeRequest;
@@ -29,8 +30,10 @@ public class RecommendsTest {
     private CreateAccount createAccountResource;
     private Login loginResource;
     private User userResource;
+    private Recommends recommendsResource;
     private AccountRequest[] accountRequests;
     private UserRequest[] userRequests;
+    private String[] userIds;
     private Random rand;
 
 
@@ -41,14 +44,17 @@ public class RecommendsTest {
         keys = new SecretKeyServiceImpl();
         loginResource = new Login(database, keys);
         userResource = new User(database);
+        recommendsResource = new Recommends(database);
         database.init();
         rand = new Random();
 
         // create a bunch of semi-random users
         accountRequests = getExampleAccountRequests(20); // arbitrarily set to 20
         userRequests = getExampleUserRequests(accountRequests);
+        userIds = new String[accountRequests.length];
+
         for (int i = 0; i < accountRequests.length; i++) {
-            createMockUser(accountRequests[i], userRequests[i]);
+            userIds[i] = createMockUser(accountRequests[i], userRequests[i]);
         }
 
     }
@@ -61,7 +67,10 @@ public class RecommendsTest {
     // later can be expanded to make sure it's returning the right users in the right order based on the algorithm used
     @Test
     void basicRecommendsTest() {
-
+        // arbitrarily chose to get recommendations for the 0-th user
+        var resp = recommendsResource.getRecommends(new MockSecurityContext(userIds[0]));
+        assertEquals(200, resp.getStatus());
+        // System.out.println(resp.entries); TODO: @Joshua: stupid question, how do I get the arraylist out of this response?
     }
 
 

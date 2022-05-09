@@ -50,7 +50,8 @@ public class Recommends {
 
             do {
                 nextUserResponse = new UserResponse();
-                nextUserResponse.setEmail(resultSet.getString("email"));
+                // nextUserResponse.setEmail(resultSet.getString("email")); Do not return email!
+                nextUserResponse.setUserId(resultSet.getString("user_id"));
                 nextUserResponse.setName(resultSet.getString("name"));
                 nextUserResponse.setPreferredGender(resultSet.getString("preferred_gender"));
                 nextUserResponse.setGender(resultSet.getString("gender"));
@@ -58,11 +59,9 @@ public class Recommends {
                 // saves birthday as a string if not null
                 nextUserResponse.setBirthday(Objects.toString(resultSet.getDate("birthday")));
                 nextUserResponse.setBio(resultSet.getString("bio"));
-                nextUserResponse.setZipcode(resultSet.getString("zipcode"));
+                // nextUserResponse.setZipcode(resultSet.getString("zipcode")); Do not return zipcode!
                 entries.add(nextUserResponse);
             } while(!resultSet.next());
-
-            return entries;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,5 +69,4 @@ public class Recommends {
         }
         return Response.ok(entries).build();
     }
-
 }
