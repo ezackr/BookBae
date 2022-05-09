@@ -20,7 +20,7 @@ public class CreateAccount {
     private static String checkIfUserAlreadyExistsString = "SELECT * FROM user_info WHERE email = ?;";
 
     private static String insertUserInfoString = "INSERT INTO user_info" +
-            " VALUES(?, NULL, NULL, ?, NULL, NULL, ?, NULL, NULL, NULL);";
+            " VALUES(?, NULL, NULL, NULL, NULL, ?, NULL, NULL, NULL, NULL);";
     private static String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
     private DatabasePoolService database;
 
@@ -37,7 +37,6 @@ public class CreateAccount {
         // new account data
         String email = req.getEmail();
         String password = req.getPassword();
-        String phone = "deleteme";
         String salt = BCrypt.gensalt();
         String hashedPw = BCrypt.hashpw(password, salt);
         String userId = UUID.randomUUID().toString();
@@ -57,8 +56,7 @@ public class CreateAccount {
             // insert user into db with default NULL for unset values
             PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
             insertUserStatement.setString(1, userId);
-            insertUserStatement.setString(2, phone);
-            insertUserStatement.setString(3, email);
+            insertUserStatement.setString(2, email);
             insertUserStatement.executeUpdate();
 
             PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
