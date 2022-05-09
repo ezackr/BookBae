@@ -8,8 +8,10 @@ import com.bookbae.server.service.SecretKeyServiceImpl;
 import com.bookbae.server.Login;
 import com.bookbae.server.CreateAccount;
 import com.bookbae.server.User;
+import com.bookbae.server.Like;
 import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.UserRequest;
+import com.bookbae.server.json.LikeRequest;
 import com.bookbae.server.json.LoginResponse;
 import com.bookbae.server.json.UserResponse;
 import java.util.UUID;
@@ -27,6 +29,7 @@ public class LikeTest {
     private CreateAccount createAccountResource;
     private Login loginResource;
     private User userResource;
+    private Like likeResource;
     private AccountRequest likerAccountRequest;
     private UserRequest likerUserRequest;
     private String likerUserId;
@@ -41,18 +44,18 @@ public class LikeTest {
         keys     = new SecretKeyServiceImpl();
         loginResource = new Login(database, keys);
         userResource = new User(database);
+        likeResource = new Like(database);
+        database.init();
 
         // create liker
         likerAccountRequest = getLikerAccountRequest();
         likerUserRequest = getLikerUserRequest();
-        likerUserId = createMockUser(likerAccountRequest, likedUserRequest);
+        likerUserId = createMockUser(likerAccountRequest, likerUserRequest);
 
         //create liked
         likedAccountRequest = getLikedAccountRequest();
         likedUserRequest = getLikedUserRequest();
         likedUserId = createMockUser(likedAccountRequest, likedUserRequest);
-
-        database.init();
     }
 
     @AfterEach
@@ -62,14 +65,16 @@ public class LikeTest {
 
     @Test
     void basicLikeTest() {
-
+        LikeRequest likeRequest = new LikeRequest();
+        likeRequest.setUserId(likedUserId);
+        var resp = likeResource.doLike(new MockSecurityContext(likerUserId), likeRequest);
+        assertEquals(200, resp.getStatus());
     }
 
     // create an account with the given AccountRequest, put the User
     private String createMockUser(AccountRequest accountRequest, UserRequest userRequest) {
         var resp = createAccountResource.tryCreate(accountRequest);
-        assertEquals(200, resp.getStatus()); // !! This is giving me a 500 error @Joshua
-
+        assertEquals(200, resp.getStatus());
         var acct = (LoginResponse) loginResource.tryLogin(accountRequest).getEntity();
         var token = acct.getAuthToken();
         Jws<Claims> jws;

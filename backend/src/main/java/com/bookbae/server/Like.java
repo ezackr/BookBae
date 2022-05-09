@@ -20,27 +20,27 @@ import jakarta.inject.Inject;
 public class Like {
     private DatabasePoolService database;
     private static String checkForDuplicateLikeString = "SELECT * FROM likes" +
-            // liker_id = client user, liked_id = other user
+            // liker_user_id = client user, liked_user_id = other user
             // client user has liked other user before and was the first to like, may or may not be mutual
-            " WHERE (liker_id = ? AND liked_id = ?)" +
-            // liker_id = other user, liked_id = client user
+            " WHERE (liker_user_id = ? AND liked_user_id = ?)" +
+            // liker_user_id = other user, liked_user_id = client user
             // client user has liked other user before and was second to like, is mutual
-            " OR (liker_id = ? AND liked_id = ? AND is_mutual = TRUE);";
+            " OR (liker_user_id = ? AND liked_user_id = ? AND is_mutual);";
 
 
     private static String checkIfOtherUserLikesClientUserString = "SELECT * FROM likes" +
-            // liker_id = other user, liked_id = client user
+            // liker_user_id = other user, liked_user_id = client user
             // other user has already liked client user
-            " WHERE liker_id = ? AND liked_id = ?;";
+            " WHERE liker_user_id = ? AND liked_user_id = ?;";
 
     private static String updateMutualLikeString = "UPDATE likes" +
-            " SET is_mutual = TRUE" +
-            // liker_id = other user, liked_id = client user
-            " WHERE liker_id = ? AND liked_id = ?";
+            " SET is_mutual = 1" +
+            // liker_user_id = other user, liked_user_id = client user
+            " WHERE liker_user_id = ? AND liked_user_id = ?;";
 
     private static String insertNonMutualLikeString = "INSERT INTO likes" +
-            // is_mutual, like_id, liker_id, liked_id
-            " VALUES(FALSE, ?, ?, ?);";
+            // is_mutual, like_id, liker_user_id, liked_user_id
+            " VALUES(0, ?, ?, ?);";
 
     public Like(DatabasePoolService database) {
         this.database = database;
@@ -48,11 +48,11 @@ public class Like {
 
     @PUT
     @Produces("application/json")
-    public Response doLike(@Context SecurityContext ctx, LikeRequest info) {
+    public Response doLike(@Context SecurityContext ctx, LikeRequest likeRequest) {
         try (Connection conn = this.database.getConnection()) {
 
             String clientUserId = ctx.getUserPrincipal().getName();
-            String otherUserId = info.getUserId();
+            String otherUserId = likeRequest.getUserId();
 
             // check if client user already likes other user
                 // if so, then this is a duplicate call, so throw exception? do nothing?
@@ -67,7 +67,7 @@ public class Like {
 
             // client has already liked other user before, what should we do in this case?
             if(resultSet.next()) {
-                // return Response.status(Response.Status.FORBIDDEN).build();
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
 
             // check if other user likes client user
@@ -97,6 +97,8 @@ public class Like {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println(e);
+            System.out.println(e.toString());
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok().build();
