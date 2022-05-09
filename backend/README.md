@@ -27,20 +27,37 @@ The server runs the application from a specific path, often called a 'context'. 
 
 The application offers a number of API endpoints accessible from the root path. (API endpoints are found in classes annotated with @Path. The value of the Path annotation is appended to the root path given above to get the path that you would direct your requests to.) Current endpoints include: 
 
-- /user
+- /user - for the authenticated user (the client)
     - GET
-        - Produces: `{“username”: “<username>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “favGenre”: “favGenre”, “birthday”: “<birthday>”, “bio”: “<bio>”, “phoneNumber”: “<phoneNumber>”, “email”: “<email>”, “zipcode”: “<zipcode>”}`
+        - Produces: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
     - PUT
-        - Consumes: `{“username”: “<username>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “favGenre”: “favGenre”, “birthday”: “<birthday>”, “bio”: “<bio>”, “phoneNumber”: “<phoneNumber>”, “email”: “<email>”, “zipcode”: “<zipcode>”}`
-        - Produces: `{“username”: “<username>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “favGenre”: “favGenre”, “birthday”: “<birthday>”, “bio”: “<bio>”, “phoneNumber”: “<phoneNumber>”, “email”: “<email>”, “zipcode”: “<zipcode>”}`
+        - Consumes: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “gender”, “favGenre”: “favGenre”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
+        - Produces: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
+    - Does Not Return USERID!
+- FUTURE OPTION: /user/{userid} : gets the above object for a specific userid
 - /create
     - POST
-        - Consumes: `{“phone”: “<phone number>”, “email”: “<email>”, “password”: “<password>”}`
+        - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
         - Produces: `{“username”: “<username>”}`
 - /login
     - POST
-        - Consumes: `{“username”: “<username>”, “password”: “<password>”}`
+        - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
         - Produces: `{“authToken”: “<token>”}`
+- /recommends
+    - GET
+        - Produces: `[{“userid”: “<userid>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”}, ...]`
+    - Will not return email or zipcode to protect privacy!
+- /like
+    - PUT
+        - Consumes: `{"userid": "<userid>"}`
+- /chats
+    - GET
+        - Produces: `[{"displayName": "<name>", "photoUrl": "<url>", "lastMessage": "<msg>", "likeId": "<uuid>"}, ...]`
+- /chats/{likeId}
+    - GET
+        - Produces: `[{"timestamp": "<timestamp>", "text": "<my hands are typing wooooooords>"}, ...]`
+    - POST
+        - Consumes: `{"text": "<words>"}`
 
 The `authToken` returned from the login endpoint is a JWT token that should be kept by the client and must be used to access authenticated endpoints (for now, just /user, but will include photo upload and accessing matches and chat).
 
