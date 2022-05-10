@@ -81,6 +81,7 @@ public class MockDatabaseService implements DatabasePoolService {
             "  line_text TEXT NOT NULL,\n" +
             "  timestamp TIMESTAMP NOT NULL,\n" +
             "  like_id UUID NOT NULL,\n" +
+            "  sender_user_id UUID NOT NULL,\n" +
             "  PRIMARY KEY (line_id),\n" +
             "  FOREIGN KEY (like_id) REFERENCES likes(like_id)\n" +
             ");";

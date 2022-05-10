@@ -17,6 +17,7 @@ import com.bookbae.server.json.ChatRequest;
 import com.bookbae.server.json.LoginResponse;
 import com.bookbae.server.json.UserResponse;
 import com.bookbae.server.json.ChatCardResponse;
+import com.bookbae.server.json.ChatLineResponse;
 import java.util.UUID;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Claims;
@@ -62,6 +63,10 @@ public class ChatsTest {
             userIds[i] = createMockUser(accountRequests[i], userRequests[i]);
         }
 
+        //set 0th user and 1st user to like each other
+        doLike(userIds[0], userIds[1]);
+        doLike(userIds[1], userIds[0]);
+
     }
     @AfterEach
     void teardown() {
@@ -69,11 +74,7 @@ public class ChatsTest {
     }
 
     @Test
-    void basicGetChatTest(){
-        //set 0th user and 1st user to like each other
-        doLike(userIds[0], userIds[1]);
-        doLike(userIds[1], userIds[0]);
-
+    void basicGetAllChatsTest(){
         // get chats for 0th user
         var resp = chatsResource.getAllChats(new MockSecurityContext(userIds[0]));
         assertEquals(200, resp.getStatus());
@@ -98,13 +99,51 @@ public class ChatsTest {
         ChatCardResponse userZeroChatCard = chatCardResponses.get(0);
         assertEquals(userZeroChatCard.getDisplayName(), userRequests[0].getName());
     }
-    // TODO: this is repeated in different forms throughout the tests, when we have time we should factor it out
-    // create an account with the given AccountRequest, put the User
 
     @Test
-    void putThenGetSpecificChatTest(){
+    void basicPutChatTest(){
+
+        // get likeId of 0th user's chat with 1st user
+        var resp = chatsResource.getAllChats(new MockSecurityContext(userIds[0]));
+        assertEquals(200, resp.getStatus());
+        ArrayList<ChatCardResponse> chatCardResponses = (ArrayList<ChatCardResponse>) resp.getEntity();
+        String likeId = chatCardResponses.get(0).getLikeId();
+
+        // create ChatRequest
+        var chatRequest = new ChatRequest();
+        chatRequest.setText("Hello World!");
+
+        // put chat "Hello World!" from user 0 to user 1
+        resp = chatsResource.putChat(new MockSecurityContext(userIds[0]), likeId, chatRequest);
+        assertEquals(200, resp.getStatus());
+    }
+
+    @Test
+    void basicPutThenGetChatTest(){
+        // get likeId of 0th user's chat with 1st user
+        var resp = chatsResource.getAllChats(new MockSecurityContext(userIds[0]));
+        String likeId = ((ArrayList<ChatCardResponse>) resp.getEntity()).get(0).getLikeId();
+
+        // create ChatRequest
+        var chatRequest = new ChatRequest();
+        chatRequest.setText("Hello World!");
+
+        // put chat "Hello World!" from user 0 to user 1
+        chatsResource.putChat(new MockSecurityContext(userIds[0]), likeId, chatRequest);
+
+        // get chat between user 0 and user 1,
+        resp = chatsResource.getChat(new MockSecurityContext(userIds[0]), likeId);
+        ArrayList<ChatLineResponse> chatLines = (ArrayList<ChatLineResponse>) resp.getEntity();
+        ChatLineResponse firstLine = chatLines.get(0);
+
+        // check values
+        assertEquals(firstLine.getText(), "Hello World!");
+        assertEquals(firstLine.getUserId(), userIds[0]);
+        assertEquals(firstLine.getNthMessage(), 1);
 
     }
+    // TODO: this is repeated in different forms throughout the tests, when we have time we should factor it out
+    // create an account with the given AccountRequest, put the User
     private String createMockUser(AccountRequest accountRequest, UserRequest userRequest) {
         var resp = createAccountResource.tryCreate(accountRequest);
         assertEquals(200, resp.getStatus());

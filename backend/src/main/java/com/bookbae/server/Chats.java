@@ -47,7 +47,7 @@ public class Chats {
             " FROM chat_line" +
             " WHERE like_id = ?;";
 
-    private String insertChatBetweenTwoUsersString = "INSERT INTO chat_line" +
+    private String insertChatBetweenTwoUsersString = "INSERT INTO chat_line(line_text, timestamp, like_id, sender_user_id)" +
             // text, timestamp, like_id, sender_user_id
             " VALUES(?, ?, ?, ?);";
 
@@ -174,7 +174,7 @@ public class Chats {
             insertChatBetweenTwoUsersStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
             insertChatBetweenTwoUsersStatement.setString(3, likeId);
             insertChatBetweenTwoUsersStatement.setString(4, clientUserId);
-            insertChatBetweenTwoUsersStatement.executeQuery();
+            insertChatBetweenTwoUsersStatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
