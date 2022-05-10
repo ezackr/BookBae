@@ -26,9 +26,9 @@ export default HomeScreen;
 
 const ProfileOverview = () => {
   return (
-      <SafeAreaView style={matchStyles.match}>
-        <Text>Hello World</Text>
-      </SafeAreaView>
+    <SafeAreaView style={matchStyles.match}>
+      <Text>Hello World</Text>
+    </SafeAreaView>
   );
 };
 
