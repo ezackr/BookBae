@@ -7,6 +7,12 @@ const EnterBirthdayScreen = ({navigation}) => {
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
 
+    //add necessary function to store birthday
+    const onPress = () => {
+        console.log(date)
+        navigation.navigate('EnterZipcodeScreen')
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Enter Your Birthday</Text>
@@ -14,6 +20,7 @@ const EnterBirthdayScreen = ({navigation}) => {
             <DatePicker
                 modal
                 open={open}
+                mode="date"
                 date={date}
                 onConfirm={(date) => {
                   setOpen(false)
@@ -25,7 +32,7 @@ const EnterBirthdayScreen = ({navigation}) => {
               />
             <Pressable
                 style={styles.button}
-                onPress={() => navigation.navigate('EnterZipcodeScreen')}>
+                onPress={onPress}>
                 <Text style={styles.buttonText}>Next</Text>
              </Pressable>
         </SafeAreaView>

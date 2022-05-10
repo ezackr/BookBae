@@ -3,15 +3,21 @@ import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-nati
 
 const EnterBioScreen = ({navigation}) => {
 
-    const [text, onChangeText] = React.useState(null);
+    const [bio, onChangeText] = React.useState(null);
+
+    //add necessary function to store bio
+    const onPress = () => {
+        console.log(bio)
+        navigation.navigate('HomeScreen')
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Enter a Bio (max 500 characters):</Text>
-            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={text} maxLength={500} placeholder="xxxxx"/>
+            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={bio} maxLength={500} placeholder="xxxxx"/>
             <Pressable
                 style={styles.button}
-                onPress={() => navigation.navigate('EnterPhotoScreen')}>
+                onPress={onPress}>
                 <Text style={styles.buttonText}>Next</Text>
              </Pressable>
         </SafeAreaView>

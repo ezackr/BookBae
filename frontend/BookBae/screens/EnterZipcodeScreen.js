@@ -3,15 +3,21 @@ import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-nati
 
 const EnterZipcodeScreen = ({navigation}) => {
 
-    const [text, onChangeText] = React.useState(null);
+    const [zipcode, onChangeText] = React.useState(null);
+
+    //add necessary function to store zipcode
+    const onPress = () => {
+        console.log(zipcode)
+        navigation.navigate('EnterGenreScreen')
+    }
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text>Enter Your Zipcode</Text>
-            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={text} placeholder="xxxxx"/>
+            <Text style={styles.title}>Enter Your Zipcode</Text>
+            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={zipcode} placeholder="xxxxx"/>
             <Pressable
                 style={styles.button}
-                onPress={() => navigation.navigate('EnterGenreScreen')}>
+                onPress={onPress}>
                 <Text style={styles.buttonText}>Next</Text>
              </Pressable>
         </SafeAreaView>
@@ -20,6 +26,18 @@ const EnterZipcodeScreen = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    color: 'black',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  input: {
+    height: 40,
+    width: '70%',
+    margin: 1,
+    borderWidth: 1,
+    padding: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fffdd3',

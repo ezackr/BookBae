@@ -6,6 +6,12 @@ const EnterGenreScreen = ({navigation}) => {
 
     const [selectedValue, setSelectedValue] = useState("java");
 
+    //add necessary function to store favorite genre
+    const onPress = () => {
+        console.log(selectedValue)
+        navigation.navigate('EnterBooksScreen')
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Enter Your Zipcode</Text>
@@ -13,18 +19,18 @@ const EnterGenreScreen = ({navigation}) => {
                 selectedValue={selectedValue}
                 style={{ height: 50, width: 150 }}
                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-                <Picker.Item label="Fantasy" value="java" />
-                <Picker.Item label="Mystery" value="js" />
-                <Picker.Item label="Science Fiction" value="js" />
-                <Picker.Item label="Dystopian" value="js" />
-                <Picker.Item label="Romance" value="js" />
-                <Picker.Item label="Biography" value="js" />
-                <Picker.Item label="History" value="js" />
-                <Picker.Item label="True Crime" value="js" />
+                <Picker.Item label="Fantasy" value="fantasy" />
+                <Picker.Item label="Mystery" value="mystery" />
+                <Picker.Item label="Science Fiction" value="scifi" />
+                <Picker.Item label="Dystopian" value="dystopian" />
+                <Picker.Item label="Romance" value="romance" />
+                <Picker.Item label="Biography" value="biography" />
+                <Picker.Item label="History" value="history" />
+                <Picker.Item label="True Crime" value="trueCrime" />
               </Picker>
             <Pressable
                 style={styles.button}
-                onPress={() => navigation.navigate('EnterBooksScreen')}>
+                onPress={onPress}>
                 <Text style={styles.buttonText}>Next</Text>
              </Pressable>
         </SafeAreaView>

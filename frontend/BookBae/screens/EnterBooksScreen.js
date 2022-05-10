@@ -1,17 +1,34 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Text, TextInput, Pressable, Image } from 'react-native';
 
 const EnterBooksScreen = ({navigation}) => {
 
-    const [text, onChangeText] = React.useState(null);
+    var bookCover = 'https://www.pngitem.com/pimgs/m/19-191625_icon-plus-png-gray-plus-icon-png-transparent.png'
+
+    const [text] = React.useState(null);
+
+    //start suggesting book title options from text input
+    //change bookCover to chosen book
+    const onChangeText = () => {
+
+    }
+
+    //we probably don't need to do anything here, we can store books as they are added in onChangeText
+    const onPress = () => {
+        console.log(bookCover)
+        navigation.navigate('EnterPhotoScreen')
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Start Typing a Book Title:</Text>
             <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={text} placeholder="xxxxx"/>
+            <View style={styles.imageContainer}>
+                <Image style={styles.image} source={{uri:bookCover}}/>
+            </View>
             <Pressable
                 style={styles.button}
-                onPress={() => navigation.navigate('EnterPhotoScreen')}>
+                onPress={onPress}>
                 <Text style={styles.buttonText}>Next</Text>
              </Pressable>
         </SafeAreaView>
@@ -38,6 +55,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 'bold',
+  },
+  imageContainer: {
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
   button: {
       alignItems: 'center',

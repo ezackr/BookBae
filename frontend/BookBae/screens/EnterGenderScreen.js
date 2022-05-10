@@ -4,12 +4,11 @@ import RadioForm from 'react-native-simple-radio-button';
 
 const EnterGenderScreen = ({navigation}) => {
 
-    const genders = [{ label: 'female'}, {label: 'male'}, {label: 'non-binary'}]
+    const genders = [{ label: 'female', value: 'female'}, {label: 'male', value: 'male'}, {label: 'non-binary', value: 'non-binary'}]
 
-    const [option, setOption] = useState(null);
+    const [option, setOption] = useState('female');
 
-    //NOT WORKING: option is always undefined
-    //add necessary function to store email
+    //add necessary function to store gender
     const onPress = () => {
         console.log(option)
         navigation.navigate('EnterBirthdayScreen')
