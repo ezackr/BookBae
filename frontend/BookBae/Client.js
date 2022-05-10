@@ -10,15 +10,15 @@ class Client {
   static authToken; // Probably not the right place to store this
 
   /**
-  * Gets the user info given the user's authToken
-  * @return {{email, name, preferredGender, gender,
-  *          favGenre, birthday, bio, zipcode}}
-  */
+   * Gets the user info given the user's authToken
+   * @return {{email, name, preferredGender, gender,
+   *          favGenre, birthday, bio, zipcode}}
+   */
   static async getUserInfo() {
     return await fetch(Client.ROOT_PATH + 'user', {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + Client.authToken
+        Authorization: 'Bearer ' + Client.authToken,
       },
     })
       .then(response => response.json())
@@ -28,18 +28,18 @@ class Client {
   }
 
   /**
-  * Updates user info
-  * @param {{email, name, preferredGender, gender,
-  *          favGenre, birthday, bio, zipcode}} userInfo
-  * @return {{email, name, preferredGender, gender,
-  *          favGenre, birthday, bio, zipcode}} the server's (new) user info
-  */
+   * Updates user info
+   * @param {{email, name, preferredGender, gender,
+   *          favGenre, birthday, bio, zipcode}} userInfo
+   * @return {{email, name, preferredGender, gender,
+   *          favGenre, birthday, bio, zipcode}} the server's (new) user info
+   */
   static async setUserInfo(userInfo) {
     return await fetch(Client.ROOT_PATH + 'user', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + Client.authToken
+        Authorization: 'Bearer ' + Client.authToken,
       },
       body: JSON.stringify(userInfo),
     })
@@ -50,12 +50,12 @@ class Client {
   }
 
   /**
-  * Creates a new user account
-  * @param {string} email - the email to associate new account with
-  * @param {string} password - the password that the user will use to access account
-  */
+   * Creates a new user account
+   * @param {string} email - the email to associate new account with
+   * @param {string} password - the password that the user will use to access account
+   */
   static async createUser(email, password) {
-    const credentials = { email, password }
+    const credentials = {email, password};
     return await fetch(Client.ROOT_PATH + 'create', {
       method: 'POST',
       headers: {
@@ -70,75 +70,73 @@ class Client {
   }
 
   /**
-  * Attempts to log in to an account with the given email and password
-  * @param {string} email - the email associated with the account
-  * @param {string} password - the password associated with the account
-  */
+   * Attempts to log in to an account with the given email and password
+   * @param {string} email - the email associated with the account
+   * @param {string} password - the password associated with the account
+   */
   static async logIn(email, password) {
-    const credentials = { email, password }
+    const credentials = {email, password};
     Client.authToken = await fetch(Client.ROOT_PATH + 'login', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(credentials),
     })
       .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to log in', error)
-      });
+      .catch(() => {});
   }
 
   /**
-  * Gets a list of recommended potential matches
-  * @return {[{userid, name, preferredGender, gender, favGenre, birthday, bio}]}
-  */
+   * Gets a list of recommended potential matches
+   * @return {[{userid, name, preferredGender, gender, favGenre, birthday, bio}]}
+   */
   static async getPotentialMatches() {
     const potentialMatches = await fetch(Client.ROOT_PATH + 'recommends', {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + Client.authToken
+        Authorization: 'Bearer ' + Client.authToken,
       },
     })
       .then(response => response.json())
       .catch(error => {
-        console.error('Failed to get potential matches', error)
+        console.error('Failed to get potential matches', error);
       });
   }
 
   /**
-  * Likes user with given id
-  * @param {string} userid - the user to like
-  */
+   * Likes user with given id
+   * @param {string} userid - the user to like
+   */
   static async sendLike(userid) {
     await fetch(Client.ROOT_PATH + 'like', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + Client.authToken
+        Authorization: 'Bearer ' + Client.authToken,
       },
       body: JSON.stringify({userid}),
     })
       .then(response => response.json())
       .catch(error => {
-        console.error('Failed to send like', error)
+        console.error('Failed to send like', error);
       });
   }
 
   /**
-  * Gets existing matches for chat
-  * @return {{displayName, photoUrl, lastMessage, likeId}}
-  */
+   * Gets existing matches for chat
+   * @return {{displayName, photoUrl, lastMessage, likeId}}
+   */
   static async getChats() {
     const chats = await fetch(Client.ROOT_PATH + 'chats', {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + Client.authToken
+        Authorization: 'Bearer ' + Client.authToken,
       },
     })
       .then(response => response.json())
       .catch(error => {
-        console.error('Failed to get chats')
+        console.error('Failed to get chats', error);
       });
   }
 }
