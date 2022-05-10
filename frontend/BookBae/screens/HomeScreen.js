@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, SafeAreaView, Pressable, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Pressable,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 
 const HomeScreen = ({navigation}) => {
   return (
@@ -11,12 +18,12 @@ const HomeScreen = ({navigation}) => {
         <ProfileOverview />
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
-        <Pressable style={styles.button}>
-          <Image source={require('../images/accept.png')} />
-        </Pressable>
-        <Pressable style={styles.button}>
+        <TouchableOpacity style={styles.button} activeOpacity={0.5}>
           <Image source={require('../images/deny.png')} />
-        </Pressable>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+          <Image source={require('../images/accept.png')} />
+        </TouchableOpacity>
       </SafeAreaView>
     </SafeAreaView>
   );
@@ -41,25 +48,25 @@ const styles = StyleSheet.create({
   },
   topMenu: {
     flex: 1,
-    backgroundColor: 'red',
     flexDirection: 'row',
     justifyContent: 'center',
   },
   matchMenu: {
-    flex: 5,
+    flex: 6,
     backgroundColor: 'green',
   },
   bottomMenu: {
     flex: 1,
-    backgroundColor: 'blue',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 20,
   },
   title: {
     color: 'black',
-    fontSize: 30,
+    fontSize: 36,
     fontWeight: 'bold',
+    paddingTop: 20,
   },
   button: {
     height: 50,
