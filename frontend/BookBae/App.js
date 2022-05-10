@@ -8,7 +8,6 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
-import MessagesScreen from './screens/MessagesScreen';
 import CreateAccountScreen from './screens/CreateAccountScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import {NavigationContainer} from '@react-navigation/native';
@@ -22,7 +21,6 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="MessagesScreen" component={MessagesScreen} />
         <Stack.Screen
           name="CreateAccountScreen"
           component={CreateAccountScreen}
