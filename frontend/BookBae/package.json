@@ -40,7 +40,7 @@
     },
     "preset": "react-native",
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|react-navigation|@react-navigation)/)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|react-navigation|@react-navigation|@react-native-picker|react-native-date-picker|react-native-simple-radio-button)/)"
     ],
     "setupFiles": [
       "./node_modules/react-native-gesture-handler/jestSetup.js"
