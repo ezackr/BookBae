@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class Chats {
             " WHERE is_mutual" +
             " AND liked_user_id = ?;";
 
-    private String getNameFromUserIdString = "SELECT name WHERE user_id = ?;";
+    private String getNameFromUserIdString = "SELECT name FROM user_info WHERE user_id = ?;";
 
     @Inject
     public Chats(DatabasePoolService database) {
@@ -45,6 +46,7 @@ public class Chats {
     public Response getAllChats(@Context SecurityContext ctx) {
         String clientUserId = ctx.getUserPrincipal().getName();
         ArrayList<ChatCardResponse> entities = new ArrayList<>();
+        ChatCardResponse nextChatCardResponse;
 
         try (Connection conn = this.database.getConnection()) {
             // get all ChatCardResponses for when user is liker
@@ -52,16 +54,59 @@ public class Chats {
                     getAllChatsWhereClientUserIsLikerString);
             getAllChatsWhereClientUserIsLikerStatement.setString(1, clientUserId);
             ResultSet resultSet = getAllChatsWhereClientUserIsLikerStatement.executeQuery();
-            if(resultSet.next()) {
-                entities.addAll(getChatCardResponsesFromResultSet(resultSet, conn, "liked_user_id"));
+            while (resultSet.next()) {
+
+                // create response
+                nextChatCardResponse = new ChatCardResponse();
+
+                // set like_id
+                nextChatCardResponse.setLikeId(resultSet.getString("like_id"));
+
+                // obtain display name
+                String otherUserId = resultSet.getString("liked_user_id");
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
+                getNameFromUserIdStatement.setString(1, otherUserId);
+                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
+                assert(nameResultSet.next());
+
+                // set display name
+                nextChatCardResponse.setDisplayName(nameResultSet.getString("name"));
+                nameResultSet.close();
+
+                // add to entities
+                entities.add(nextChatCardResponse);
             }
+
+            resultSet.close();
 
             // get all ChatCardResponses for when user is liked
             PreparedStatement getAllChatsWhereClientUserIsLikedStatement = conn.prepareStatement(
                     getAllChatsWhereClientUserIsLikedString);
             getAllChatsWhereClientUserIsLikedStatement.setString(1, clientUserId);
             resultSet = getAllChatsWhereClientUserIsLikedStatement.executeQuery();
-            entities.addAll(getChatCardResponsesFromResultSet(resultSet, conn, "liker_user_id"));
+            while (resultSet.next()) {
+
+                // create response
+                nextChatCardResponse = new ChatCardResponse();
+
+                // set like_id
+                nextChatCardResponse.setLikeId(resultSet.getString("like_id"));
+
+                // obtain display name
+                String otherUserId = resultSet.getString("liker_user_id");
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
+                getNameFromUserIdStatement.setString(1, otherUserId);
+                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
+                assert(nameResultSet.next());
+
+                // set display name
+                nextChatCardResponse.setDisplayName(nameResultSet.getString("name"));
+                nameResultSet.close();
+
+                // add to entities
+                entities.add(nextChatCardResponse);
+            }
+            resultSet.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,31 +130,4 @@ public class Chats {
         return Response.ok().build();
     }
 
-    // profile url and last message are null for now
-    private ArrayList<ChatCardResponse> getChatCardResponsesFromResultSet(ResultSet resultSet, Connection conn,
-                                                                          String columnName)
-            throws SQLException{
-        ArrayList<ChatCardResponse> responses = new ArrayList<>();
-        ChatCardResponse nextChatCardResponse;
-
-        // while there are users to load
-        while(!resultSet.next()) {
-            nextChatCardResponse = new ChatCardResponse();
-
-            // set like_id
-            nextChatCardResponse.setLikeId(resultSet.getString("like_id"));
-
-            // obtain display name
-            String otherUserId = resultSet.getString(columnName);
-            PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
-            getNameFromUserIdStatement.setString(1, otherUserId);
-            ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-            assert(nameResultSet.next());
-
-            // set display name
-            nextChatCardResponse.setDisplayName(nameResultSet.getString("name"));
-            responses.add(nextChatCardResponse);
-        }
-        return responses;
-    }
 }

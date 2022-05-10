@@ -67,8 +67,10 @@ public class Like {
 
             // client has already liked other user before, what should we do in this case?
             if(resultSet.next()) {
+                resultSet.close();
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
+            resultSet.close();
 
             // check if other user likes client user
             PreparedStatement checkIfOtherUserLikesClientUserStatement =
@@ -104,7 +106,7 @@ public class Like {
 //                ResultSet checkResults = checkStatement.executeQuery();
 //                System.out.println("IS SOMETHING INSERTED INTO LIKE? : " + checkResults.next());
             }
-
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e);

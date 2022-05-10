@@ -74,18 +74,28 @@ public class ChatsTest {
         doLike(userIds[1], userIds[0]);
 
         // get chats for 0th user
-        // ChatCardResponse arraylist should contain chatcardresponse of 1st user
         var resp = chatsResource.getAllChats(new MockSecurityContext(userIds[0]));
         assertEquals(200, resp.getStatus());
 
+        // get chat cards
         ArrayList<ChatCardResponse> chatCardResponses = (ArrayList<ChatCardResponse>) resp.getEntity();
-        assertNotNull(resp.getEntity());
-        System.out.println(chatCardResponses.size());
+        assertEquals(1, chatCardResponses.size());
 
-        // check display name is correct
-//        ChatCardResponse userOneChatCard = chatCardResponses.get(0);
-//        assertEquals(userOneChatCard.getDisplayName(), userRequests[1].getName());
+        // ChatCardResponse arraylist should contain chatcardresponse of 1st user
+        ChatCardResponse userOneChatCard = chatCardResponses.get(0);
+        assertEquals(userOneChatCard.getDisplayName(), userRequests[1].getName());
 
+        // get chats for 1st user
+        resp = chatsResource.getAllChats(new MockSecurityContext(userIds[1]));
+        assertEquals(200, resp.getStatus());
+
+        // get chat cards
+        chatCardResponses = (ArrayList<ChatCardResponse>) resp.getEntity();
+        assertEquals(1, chatCardResponses.size());
+
+        // ChatCardResponse arraylist should contain chatcardresponse of 0th user
+        ChatCardResponse userZeroChatCard = chatCardResponses.get(0);
+        assertEquals(userZeroChatCard.getDisplayName(), userRequests[0].getName());
     }
     // TODO: this is repeated in different forms throughout the tests, when we have time we should factor it out
     // create an account with the given AccountRequest, put the User

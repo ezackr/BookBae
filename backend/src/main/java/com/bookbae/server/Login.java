@@ -58,6 +58,7 @@ public class Login {
                  return Response.status(Response.Status.FORBIDDEN).build();
              }
             userId = resultSet.getString("user_id"); // not null! woo
+            resultSet.close();
 
             // get user's salt
             PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
@@ -86,6 +87,7 @@ public class Login {
                 resultSet.close();
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();

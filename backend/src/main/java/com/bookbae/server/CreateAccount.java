@@ -50,8 +50,10 @@ public class CreateAccount {
 
             // email already in use, cannot create user
             if (resultSet.next()) {
+                resultSet.close();
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
+            resultSet.close();
 
             // insert user into db with default NULL for unset values
             PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);

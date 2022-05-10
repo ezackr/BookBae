@@ -45,6 +45,7 @@ public class Recommends {
             // no users to recommend!
             if (!resultSet.next()) {
                 //TODO: what to do in this case?
+                resultSet.close();
                 return Response.status(Response.Status.FORBIDDEN).build(); // is this the right thing to return?
             }
 
@@ -62,6 +63,7 @@ public class Recommends {
                 // nextUserResponse.setZipcode(resultSet.getString("zipcode")); Do not return zipcode!
                 entries.add(nextUserResponse);
             } while(resultSet.next());
+            resultSet.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
