@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Pressable,
   TextInput,
+  Button,
 } from 'react-native';
 
 const LoginScreen = ({navigation}) => {
@@ -33,19 +34,17 @@ const LoginScreen = ({navigation}) => {
         keyboardType="default"
         secureTextEntry={true}
       />
-      <Pressable
-        style={styles.button}
+      <Pressable style={styles.button}
         onPress={() => navigation.navigate('HomeScreen')}>
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
-      <Pressable
-        style={styles.button}
+      <Pressable style={styles.button}
         onPress={() => console.log('Forgot Password!')}>
         <Text style={styles.buttonText}>Forgot Password</Text>
       </Pressable>
       <Pressable
         style={styles.button}
-        onPress={() => console.log('Create Account!')}>
+        onPress={() => navigation.navigate('EnterEmailScreen')}>
         <Text style={styles.buttonText}>Create Account</Text>
       </Pressable>
     </SafeAreaView>
@@ -74,10 +73,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: '#BD2A2A',
+    marginTop: 5,
+    marginBottom: 5,
+  },
   buttonText: {
-    textAlign: 'center',
-    color: 'black',
-    fontSize: 12,
-    padding: 5,
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });
