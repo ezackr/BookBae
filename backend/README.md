@@ -56,8 +56,8 @@ To access a secured resource, the JWT must be passed in the "Authorization" HTTP
 
 ## Building
 
-The application is built with `gradle build` (or possibly `./gradlew build` or `.\gradlew build`)
-The above command builds a file `build/libs/api.war` which can be deployed to a Jakarta EE server like glassfish
+The application is built with `gradle build` (or possibly `./gradlew build` or `.\gradlew build`). 
+This builds a file `build/libs/api.war` which can be deployed to a Jakarta EE server like glassfish. 
 
 ## Running
 
