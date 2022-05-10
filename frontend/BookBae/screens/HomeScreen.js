@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, SafeAreaView, Pressable} from 'react-native';
+import {StyleSheet, Text, SafeAreaView, Pressable, Image} from 'react-native';
 
 const HomeScreen = ({navigation}) => {
   return (
@@ -14,9 +14,7 @@ const HomeScreen = ({navigation}) => {
         <Pressable style={styles.button}>
           <Text>No</Text>
         </Pressable>
-        <Pressable style={styles.button}>
-          <Text>Yes</Text>
-        </Pressable>
+        <Image source={require('../images/deny.png')} />
       </SafeAreaView>
     </SafeAreaView>
   );
