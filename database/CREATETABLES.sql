@@ -62,10 +62,12 @@ CREATE TABLE likes
 
 CREATE TABLE chat_line
 (
-    line_id INT NOT NULL,
+    line_id INT IDENTITY(1,1) NOT NULL,
     line_text TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
     like_id UNIQUEIDENTIFIER NOT NULL,
+    sender_user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     PRIMARY KEY (line_id),
-    FOREIGN KEY (like_id) REFERENCES likes(like_id)
+    FOREIGN KEY (like_id) REFERENCES likes(like_id),
+    FOREIGN KEY (sender_user_id) REFERENCES user_info(user_id)
 );

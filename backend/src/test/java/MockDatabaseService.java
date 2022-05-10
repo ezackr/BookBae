@@ -77,7 +77,7 @@ public class MockDatabaseService implements DatabasePoolService {
             "\n" +
             "CREATE TABLE chat_line\n" +
             "(\n" +
-            "  line_id INT NOT NULL,\n" +
+            "  line_id INT AUTO_INCREMENT NOT NULL,\n" +
             "  line_text TEXT NOT NULL,\n" +
             "  timestamp TIMESTAMP NOT NULL,\n" +
             "  like_id UUID NOT NULL,\n" +
@@ -114,9 +114,11 @@ public class MockDatabaseService implements DatabasePoolService {
     }
 
     // UNIQUEIDENTIFIER is Microsoft's naming convention, must change to UUID for H2
+    // for some reason Microsoft doesn't like auto_increment and H2 doesn't like Identity
     private static String makeSQLH2Compatible(String str){
         str = str.replace("UNIQUEIDENTIFIER default NEWID()", "UUID");
         str = str.replace("UNIQUEIDENTIFIER", "UUID");
+        str = str.replace("INT IDENTITY(1,1) NOT NULL", "INT AUTO_INCREMENT");
         return str;
     }
 

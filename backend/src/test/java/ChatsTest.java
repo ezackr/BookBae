@@ -68,7 +68,7 @@ public class ChatsTest {
     }
 
     @Test
-    void basicChatTest(){
+    void basicGetChatTest(){
         //set 0th user and 1st user to like each other
         doLike(userIds[0], userIds[1]);
         doLike(userIds[1], userIds[0]);
@@ -99,6 +99,11 @@ public class ChatsTest {
     }
     // TODO: this is repeated in different forms throughout the tests, when we have time we should factor it out
     // create an account with the given AccountRequest, put the User
+
+    @Test
+    void basicGetSpecificChatTest(){
+
+    }
     private String createMockUser(AccountRequest accountRequest, UserRequest userRequest) {
         var resp = createAccountResource.tryCreate(accountRequest);
         assertEquals(200, resp.getStatus());

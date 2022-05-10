@@ -2,6 +2,7 @@ package com.bookbae.server;
 
 import com.bookbae.server.security.SecuredResource;
 import com.bookbae.server.json.ChatCardResponse;
+import com.bookbae.server.json.ChatLineResponse;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -34,13 +35,19 @@ public class Chats {
             " WHERE is_mutual" +
             " AND liked_user_id = ?;";
 
-    private String getNameFromUserIdString = "SELECT name FROM user_info WHERE user_id = ?;";
+    private String getNameFromUserIdString = "SELECT name" +
+            " FROM user_info" +
+            " WHERE user_id = ?;";
 
+    private String getChatsBetweenTwoUsersString = "SELECT *" +
+            " FROM chat_line" +
+            " WHERE like_id = ?;";
     @Inject
     public Chats(DatabasePoolService database) {
         this.database = database;
     }
 
+    // @TODO: this is so repetitive it hurts I need to learn how to pass database parameters like connection & resultset
     @GET
     @Produces("application/json")
     public Response getAllChats(@Context SecurityContext ctx) {
@@ -119,15 +126,30 @@ public class Chats {
     @GET
     @Produces("application/json")
     public Response getChat(@Context SecurityContext ctx, @PathParam("likeId") String likeId) {
-        // be sure to check that the user
+
+        ArrayList<ChatLineResponse> entities = new ArrayList<>();
+
         try (Connection conn = this.database.getConnection()) {
-            //sql
-            // return all chat IDs
+            PreparedStatement getChatsBetweenTwoUsersStatement = conn.prepareStatement(getChatsBetweenTwoUsersString);
+            getChatsBetweenTwoUsersStatement.setString(1, likeId);
+            ResultSet resultSet = getChatsBetweenTwoUsersStatement.executeQuery();
+            ChatLineResponse nextChatLine;
+
+            while (resultSet.next()) {
+                nextChatLine = new ChatLineResponse();
+                nextChatLine.setText(resultSet.getString("line_text"));
+                nextChatLine.setNthMessage(resultSet.getInt("line_id"));
+                nextChatLine.setTimestamp(resultSet.getTimestamp("timestamp"));
+                nextChatLine.setUserId(resultSet.getString("sender_user_id"));
+                entities.add(nextChatLine);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok().build();
+        return Response.ok(entities).build();
     }
+
 
 }

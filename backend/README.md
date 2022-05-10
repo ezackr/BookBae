@@ -54,9 +54,9 @@ The application offers a number of API endpoints accessible from the root path. 
         - Produces: `[{"displayName": "<name>", "photoUrl": "<url>", "lastMessage": "<msg>", "likeId": "<uuid>"}, ...]`
 - /chats/{likeId}
     - GET
-        - Produces: `[{"timestamp": "<timestamp>", "text": "<my hands are typing wooooooords>"}, ...]`
+        - Produces: `[{"userid": "<userid>", "timestamp": "<timestamp>", "text": "<text>", "nthMessage": "<nthMessage>"}, ...]`
     - POST
-        - Consumes: `{"text": "<words>"}`
+        - Consumes: `{"text": "<words>", "userid": "<userid>"}`
 
 The `authToken` returned from the login endpoint is a JWT token that should be kept by the client and must be used to access authenticated endpoints (for now, just /user, but will include photo upload and accessing matches and chat).
 
