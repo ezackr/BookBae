@@ -67,7 +67,7 @@ public class MockDatabaseService implements DatabasePoolService {
             "CREATE TABLE likes\n" +
             "(\n" +
             "  is_mutual BIT NOT NULL,\n" +
-            "  like_id UUID  NOT NULL,\n" +
+            "  like_id UUID NOT NULL,\n" +
             "  liker_user_id UUID NOT NULL,\n" +
             "  liked_user_id UUID NOT NULL,\n" +
             "  PRIMARY KEY (like_id),\n" +

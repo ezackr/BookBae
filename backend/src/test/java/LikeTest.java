@@ -70,6 +70,23 @@ public class LikeTest {
         likeRequest.setUserId(likedUserId);
         var resp = likeResource.doLike(new MockSecurityContext(likerUserId), likeRequest);
         assertEquals(200, resp.getStatus());
+
+    }
+
+    @Test
+    void mutualLikeTest() {
+        LikeRequest likeRequest = new LikeRequest();
+
+        // liker likes liked request
+        likeRequest.setUserId(likedUserId);
+        var resp = likeResource.doLike(new MockSecurityContext(likerUserId), likeRequest);
+        assertEquals(200, resp.getStatus());
+
+        // liked likes liker request
+        likeRequest.setUserId(likerUserId);
+        resp = likeResource.doLike(new MockSecurityContext(likedUserId), likeRequest);
+        assertEquals(200, resp.getStatus());
+
     }
 
     // create an account with the given AccountRequest, put the User

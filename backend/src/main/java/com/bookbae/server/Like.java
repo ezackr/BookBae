@@ -85,6 +85,11 @@ public class Like {
                 updateMutualLikeStatement.executeUpdate();
 
                 onMutualLike(otherUserId, clientUserId);
+
+                //make sure something is inserted into likes, to delete
+//                PreparedStatement checkStatement = conn.prepareStatement("SELECT * FROM likes WHERE is_mutual;");
+//                ResultSet checkResults = checkStatement.executeQuery();
+//                System.out.println("IS SOMETHING INSERTED INTO LIKE? : " + checkResults.next());
             }
             // the like is not mutual
             else {
@@ -93,6 +98,11 @@ public class Like {
                 insertNonMutualLikeStatement.setString(2, clientUserId);
                 insertNonMutualLikeStatement.setString(3, otherUserId);
                 insertNonMutualLikeStatement.execute();
+
+                //make sure something is inserted into likes, to delete
+//                PreparedStatement checkStatement = conn.prepareStatement("SELECT * FROM likes;");
+//                ResultSet checkResults = checkStatement.executeQuery();
+//                System.out.println("IS SOMETHING INSERTED INTO LIKE? : " + checkResults.next());
             }
 
         } catch (SQLException e) {

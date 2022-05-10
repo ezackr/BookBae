@@ -7,7 +7,7 @@ public class ChatCardResponse {
     private String displayName;
     private String photoUrl;
     private String lastMessage;
-    private UUID likeId;
+    private String likeId;
 
     @JsonProperty("displayName")
     public String getDisplayName() {
@@ -31,7 +31,7 @@ public class ChatCardResponse {
 
     @JsonProperty("likeId")
     public String getLikeId() {
-        return likeId == null ? null : this.likeId.toString();
+        return likeId;// == null ? null : this.likeId.toString();
     }
 
     @JsonProperty("photoUrl")
@@ -44,7 +44,8 @@ public class ChatCardResponse {
         this.lastMessage = lastMessage;
     }
 
-    public void setLikeId(UUID likeId) {
+    @JsonProperty("likeId")
+    public void setLikeId(String likeId) {
         this.likeId = likeId;
     }
 }
