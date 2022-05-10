@@ -15,86 +15,78 @@ public class MockDatabaseService implements DatabasePoolService {
     //private static String dropTables = readFromFile("DROPTABLES.sql");//"./../../../../database/DROPTABLES.sql");
     private static String createTables = "CREATE TABLE user_info\n" +
             "(\n" +
-            "    user_id UUID NOT NULL,\n" +
-            "    name VARCHAR(64),\n" +
-            "    gender VARCHAR(2),\n" +
-            "    phone_num VARCHAR(15) NOT NULL,\n" +
-            "    fav_genre VARCHAR(20),\n" +
-            "    birthday DATE,\n" +
-            "    email VARCHAR(254) NOT NULL,\n" +
-            "    zipcode CHAR(5),\n" +
-            "    bio VARCHAR(500),\n" +
-            "    preferred_gender VARCHAR(10),\n" +
-            "    PRIMARY KEY (user_id)\n" +
+            "  user_id UUID NOT NULL,\n" +
+            "  name VARCHAR(64),\n" +
+            "  gender VARCHAR(2),\n" +
+            "  fav_genre VARCHAR(20),\n" +
+            "  birthday DATE,\n" +
+            "  email VARCHAR(254) NOT NULL,\n" +
+            "  zipcode CHAR(5),\n" +
+            "  bio VARCHAR(500),\n" +
+            "  preferred_gender VARCHAR,\n" +
+            "  phone_num VARCHAR(15),\n" +
+            "  PRIMARY KEY (user_id)\n" +
             ");\n" +
             "\n" +
             "CREATE TABLE prompt\n" +
             "(\n" +
-            "    prompt_id TINYINT NOT NULL,\n" +
-            "    question VARCHAR(100) NOT NULL,\n" +
-            "    answer VARCHAR(250) NOT NULL,\n" +
-            "    user_id UUID NOT NULL,\n" +
-            "    PRIMARY KEY (prompt_id, user_id),\n" +
-            "    FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
+            "  prompt_id TINYINT NOT NULL,\n" +
+            "  question VARCHAR(100) NOT NULL,\n" +
+            "  answer VARCHAR(250) NOT NULL,\n" +
+            "  user_id UUID NOT NULL,\n" +
+            "  PRIMARY KEY (prompt_id, user_id),\n" +
+            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
             ");\n" +
             "\n" +
             "CREATE TABLE preference\n" +
             "(\n" +
-            "    low_target_age TINYINT NOT NULL,\n" +
-            "    high_target_age TINYINT NOT NULL,\n" +
-            "    within_x_miles SMALLINT NOT NULL,\n" +
-            "    user_id UUID NOT NULL,\n" +
-            "    PRIMARY KEY (user_id),\n" +
-            "    FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
+            "  low_target_age TINYINT NOT NULL,\n" +
+            "  high_target_age TINYINT NOT NULL,\n" +
+            "  within_x_miles SMALLINT NOT NULL,\n" +
+            "  user_id UUID NOT NULL,\n" +
+            "  PRIMARY KEY (user_id),\n" +
+            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
             ");\n" +
             "\n" +
             "CREATE TABLE user_book\n" +
             "(\n" +
-            "    book_id VARCHAR(12) NOT NULL,\n" +
-            "    user_id UUID NOT NULL,\n" +
-            "    FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
+            "  book_id VARCHAR(12) NOT NULL,\n" +
+            "  user_id UUID NOT NULL,\n" +
+            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
             ");\n" +
             "\n" +
             "CREATE TABLE login_info\n" +
             "(\n" +
-            "    salt VARCHAR(29) NOT NULL,\n" +
-            "    hash VARCHAR(60) NOT NULL,\n" +
-            "    user_id UUID NOT NULL,\n" +
-            "    PRIMARY KEY (user_id),\n" +
-            "    FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
+            "  salt VARCHAR(29) NOT NULL,\n" +
+            "  hash VARCHAR(60) NOT NULL,\n" +
+            "  user_id UUID NOT NULL,\n" +
+            "  PRIMARY KEY (user_id),\n" +
+            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
             ");\n" +
             "\n" +
             "CREATE TABLE likes\n" +
             "(\n" +
-            "    is_mutual BIT NOT NULL,\n" +
-            "    liker_user_id UUID NOT NULL,\n" +
-            "    liked_user_id UUID NOT NULL,\n" +
-            "    PRIMARY KEY (liker_user_id, liked_user_id),\n" +
-            "    FOREIGN KEY (liker_user_id) REFERENCES user_info(user_id),\n" +
-            "    FOREIGN KEY (liked_user_id) REFERENCES user_info(user_id)\n" +
-            ");\n" +
-            "\n" +
-            "CREATE TABLE chat\n" +
-            "(\n" +
-            "    chat_id UUID NOT NULL,\n" +
-            "    user_id1 UUID NOT NULL,\n" +
-            "    user_id2 UUID NOT NULL,\n" +
-            "    PRIMARY KEY (chat_id),\n" +
-            "    FOREIGN KEY (user_id1) REFERENCES user_info(user_id),\n" +
-            "    FOREIGN KEY (user_id2) REFERENCES user_info(user_id)\n" +
+            "  is_mutual BIT NOT NULL,\n" +
+            "  like_id UUID NOT NULL,\n" +
+            "  liker_user_id UUID NOT NULL,\n" +
+            "  liked_user_id UUID NOT NULL,\n" +
+            "  PRIMARY KEY (like_id),\n" +
+            "  FOREIGN KEY (liker_user_id) REFERENCES user_info(user_id),\n" +
+            "  FOREIGN KEY (liked_user_id) REFERENCES user_info(user_id)\n" +
             ");\n" +
             "\n" +
             "CREATE TABLE chat_line\n" +
             "(\n" +
-            "    line_id INT NOT NULL,\n" +
-            "    line_text TEXT NOT NULL,\n" +
-            "    timestamp TIMESTAMP NOT NULL,\n" +
-            "    chat_id UUID NOT NULL,\n" +
-            "    PRIMARY KEY (line_id, chat_id),\n" +
-            "    FOREIGN KEY (chat_id) REFERENCES chat(chat_id)\n" +
+            "  line_id INT AUTO_INCREMENT NOT NULL,\n" +
+            "  line_text TEXT NOT NULL,\n" +
+            "  timestamp TIMESTAMP NOT NULL,\n" +
+            "  like_id UUID NOT NULL,\n" +
+            "  sender_user_id UUID NOT NULL,\n" +
+            "  PRIMARY KEY (line_id),\n" +
+            "  FOREIGN KEY (like_id) REFERENCES likes(like_id)\n" +
             ");";
+
     private static String dropTables = "DROP TABLE chat_line;\n" +
-            "DROP TABLE chat;\n" +
             "DROP TABLE likes;\n" +
             "DROP TABLE login_info;\n" +
             "DROP TABLE user_book;\n" +
@@ -123,9 +115,11 @@ public class MockDatabaseService implements DatabasePoolService {
     }
 
     // UNIQUEIDENTIFIER is Microsoft's naming convention, must change to UUID for H2
+    // for some reason Microsoft doesn't like auto_increment and H2 doesn't like Identity
     private static String makeSQLH2Compatible(String str){
         str = str.replace("UNIQUEIDENTIFIER default NEWID()", "UUID");
         str = str.replace("UNIQUEIDENTIFIER", "UUID");
+        str = str.replace("INT IDENTITY(1,1) NOT NULL", "INT AUTO_INCREMENT");
         return str;
     }
 
