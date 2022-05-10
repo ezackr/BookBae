@@ -43,3 +43,7 @@ This project has implemented branch protection. Contributors to the main branch 
 ### Milestones:
 
 The main BookBae project has a "Projects" tab which outlines the milestones within the course (e.g., System Architecture, Testing, etc.). Each project milestone will detail the individual/group tasks necessary, as well as a task's status.
+
+### Continuous Integration:
+
+This project uses GitHub Actions for continuous integration. Pull requests against main and pushes to main all must pass the CI tests. The continuous integration configuration is split into two parts, one for the backend and one for the frontend. The backend CI configuration ignores merges that effect only the frontend directory, and the frontend CI configuration ignores merges that effect only the backend. The backend CI uses GitHub's gradle integration to do a full build and test of the backend code. The frontend CI uses npm to run the Jest tests then builds a release of the app using the gradle configuration.
