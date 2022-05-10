@@ -13,6 +13,7 @@ import com.bookbae.server.Chats;
 import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.UserRequest;
 import com.bookbae.server.json.LikeRequest;
+import com.bookbae.server.json.ChatRequest;
 import com.bookbae.server.json.LoginResponse;
 import com.bookbae.server.json.UserResponse;
 import com.bookbae.server.json.ChatCardResponse;
@@ -101,7 +102,7 @@ public class ChatsTest {
     // create an account with the given AccountRequest, put the User
 
     @Test
-    void basicGetSpecificChatTest(){
+    void putThenGetSpecificChatTest(){
 
     }
     private String createMockUser(AccountRequest accountRequest, UserRequest userRequest) {
