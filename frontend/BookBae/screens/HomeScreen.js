@@ -12,9 +12,11 @@ const HomeScreen = ({navigation}) => {
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
         <Pressable style={styles.button}>
-          <Text>No</Text>
+          <Image source={require('../images/accept.png')} />
         </Pressable>
-        <Image source={require('../images/deny.png')} />
+        <Pressable style={styles.button}>
+          <Image source={require('../images/deny.png')} />
+        </Pressable>
       </SafeAreaView>
     </SafeAreaView>
   );
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    color: 'white',
+    height: 50,
     margin: 10,
   },
 });
