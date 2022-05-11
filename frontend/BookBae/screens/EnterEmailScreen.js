@@ -13,7 +13,7 @@ const EnterEmailScreen = ({navigation}) => {
   //add necessary function to store email
   const onPress = () => {
     console.log(email);
-    navigation.navigate('EnterPasswordScreen');
+    navigation.navigate('EnterPasswordScreen', {myEmail: email,});
   };
 
   return (
