@@ -34,7 +34,7 @@ export default HomeScreen;
 const ProfileOverview = () => {
   return (
     <SafeAreaView style={matchStyles.matchBox}>
-      <Text>Hello World</Text>
+      <Text style={matchStyles.frontName}>Alan, 29</Text>
     </SafeAreaView>
   );
 };
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'black',
-    fontSize: 36,
+    fontSize: 48,
     fontWeight: 'bold',
     paddingTop: 20,
   },
@@ -80,6 +80,13 @@ const matchStyles = StyleSheet.create({
     height: 500,
     width: 300,
     backgroundColor: '#ffe9a1',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  frontName: {
+    color: 'black',
+    fontSize: 24,
+    fontWeight: 'bold',
     justifyContent: 'center',
     alignItems: 'center',
   },
