@@ -62,7 +62,7 @@ The application offers a number of API endpoints accessible from the root path. 
 - /chats/{likeId}
     - GET
         - Produces: `[{"userid": "<userid>", "timestamp": "<timestamp>", "text": "<text>", "nthMessage": "<nthMessage>"}, ...]`
-- POST
+    - POST
         - Consumes: `{"text": "<words>"}`
     - userid is of the sender
     
