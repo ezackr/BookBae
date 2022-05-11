@@ -14,13 +14,11 @@ const LoginScreen = ({navigation}) => {
   const [password, onChangePassword] = React.useState(null);
 
   const handleLogin = async () => {
-    Client.logIn({email: email, password: password});
-    if (Client.authToken !== undefined) {
-      navigation.navigate('HomeScreen');
+    const success = await Client.logIn(email, password);
+    if (success) {
+      navigation.navigate('TabNavigation');
     } else {
       console.log('error');
-      navigation.navigate('TabNavigation'); // still navigate to HomeScreen for now.
-      // toggleErrorMessage();
     }
   };
 
