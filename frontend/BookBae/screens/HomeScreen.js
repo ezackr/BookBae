@@ -33,7 +33,7 @@ export default HomeScreen;
 
 const ProfileOverview = () => {
   return (
-    <SafeAreaView style={matchStyles.match}>
+    <SafeAreaView style={matchStyles.matchBox}>
       <Text>Hello World</Text>
     </SafeAreaView>
   );
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
   },
   matchMenu: {
     flex: 6,
-    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bottomMenu: {
     flex: 1,
@@ -75,8 +76,10 @@ const styles = StyleSheet.create({
 });
 
 const matchStyles = StyleSheet.create({
-  match: {
-    flex: 1,
+  matchBox: {
+    height: 500,
+    width: 300,
+    backgroundColor: '#ffe9a1',
     justifyContent: 'center',
     alignItems: 'center',
   },
