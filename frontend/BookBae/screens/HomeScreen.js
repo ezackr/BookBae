@@ -34,14 +34,26 @@ export default HomeScreen;
 const ProfileOverview = () => {
   return (
     <SafeAreaView style={matchStyles.matchBox}>
-      <SafeAreaView>
-        <Image source={require('../images/sampleTitle1.jpg')} />
-        <Image source={require('../images/sampleTitle2.jpeg')} />
+      <SafeAreaView style={matchStyles.bookDisplay}>
+        <Image
+          style={matchStyles.book}
+          source={require('../images/title1.jpg')}
+        />
+        <Image
+          style={matchStyles.book}
+          source={require('../images/title2.jpeg')}
+        />
       </SafeAreaView>
       <Text style={matchStyles.frontName}>Alan, 29</Text>
-      <SafeAreaView>
-        <Image source={require('../images/sampleTitle3.png')} />
-        <Image source={require('../images/sampleTitle4.jpeg')} />
+      <SafeAreaView style={matchStyles.bookDisplay}>
+        <Image
+          style={matchStyles.book}
+          source={require('../images/title3.jpg')}
+        />
+        <Image
+          style={matchStyles.book}
+          source={require('../images/title4.jpeg')}
+        />
       </SafeAreaView>
     </SafeAreaView>
   );
@@ -97,5 +109,15 @@ const matchStyles = StyleSheet.create({
     fontWeight: 'bold',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  bookDisplay: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  book: {
+    height: 175,
+    width: 125,
+    margin: 10,
   },
 });
