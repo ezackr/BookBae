@@ -63,7 +63,7 @@ The application offers a number of API endpoints accessible from the root path. 
     - GET
         - Produces: `[{"userid": "<userid>", "timestamp": "<timestamp>", "text": "<text>", "nthMessage": "<nthMessage>"}, ...]`
 - POST
-        - Consumes: `{"text": "<words>"}
+        - Consumes: `{"text": "<words>"}`
     - userid is of the sender
     
 Endpoints return a 500 response code in the event of a SQL error   
