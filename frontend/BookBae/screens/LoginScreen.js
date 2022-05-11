@@ -61,6 +61,8 @@ const LoginScreen = ({navigation}) => {
         <Text style={styles.buttonText}>Forgot Password</Text>
       </Pressable>
       <Pressable style={styles.button} onPress={handleCreateAccount}>
+        <Text style={styles.buttonText}>Create Account</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
