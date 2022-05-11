@@ -1,29 +1,37 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  Pressable,
+} from 'react-native';
 
 const EnterEmailScreen = ({navigation}) => {
+  const [email, onChangeText] = React.useState(null);
 
-    const [email, onChangeText] = React.useState(null);
+  //add necessary function to store email
+  const onPress = () => {
+    console.log(email);
+    navigation.navigate('EnterPasswordScreen');
+  };
 
-    //add necessary function to store email
-    const onPress = () => {
-        console.log(email)
-        navigation.navigate('EnterPasswordScreen')
-    }
-
-    return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Enter Your Email:</Text>
-            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={email} placeholder="xxx@xx.x"/>
-            <Pressable
-                style={styles.button}
-                onPress={onPress}>
-                <Text style={styles.buttonText}>Next</Text>
-             </Pressable>
-        </SafeAreaView>
-    );
-
-}
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Enter Your Email:</Text>
+      <TextInput
+        style={styles.input}
+        multiline={true}
+        onChangeText={onChangeText}
+        value={email}
+        placeholder="xxx@xx.x"
+      />
+      <Pressable style={styles.button} onPress={onPress}>
+        <Text style={styles.buttonText}>Next</Text>
+      </Pressable>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   title: {
@@ -46,22 +54,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: 12,
-      paddingHorizontal: 32,
-      borderRadius: 4,
-      elevation: 3,
-      backgroundColor: '#BD2A2A',
-      marginTop: 5,
-      marginBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: '#BD2A2A',
+    marginTop: 5,
+    marginBottom: 5,
   },
   buttonText: {
-      fontSize: 16,
-      lineHeight: 21,
-      fontWeight: 'bold',
-      letterSpacing: 0.25,
-      color: 'white',
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });
 
