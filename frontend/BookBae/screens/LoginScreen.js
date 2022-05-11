@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Pressable,
   TextInput,
+  Button,
 } from 'react-native';
 import Client from '../Client.js';
 
@@ -24,7 +25,7 @@ const LoginScreen = ({navigation}) => {
   };
 
   const handleCreateAccount = () => {
-    navigation.navigate('CreateAccountScreen');
+    navigation.navigate('EnterEmailScreen');
   };
 
   const handleForgotPassword = () => {
@@ -88,10 +89,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: '#BD2A2A',
+    marginTop: 5,
+    marginBottom: 5,
+  },
   buttonText: {
-    textAlign: 'center',
-    color: 'black',
-    fontSize: 12,
-    padding: 5,
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });

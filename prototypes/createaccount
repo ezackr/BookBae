@@ -2,11 +2,9 @@
 set -x
 URL="http://localhost:8080"
 JSON="Content-Type: application/json"
-ACCOUNT=$(curl -s -d '{ "email": "foo", "password": "hunter2"}' -X POST -H "$JSON" $URL/api/v1/create)
-USERNAME=$(echo $ACCOUNT | python3 -c "import sys, json; print(json.load(sys.stdin)['username'])")
-JWT_REQ='{ "email": "foo", "password": "hunter2"}'
+JWT_REQ='{ "email": "'$1'", "password": "hunter2"}'
+curl -s -d "$JWT_REQ" -X POST -H "$JSON" $URL/api/v1/create
 JWT_RESP=$(curl -s -d "$JWT_REQ" -H "$JSON" $URL/api/v1/login)
 AUTH_TOKEN=$(echo $JWT_RESP | python3 -c "import sys, json; print(json.load(sys.stdin)['authToken'])")
 AUTH_HEADER="Authorization: Bearer "$AUTH_TOKEN
 USER_RESP=$(curl -s -H "$AUTH_HEADER" $URL/api/v1/user)
-PUT_RESP=$(curl -s -d '{ "zipcode": "80210" }' -X PUT -H "$AUTH_HEADER" -H "$JSON" $URL/api/v1/user)

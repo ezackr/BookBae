@@ -1,5 +1,4 @@
 DROP TABLE chat_line;
-DROP TABLE chat;
 DROP TABLE likes;
 DROP TABLE login_info;
 DROP TABLE user_book;
