@@ -7,22 +7,38 @@ import {
   TextInput,
   Pressable,
   Image,
+  FlatList,
 } from 'react-native';
+import axios from 'axios';
 
 const EnterBooksScreen = ({navigation}) => {
-  var bookCover =
+  const bookCover =
     'https://www.pngitem.com/pimgs/m/19-191625_icon-plus-png-gray-plus-icon-png-transparent.png';
 
-  const [text] = React.useState(null);
+  const [text, setText] = React.useState(null);
+  const [bookList, setBookList] = React.useState([]);
 
-  //start suggesting book title options from text input
-  //change bookCover to chosen book
-  const onChangeText = () => {};
-
-  //we probably don't need to do anything here, we can store books as they are added in onChangeText
+  // we probably don't need to do anything here, we can store books as they are added in onChangeText
   const onPress = () => {
     console.log(bookCover);
     navigation.navigate('EnterPhotoScreen');
+  };
+
+  const addNewBook = () => {
+    axios
+      .get('https://www.googleapis.com/books/v1/volumes?q=' + text)
+      .then(data => {
+        let book = data.data.items[0];
+        // add new book to stored list.
+        setBookList(prevState => {
+          prevState.push({
+            title: book.volumeInfo.title,
+          });
+          return [...prevState];
+        });
+        console.log(bookList);
+      });
+    setText('');
   };
 
   return (
@@ -30,11 +46,18 @@ const EnterBooksScreen = ({navigation}) => {
       <Text style={styles.title}>Start Typing a Book Title:</Text>
       <TextInput
         style={styles.input}
-        multiline={true}
-        onChangeText={onChangeText}
-        value={text}
-        placeholder="xxxxx"
+        placeholder="Insert Book Title"
+        onChangeText={setText}
+        onSubmitEditing={() => addNewBook()}
+        defaultValue={text}
       />
+      <View style={styles.bookList}>
+        <FlatList
+          data={bookList}
+          extraData={bookList}
+          renderItem={({item}) => <Text style={styles.book}>{item.title}</Text>}
+        />
+      </View>
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{uri: bookCover}} />
       </View>
@@ -50,6 +73,14 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  bookList: {
+    flex: 1,
+    padding: 10,
+  },
+  book: {
+    color: 'black',
+    fontSize: 24,
   },
   input: {
     height: 40,
