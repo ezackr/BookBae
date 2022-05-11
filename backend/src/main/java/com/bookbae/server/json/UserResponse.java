@@ -14,6 +14,7 @@ public class UserResponse {
     protected String birthday;
     protected String bio;
     protected String zipcode;
+    protected String userid;
 
     public UserResponse() {}
 
@@ -104,5 +105,15 @@ public class UserResponse {
     @JsonProperty("zipcode")
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
+    }
+
+    @JsonProperty("userid")
+    public String getUserId() {
+        return this.userid;
+    }
+
+    @JsonProperty("userid")
+    public void setUserId(String userid) {
+        this.userid = userid;
     }
 }

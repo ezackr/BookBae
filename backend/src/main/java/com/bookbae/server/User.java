@@ -55,6 +55,7 @@ public class User {
 
             // invalid user id
              if(!resultSet.next()){
+                 resultSet.close();
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
 
@@ -67,6 +68,7 @@ public class User {
              resp.setBirthday(Objects.toString(resultSet.getDate("birthday"))); // saves birthday as a string if not null
              resp.setBio(resultSet.getString("bio"));
              resp.setZipcode(resultSet.getString("zipcode"));
+             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();
