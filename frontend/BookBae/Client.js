@@ -13,7 +13,7 @@ class Client {
   /**
    * Gets the user info given the user's authToken
    * @return {{email, name, preferredGender, gender,
-   *          favGenre, birthday, bio, zipcode}}
+   *          favGenre, birthday, bio, zipcode}}, or null for failure
    */
   static async getUserInfo() {
     return await axios({
@@ -31,21 +31,18 @@ class Client {
    * @param {{email, name, preferredGender, gender,
    *          favGenre, birthday, bio, zipcode}} userInfo
    * @return {{email, name, preferredGender, gender,
-   *          favGenre, birthday, bio, zipcode}} the server's (new) user info
+   *          favGenre, birthday, bio, zipcode}} the server's (new) user info, or null for failure
    */
   static async setUserInfo(userInfo) {
-    return await fetch(Client.ROOT_PATH + 'user', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + Client.authToken,
-      },
-      body: JSON.stringify(userInfo),
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/user',
+      method: 'put',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
+      data: userInfo
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to set user info:', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 
   /**
@@ -94,55 +91,49 @@ class Client {
 
   /**
    * Gets a list of recommended potential matches
-   * @return {[{userid, name, preferredGender, gender, favGenre, birthday, bio}]}
+   * @return {[{userid, name, preferredGender, gender, favGenre, birthday, bio}]}, or null for failure
    */
   static async getPotentialMatches() {
-    const potentialMatches = await fetch(Client.ROOT_PATH + 'recommends', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + Client.authToken,
-      },
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/recommends',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to get potential matches', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 
   /**
    * Likes user with given id
    * @param {string} userid - the user to like
+   * @return {boolean} whether like was successful
    */
   static async sendLike(userid) {
-    await fetch(Client.ROOT_PATH + 'like', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + Client.authToken,
-      },
-      body: JSON.stringify({userid}),
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/like',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
+      data: { userid: userid }
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to send like', error);
-      });
+      .then(response => true)
+      .catch(response => false);
   }
 
   /**
    * Gets existing matches for chat
-   * @return {{displayName, photoUrl, lastMessage, likeId}}
+   * @return {{displayName, photoUrl, lastMessage, likeId}}, or null for failure
    */
   static async getChats() {
-    const chats = await fetch(Client.ROOT_PATH + 'chats', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + Client.authToken,
-      },
+    await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/chats',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to get chats', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 }
 
