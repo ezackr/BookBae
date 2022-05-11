@@ -10,7 +10,7 @@ import {
 const EnterEmailScreen = ({navigation}) => {
   const [email, onChangeText] = React.useState(null);
 
-  //add necessary function to store email
+  // add necessary function to store email
   const onPress = () => {
     console.log(email);
     navigation.navigate('EnterPasswordScreen');
