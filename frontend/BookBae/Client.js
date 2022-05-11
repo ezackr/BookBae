@@ -1,3 +1,4 @@
+import axios from 'axios'
 /** Utility class for making requests to server */
 class Client {
   static IP = '127.0.0.1';
