@@ -7,10 +7,30 @@ import {
   TextInput,
   Button,
 } from 'react-native';
+import Client from '../Client.js';
 
 const LoginScreen = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
+
+  const handleLogin = async () => {
+    Client.logIn({email: email, password: password});
+    if (Client.authToken !== undefined) {
+      navigation.navigate('HomeScreen');
+    } else {
+      console.log('error');
+      navigation.navigate('HomeScreen'); // still navigate to HomeScreen for now.
+      // toggleErrorMessage();
+    }
+  };
+
+  const handleCreateAccount = () => {
+    navigation.navigate('EnterEmailScreen');
+  };
+
+  const handleForgotPassword = () => {
+    navigation.navigate('ResetPasswordScreen');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,17 +54,13 @@ const LoginScreen = ({navigation}) => {
         keyboardType="default"
         secureTextEntry={true}
       />
-      <Pressable style={styles.button}
-        onPress={() => navigation.navigate('HomeScreen')}>
+      <Pressable style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
-      <Pressable style={styles.button}
-        onPress={() => console.log('Forgot Password!')}>
+      <Pressable style={styles.button} onPress={handleForgotPassword}>
         <Text style={styles.buttonText}>Forgot Password</Text>
       </Pressable>
-      <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate('EnterEmailScreen')}>
+      <Pressable style={styles.button} onPress={handleCreateAccount}>
         <Text style={styles.buttonText}>Create Account</Text>
       </Pressable>
     </SafeAreaView>
