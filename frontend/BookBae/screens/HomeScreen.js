@@ -34,7 +34,15 @@ export default HomeScreen;
 const ProfileOverview = () => {
   return (
     <SafeAreaView style={matchStyles.matchBox}>
+      <SafeAreaView>
+        <Image source={require('../images/sampleTitle1.jpg')} />
+        <Image source={require('../images/sampleTitle2.jpeg')} />
+      </SafeAreaView>
       <Text style={matchStyles.frontName}>Alan, 29</Text>
+      <SafeAreaView>
+        <Image source={require('../images/sampleTitle3.png')} />
+        <Image source={require('../images/sampleTitle4.jpeg')} />
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
