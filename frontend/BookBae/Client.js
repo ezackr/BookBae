@@ -16,16 +16,14 @@ class Client {
    *          favGenre, birthday, bio, zipcode}}
    */
   static async getUserInfo() {
-    return await fetch(Client.ROOT_PATH + 'user', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + Client.authToken,
-      },
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/user',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken}
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to fetch user info:', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 
   /**

@@ -61,4 +61,12 @@ describe('Client', () => {
             expect(success).toBeFalsy();
         })
     });
+
+    describe('getUserInfo', () => {
+        test('makes correct request with authToken', async () => {
+            Client.authToken = 'myauthtoken';
+            await Client.getUserInfo();
+            expect(mock.history.get[0].headers.Authorization).toBe('Bearer myauthtoken');
+        })
+    })
 })
