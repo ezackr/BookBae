@@ -8,7 +8,7 @@ public class LikeRequest {
 
     @JsonProperty("userid")
     public String getUserId() {
-        return userid;
+        return this.userid;
     }
 
     @JsonProperty("userid")

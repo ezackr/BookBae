@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 /** Utility class for making requests to server */
 class Client {
   static IP = '10.0.2.2';
@@ -20,7 +20,7 @@ class Client {
       baseURL: Client.ROOT_PATH,
       url: '/user',
       method: 'get',
-      headers: {'Authorization': 'Bearer ' + Client.authToken}
+      headers: {Authorization: 'Bearer ' + Client.authToken},
     })
       .then(response => response.data)
       .catch(response => null);
@@ -38,8 +38,8 @@ class Client {
       baseURL: Client.ROOT_PATH,
       url: '/user',
       method: 'put',
-      headers: {'Authorization': 'Bearer ' + Client.authToken},
-      data: userInfo
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+      data: userInfo,
     })
       .then(response => response.data)
       .catch(response => null);
@@ -56,12 +56,14 @@ class Client {
       baseURL: Client.ROOT_PATH,
       url: '/create',
       method: 'post',
-      data: { email: email, password: password }
+      data: {email: email, password: password},
     })
-      .then(response => { // success
+      .then(response => {
+        // success
         return true;
       })
-      .catch(response => { // failure
+      .catch(response => {
+        // failure
         return false;
       });
   }
@@ -77,13 +79,15 @@ class Client {
       baseURL: Client.ROOT_PATH,
       url: '/login',
       method: 'post',
-      data: { email: email, password: password }
+      data: {email: email, password: password},
     })
-      .then(response => { // success
+      .then(response => {
+        // success
         Client.authToken = response.data.authToken;
         return true;
       })
-      .catch(response => { // failure
+      .catch(response => {
+        // failure
         Client.authToken = null;
         return false;
       });
@@ -98,7 +102,7 @@ class Client {
       baseURL: Client.ROOT_PATH,
       url: '/recommends',
       method: 'get',
-      headers: {'Authorization': 'Bearer ' + Client.authToken},
+      headers: {Authorization: 'Bearer ' + Client.authToken},
     })
       .then(response => response.data)
       .catch(response => null);
@@ -114,8 +118,8 @@ class Client {
       baseURL: Client.ROOT_PATH,
       url: '/like',
       method: 'get',
-      headers: {'Authorization': 'Bearer ' + Client.authToken},
-      data: { userid: userid }
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+      data: {userid: userid},
     })
       .then(response => true)
       .catch(response => false);
@@ -130,7 +134,7 @@ class Client {
       baseURL: Client.ROOT_PATH,
       url: '/chats',
       method: 'get',
-      headers: {'Authorization': 'Bearer ' + Client.authToken},
+      headers: {Authorization: 'Bearer ' + Client.authToken},
     })
       .then(response => response.data)
       .catch(response => null);

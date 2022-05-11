@@ -23,7 +23,7 @@ import EnterBioScreen from './screens/EnterBioScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 //incorporate icons later
 //import Icon from 'react-native-ionicons';
 
@@ -36,16 +36,29 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="TabNavigation" component={TabNavigation} options={{ headerShown: false }}/>
+        <Stack.Screen
+          name="TabNavigation"
+          component={TabNavigation}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="CreateAccountScreen"
           component={CreateAccountScreen}
         />
         <Stack.Screen name="EnterEmailScreen" component={EnterEmailScreen} />
-        <Stack.Screen name="EnterPasswordScreen" component={EnterPasswordScreen} />
+        <Stack.Screen
+          name="EnterPasswordScreen"
+          component={EnterPasswordScreen}
+        />
         <Stack.Screen name="EnterGenderScreen" component={EnterGenderScreen} />
-        <Stack.Screen name="EnterBirthdayScreen" component={EnterBirthdayScreen} />
-        <Stack.Screen name="EnterZipcodeScreen" component={EnterZipcodeScreen} />
+        <Stack.Screen
+          name="EnterBirthdayScreen"
+          component={EnterBirthdayScreen}
+        />
+        <Stack.Screen
+          name="EnterZipcodeScreen"
+          component={EnterZipcodeScreen}
+        />
         <Stack.Screen name="EnterGenreScreen" component={EnterGenreScreen} />
         <Stack.Screen name="EnterBooksScreen" component={EnterBooksScreen} />
         <Stack.Screen name="EnterPhotoScreen" component={EnterPhotoScreen} />
@@ -65,26 +78,32 @@ function TabNavigation() {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{
-          //incorporate icon later
-          //tabBarIcon: () => (<Icon name="information-circle-outline" color="blue" />),
-        }}
+        options={
+          {
+            //incorporate icon later
+            //tabBarIcon: () => (<Icon name="information-circle-outline" color="blue" />),
+          }
+        }
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{
-          //incorporate icon later
-          //tabBarIcon: () => <Icon name="person-circle-outline" size={40} color="blue"/>,
-        }}
+        options={
+          {
+            //incorporate icon later
+            //tabBarIcon: () => <Icon name="person-circle-outline" size={40} color="blue"/>,
+          }
+        }
       />
       <Tab.Screen
         name="Chat"
         component={ChatScreen}
-        options={{
-          //incorporate icon later
-          //tabBarIcon: () => <Icon name="person-circle-outline" size={40} color="blue"/>,
-        }}
+        options={
+          {
+            //incorporate icon later
+            //tabBarIcon: () => <Icon name="person-circle-outline" size={40} color="blue"/>,
+          }
+        }
       />
     </Tab.Navigator>
   );

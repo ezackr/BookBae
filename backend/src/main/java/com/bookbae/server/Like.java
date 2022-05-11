@@ -4,6 +4,7 @@ import com.bookbae.server.security.SecuredResource;
 import com.bookbae.server.json.LikeRequest;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Context;
@@ -42,12 +43,14 @@ public class Like {
             // is_mutual, like_id, liker_user_id, liked_user_id
             " VALUES(0, ?, ?, ?);";
 
+    @Inject
     public Like(DatabasePoolService database) {
         this.database = database;
     }
 
     @PUT
     @Produces("application/json")
+    @Consumes("application/json")
     public Response doLike(@Context SecurityContext ctx, LikeRequest likeRequest) {
         try (Connection conn = this.database.getConnection()) {
 

@@ -1,13 +1,16 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
+import Client from '../Client'
 
-const EnterPasswordScreen = ({navigation}) => {
+const EnterPasswordScreen = ({route, navigation}) => {
 
     const [password, onChangeText] = React.useState(null);
 
     //add necessary function to store password
     const onPress = () => {
         console.log(password)
+        console.log(route.params.myEmail)
+        Client.createUser(route.params.myEmail, password);
         navigation.navigate('EnterGenderScreen')
     }
 
