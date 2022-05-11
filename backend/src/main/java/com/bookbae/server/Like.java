@@ -112,9 +112,7 @@ public class Like {
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println(e);
-            System.out.println(e.toString());
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.serverError().build();
         }
         return Response.ok().build();
     }

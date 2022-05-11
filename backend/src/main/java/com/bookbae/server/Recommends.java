@@ -67,7 +67,7 @@ public class Recommends {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.serverError().build();
         }
         return Response.ok(entries).build();
     }

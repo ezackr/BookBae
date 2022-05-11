@@ -30,25 +30,31 @@ The application offers a number of API endpoints accessible from the root path. 
 - /user - for the authenticated user (the client)
     - GET
         - Produces: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
+        - Returns 403 response code if user does not exist
     - PUT
         - Consumes: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “gender”, “favGenre”: “favGenre”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
         - Produces: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
     - Does Not Return USERID!
+    - Birthday must be of the form "yyy-mm-dd"
 - FUTURE OPTION: /user/{userid} : gets the above object for a specific userid
 - /create
     - POST
         - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
+        - Returns 403 response code if email already in use
 - /login
     - POST
         - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
         - Produces: `{“authToken”: “<token>”}`
+        - Returns 403 response code if email or password are wrong
 - /recommends
     - GET
         - Produces: `[{“userid”: “<userid>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”}, ...]`
+        - Returns 403 response code if there are no users to recommend (to be changed to return empty list in future version)
     - Will not return email or zipcode to protect privacy!
 - /like
     - PUT
         - Consumes: `{"userid": "<userid>"}`
+        - Returns 403 response code if client user has already liked the other user
     - userid is of the liked user, not the liker
 - /chats
     - GET
@@ -59,6 +65,8 @@ The application offers a number of API endpoints accessible from the root path. 
     - POST
         - Consumes: `{"text": "<words>"}`
     - userid is of the sender
+    
+Endpoints return a 500 response code in the event of a SQL error   
 The `authToken` returned from the login endpoint is a JWT token that should be kept by the client and must be used to access authenticated endpoints (for now, just /user, but will include photo upload and accessing matches and chat).
 
 Attempting to access a secured resource with an expired JWT will return a response with an UNAUTHORIZED status code, and attempting to access a secured resource with an invalid JWT will return UNAUTHORIZED. If a client recieves an unauthorized response, it should attempt to get a fresh JWT by hitting the /login endpoint again. 
@@ -69,10 +77,10 @@ To access a secured resource, the JWT must be passed in the "Authorization" HTTP
 
 When running on Glassfish (and likely other servers too) you need to configure some system properties. Specifically, you need to set the following four properties appropriately:
 
-- bookbae.server_url
-- bookbae.database_name
-- bookbae.username
-- bookbae.password
+-Dbookbae.server_url=
+-Dbookbae.database_name=
+-Dbookbae.username=
+-Dbookbae.password=
 
 Additionally, you need to unset the following properties (so Glassfish uses the system defaults, which are appropriate for now):
 
