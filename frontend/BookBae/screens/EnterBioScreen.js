@@ -8,7 +8,7 @@ const EnterBioScreen = ({navigation}) => {
     //add necessary function to store bio
     const onPress = () => {
         console.log(bio)
-        navigation.navigate('HomeScreen')
+        navigation.navigate('TabNavigation')
     }
 
     return (

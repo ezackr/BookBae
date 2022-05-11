@@ -19,7 +19,7 @@ const LoginScreen = ({navigation}) => {
       navigation.navigate('HomeScreen');
     } else {
       console.log('error');
-      navigation.navigate('HomeScreen'); // still navigate to HomeScreen for now.
+      navigation.navigate('TabNavigation'); // still navigate to HomeScreen for now.
       // toggleErrorMessage();
     }
   };

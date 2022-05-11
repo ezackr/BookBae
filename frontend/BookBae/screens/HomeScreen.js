@@ -11,9 +11,6 @@ import {
 const HomeScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <SafeAreaView style={styles.topMenu}>
-        <Text style={styles.title}>BookBae</Text>
-      </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
         <ProfileOverview />
       </SafeAreaView>
