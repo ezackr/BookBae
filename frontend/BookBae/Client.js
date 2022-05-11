@@ -54,19 +54,20 @@ class Client {
    * Creates a new user account
    * @param {string} email - the email to associate new account with
    * @param {string} password - the password that the user will use to access account
+   * @return {boolean} whether account was successfully created
    */
   static async createUser(email, password) {
-    const credentials = {email, password};
-    return await fetch(Client.ROOT_PATH + 'create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/create',
+      method: 'post',
+      data: { email: email, password: password }
     })
-      .then(response => response.status)
-      .catch(error => {
-        console.error('Failed to create user:', error);
+      .then(response => { // success
+        return true;
+      })
+      .catch(response => { // failure
+        return false;
       });
   }
 
@@ -77,14 +78,6 @@ class Client {
    * @return {boolean} whether login was successful
    */
   static async logIn(email, password) {
-//    const credentials = {email, password};
-//    Client.authToken = await fetch(Client.ROOT_PATH + 'login', {
-//      method: 'POST',
-//      headers: {
-//        'Content-Type': 'application/json',
-//      },
-//      body: JSON.stringify(credentials),
-//    })
     return await axios({
       baseURL: Client.ROOT_PATH,
       url: '/login',
