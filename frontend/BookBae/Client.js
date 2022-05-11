@@ -6,7 +6,7 @@ class Client {
   static CONTEXT = 'api';
   static VERSION = 'v1';
 
-  static ROOT_PATH = `http://${Client.IP}:${Client.PORT}/${Client.CONTEXT}/${Client.VERSION}/`;
+  static ROOT_PATH = `http://${Client.IP}:${Client.PORT}/${Client.CONTEXT}/${Client.VERSION}`;
 
   static authToken; // Probably not the right place to store this
 
@@ -74,18 +74,31 @@ class Client {
    * Attempts to log in to an account with the given email and password
    * @param {string} email - the email associated with the account
    * @param {string} password - the password associated with the account
+   * @return {boolean} whether login was successful
    */
   static async logIn(email, password) {
-    const credentials = {email, password};
-    Client.authToken = await fetch(Client.ROOT_PATH + 'login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
+//    const credentials = {email, password};
+//    Client.authToken = await fetch(Client.ROOT_PATH + 'login', {
+//      method: 'POST',
+//      headers: {
+//        'Content-Type': 'application/json',
+//      },
+//      body: JSON.stringify(credentials),
+//    })
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/login',
+      method: 'post',
+      data: { email: email, password: password }
     })
-      .then(response => response.json())
-      .catch(() => {});
+      .then(response => { // success
+        Client.authToken = response.data.authToken;
+        return true;
+      })
+      .catch(response => { // failure
+        Client.authToken = null;
+        return false;
+      });
   }
 
   /**
