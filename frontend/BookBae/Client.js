@@ -1,3 +1,4 @@
+import axios from 'axios'
 /** Utility class for making requests to server */
 class Client {
   static IP = '127.0.0.1';
@@ -5,26 +6,24 @@ class Client {
   static CONTEXT = 'api';
   static VERSION = 'v1';
 
-  static ROOT_PATH = `http://${Client.IP}:${Client.PORT}/${Client.CONTEXT}/${Client.VERSION}/`;
+  static ROOT_PATH = `http://${Client.IP}:${Client.PORT}/${Client.CONTEXT}/${Client.VERSION}`;
 
   static authToken; // Probably not the right place to store this
 
   /**
    * Gets the user info given the user's authToken
    * @return {{email, name, preferredGender, gender,
-   *          favGenre, birthday, bio, zipcode}}
+   *          favGenre, birthday, bio, zipcode}}, or null for failure
    */
   static async getUserInfo() {
-    return await fetch(Client.ROOT_PATH + 'user', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + Client.authToken,
-      },
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/user',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken}
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to fetch user info:', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 
   /**
@@ -32,40 +31,38 @@ class Client {
    * @param {{email, name, preferredGender, gender,
    *          favGenre, birthday, bio, zipcode}} userInfo
    * @return {{email, name, preferredGender, gender,
-   *          favGenre, birthday, bio, zipcode}} the server's (new) user info
+   *          favGenre, birthday, bio, zipcode}} the server's (new) user info, or null for failure
    */
   static async setUserInfo(userInfo) {
-    return await fetch(Client.ROOT_PATH + 'user', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + Client.authToken,
-      },
-      body: JSON.stringify(userInfo),
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/user',
+      method: 'put',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
+      data: userInfo
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to set user info:', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 
   /**
    * Creates a new user account
    * @param {string} email - the email to associate new account with
    * @param {string} password - the password that the user will use to access account
+   * @return {boolean} whether account was successfully created
    */
   static async createUser(email, password) {
-    const credentials = {email, password};
-    return await fetch(Client.ROOT_PATH + 'create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/create',
+      method: 'post',
+      data: { email: email, password: password }
     })
-      .then(response => response.status)
-      .catch(error => {
-        console.error('Failed to create user:', error);
+      .then(response => { // success
+        return true;
+      })
+      .catch(response => { // failure
+        return false;
       });
   }
 
@@ -73,71 +70,70 @@ class Client {
    * Attempts to log in to an account with the given email and password
    * @param {string} email - the email associated with the account
    * @param {string} password - the password associated with the account
+   * @return {boolean} whether login was successful
    */
   static async logIn(email, password) {
-    const credentials = {email, password};
-    Client.authToken = await fetch(Client.ROOT_PATH + 'login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/login',
+      method: 'post',
+      data: { email: email, password: password }
     })
-      .then(response => response.json())
-      .catch(() => {});
+      .then(response => { // success
+        Client.authToken = response.data.authToken;
+        return true;
+      })
+      .catch(response => { // failure
+        Client.authToken = null;
+        return false;
+      });
   }
 
   /**
    * Gets a list of recommended potential matches
-   * @return {[{userid, name, preferredGender, gender, favGenre, birthday, bio}]}
+   * @return {[{userid, name, preferredGender, gender, favGenre, birthday, bio}]}, or null for failure
    */
   static async getPotentialMatches() {
-    const potentialMatches = await fetch(Client.ROOT_PATH + 'recommends', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + Client.authToken,
-      },
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/recommends',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to get potential matches', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 
   /**
    * Likes user with given id
    * @param {string} userid - the user to like
+   * @return {boolean} whether like was successful
    */
   static async sendLike(userid) {
-    await fetch(Client.ROOT_PATH + 'like', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + Client.authToken,
-      },
-      body: JSON.stringify({userid}),
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/like',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
+      data: { userid: userid }
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to send like', error);
-      });
+      .then(response => true)
+      .catch(response => false);
   }
 
   /**
    * Gets existing matches for chat
-   * @return {{displayName, photoUrl, lastMessage, likeId}}
+   * @return {{displayName, photoUrl, lastMessage, likeId}}, or null for failure
    */
   static async getChats() {
-    const chats = await fetch(Client.ROOT_PATH + 'chats', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + Client.authToken,
-      },
+    await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/chats',
+      method: 'get',
+      headers: {'Authorization': 'Bearer ' + Client.authToken},
     })
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Failed to get chats', error);
-      });
+      .then(response => response.data)
+      .catch(response => null);
   }
 }
 
