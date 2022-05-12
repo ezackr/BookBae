@@ -13,6 +13,7 @@ import ChatScreen from './screens/ChatScreen';
 import CreateAccountScreen from './screens/CreateAccountScreen';
 import EnterEmailScreen from './screens/EnterEmailScreen';
 import EnterPasswordScreen from './screens/EnterPasswordScreen';
+import EnterNameScreen from './screens/EnterNameScreen';
 import EnterGenderScreen from './screens/EnterGenderScreen';
 import EnterBirthdayScreen from './screens/EnterBirthdayScreen';
 import EnterZipcodeScreen from './screens/EnterZipcodeScreen';
@@ -50,6 +51,7 @@ const App = () => {
           name="EnterPasswordScreen"
           component={EnterPasswordScreen}
         />
+        <Stack.Screen name="EnterNameScreen" component={EnterNameScreen} />
         <Stack.Screen name="EnterGenderScreen" component={EnterGenderScreen} />
         <Stack.Screen
           name="EnterBirthdayScreen"

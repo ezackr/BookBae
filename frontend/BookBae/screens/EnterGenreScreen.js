@@ -13,6 +13,7 @@ const EnterGenreScreen = ({route, navigation}) => {
         navigation.navigate('EnterBooksScreen', {
             email: route.params.email,
             password: route.params.password,
+            name: route.params.name,
             gender: route.params.gender,
             birthday: route.params.birthday,
             zipcode: route.params.zipcode,

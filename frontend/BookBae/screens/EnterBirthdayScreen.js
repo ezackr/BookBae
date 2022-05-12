@@ -14,6 +14,7 @@ const EnterBirthdayScreen = ({route, navigation}) => {
         navigation.navigate('EnterZipcodeScreen', {
             email: route.params.email,
             password: route.params.password,
+            name: route.params.name,
             gender: route.params.gender,
             birthday: moment(date).format('YYYY-MM-DD')
         })

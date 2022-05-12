@@ -88,6 +88,7 @@ class Client {
       })
       .catch(response => {
         // failure
+        console.log(response);
         Client.authToken = null;
         return false;
       });

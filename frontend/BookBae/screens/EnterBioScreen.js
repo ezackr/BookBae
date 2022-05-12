@@ -12,8 +12,8 @@ const EnterBioScreen = ({route, navigation}) => {
         await Client.logIn(route.params.email, route.params.password);
         const userInfo = await Client.setUserInfo({
             email: route.params.email,
-            name: 'There is no page for entering name yet',
             password: route.params.password,
+            name: route.params.name,
             preferredGender: '_',
             gender: route.params.gender,
             birthday: route.params.birthday,
