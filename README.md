@@ -110,3 +110,28 @@ Starting the app:
    - run "npm ci" to add the Jest testing setup.
    - run "npm test" to run tests.
    - Note: all tests run automatically when changes are pushed to branches/main via continuous integration, which is why testing in the local repository is optional.
+   
+### Bug Tracking, Testing, and CI:
+      As briefly described above, the repository has implemented continuous integration to test commits/merges to the project. Pull requests and conflicts are resolved by other users (user who made pull request cannot also be the reviewer) to ensure all code is properly reviewed. See the optional testing sections above, and the testing portion of the living document, for further details regarding test types, build system, and more. The continuous integration uses GitHub Actions to catch any potential bugs within the code. In doing so, code is checked *immediately* before any further damage can be dealt.
+   
+### Functional Use Cases:
+   
+This section outlines which use cases described from the Living Document are operational in the current implementation.
+   
+1. User wishes to connect with prospective dates using BookBae: NOT OPERATIONAL
+      Although all the necessary components have been outlined, they are not fully linked and operational to meet the definition of the use case.
+   
+2. User wishes to connect with new friends using BookBae: NOT OPERATIONAL
+      Similarly to (1) the features have been established, but are not yet operational.
+   
+3. User wants to browse profiles, not necessarily trying to find a match: SEMI-OPERATIONAL
+      The app currently provides fake sample data when logging in, displaying how real matches will be viewed in the future. The implementation should occur easily and quickly after the necessary endpoints are established in the database.
+   
+4. User wants to start a conversation with a match: NOT OPERATIONAL
+      The messaging screen has been outlined, with established endpoints in the backend, but it has not yet been linked to its corresponding frontend components.
+
+5. User wants to explore the app to see if they might like it: OPERATIONAL
+      Onboarding process is fully implemented, allowing user to design their profiles and explore the various screens within the app. 
+
+
+
