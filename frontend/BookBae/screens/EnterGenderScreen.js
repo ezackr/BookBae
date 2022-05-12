@@ -4,7 +4,7 @@ import RadioForm from 'react-native-simple-radio-button';
 
 const EnterGenderScreen = ({route, navigation}) => {
 
-    const genders = [{ label: 'female', value: 'female'}, {label: 'male', value: 'male'}, {label: 'non-binary', value: 'non-binary'}]
+    const genders = [{ label: 'female', value: 'f'}, {label: 'male', value: 'm'}, {label: 'non-binary', value: 'n'}]
 
     const [option, setOption] = useState('female');
 
