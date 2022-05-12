@@ -21,9 +21,10 @@ const EnterBooksScreen = ({route, navigation}) => {
   // we probably don't need to do anything here, we can store books as they are added in onChangeText
   const onPress = () => {
     console.log(bookCover);
-    navigation.navigate('EnterPhotoScreen', {
+    navigation.navigate('EnterBioScreen', {
         email: route.params.email,
         password: route.params.password,
+        name: route.params.name,
         gender: route.params.gender,
         birthday: route.params.birthday,
         zipcode: route.params.zipcode,

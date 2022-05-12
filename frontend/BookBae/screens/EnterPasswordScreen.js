@@ -11,7 +11,7 @@ const EnterPasswordScreen = ({route, navigation}) => {
         console.log(password)
         console.log(route.params.myEmail)
         Client.createUser(route.params.myEmail, password);
-        navigation.navigate('EnterGenderScreen', {
+        navigation.navigate('EnterNameScreen', {
             email: route.params.myEmail,
             password: password
         })

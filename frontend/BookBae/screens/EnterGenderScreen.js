@@ -14,6 +14,7 @@ const EnterGenderScreen = ({route, navigation}) => {
         navigation.navigate('EnterBirthdayScreen', {
             email: route.params.email,
             password: route.params.password,
+            name: route.params.name,
             gender: option
         })
     }

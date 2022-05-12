@@ -1,28 +1,25 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
 
-const EnterZipcodeScreen = ({route, navigation}) => {
+const EnterNameScreen = ({route, navigation}) => {
 
-    const [zipcode, onChangeText] = React.useState(null);
+    const [name, onChangeText] = React.useState(null);
 
     //add necessary function to store zipcode
     const onPress = () => {
-        console.log(zipcode)
+        console.log(name)
         console.log(route.params.birthday)
-        navigation.navigate('EnterGenreScreen', {
+        navigation.navigate('EnterGenderScreen', {
             email: route.params.email,
             password: route.params.password,
-            name: route.params.name,
-            gender: route.params.gender,
-            birthday: route.params.birthday,
-            zipcode: zipcode
+            name: name
         })
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Enter Your Zipcode</Text>
-            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={zipcode} placeholder="xxxxx"/>
+            <Text style={styles.title}>Enter Your Name:</Text>
+            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={name} placeholder="Herbert Ferdinand"/>
             <Pressable
                 style={styles.button}
                 onPress={onPress}>
@@ -73,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnterZipcodeScreen;
+export default EnterNameScreen;
