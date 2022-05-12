@@ -78,6 +78,7 @@ These are the set up instructions to set up an instance of our server. For the f
       "-Dbookbae.username=TeamBookBae@bookbaeserver'
       "-Dbookbae.password=<password>'
     - Click "Ok" to save
+    - Press the "Restart Server" button to save changes
       
     At this point your server is set up and ready to take requests!
    
