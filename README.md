@@ -52,7 +52,7 @@ These are the set up instructions to set up an instance of our server. For the f
     - In command line, navigate to the backend folder
     - run "./gradlew build" this command will build an .war file called api.war within backend/build/libs
     
-2. Download Glassfish, our interim server, and start the server (@Joshua what to say besides "start the server"?)
+2. Download Glassfish, our interim server, and start the server
     - Go to https://projects.eclipse.org/projects/ee4j.glassfish/downloads and download Glassfish version 6.2.5 Full Profile
     - Extract the glassfish-6.2.5.zip to a safe place
     - In command line, navigate to the glassfish-6.2.5 folder
