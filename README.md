@@ -44,7 +44,7 @@ This project has implemented branch protection. Contributors to the main branch 
 
 The main BookBae project has a "Projects" tab which outlines the milestones within the course (e.g., System Architecture, Testing, etc.). Each project milestone will detail the individual/group tasks necessary, as well as a task's status.
 
-### Set up Instructions
+### Set up Instructions (Backend)
 
 These are the set up instructions to set up an instance of our server. For the final turn in, we will host the server on Azure.
 
@@ -88,3 +88,25 @@ These are the set up instructions to set up an instance of our server. For the f
     - Click the first link, the one at port 8080
     - add "/v1/user" to the url
     - If you see a 401 server error (as opposed to a 404 server error) you are properly configured. At this point, the server is denying your request only because you have not provided the appropriate token.
+
+### Set up Instructions (Frontend)
+   
+These are the setup instructions for the frontend components. These let a user run the application on an android device or an emulator in Android Studio.
+
+Setup For Emulator:
+   Create an Android Virtual Device (AVD) in Android Studio to run the application (recommended: Pixel_3a).
+   
+Setup for Real Device:
+   Plug the device into your computer that you are using to run Android Studio. 
+
+Starting the app:
+1. From the top level "BookBae" in the repository, enter the frontend section by running "cd ./frontend/BookBae" in the command line.
+   
+2. In the command line, run "npm install" to add the necessary dependencies to the local repository. 
+   
+3. Run "npx react-native run-android" in the command line to start the application (should open emulator or switch to app screen on real device)
+   
+4. (Optional) Testing the application:
+   - run "npm ci" to add the Jest testing setup.
+   - run "npm test" to run tests.
+   - Note: all tests run automatically when changes are pushed to branches/main via continuous integration, which is why testing in the local repository is optional.
