@@ -68,8 +68,8 @@ These are the set up instructions to set up an instance of our server. For the f
    - Click "Ok" to save
     
 4. Configure properties
-    - On the left navigation bar, click "server config". It is the last option.
-    - Click JVM ________
+    - On the left navigation bar, click "server-config". It is the last option.
+    - Click JVM Settings
     - Click the JVM Options tab 
     - delete the javax.net.ssl.keyStore and javax.net.ssl.trustStore properties
     - Add the following four properties. Contact BookBae team for password.
