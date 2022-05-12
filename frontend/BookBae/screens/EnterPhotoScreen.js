@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, StyleSheet, Text, TextInput, Pressable, Image } from 'react-native';
 
-const EnterPhotoScreen = ({navigation}) => {
+const EnterPhotoScreen = ({route, navigation}) => {
 
     var profileSource = 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
 
@@ -14,7 +14,15 @@ const EnterPhotoScreen = ({navigation}) => {
     //we probably don't need to do anything here, we can store image as it is added in onUploadPress
     const onPress = () => {
         console.log(profileSource)
-        navigation.navigate('EnterBioScreen')
+        navigation.navigate('EnterBioScreen', {
+            email: route.params.email,
+            password: route.params.password,
+            gender: route.params.gender,
+            birthday: route.params.birthday,
+            zipcode: route.params.zipcode,
+            genre: route.params.genre,
+            books: route.params.books
+        })
     }
 
     return (

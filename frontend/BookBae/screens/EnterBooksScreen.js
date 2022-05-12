@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 
-const EnterBooksScreen = ({navigation}) => {
+const EnterBooksScreen = ({route, navigation}) => {
   const bookCover =
     'https://www.pngitem.com/pimgs/m/19-191625_icon-plus-png-gray-plus-icon-png-transparent.png';
 
@@ -21,7 +21,15 @@ const EnterBooksScreen = ({navigation}) => {
   // we probably don't need to do anything here, we can store books as they are added in onChangeText
   const onPress = () => {
     console.log(bookCover);
-    navigation.navigate('EnterPhotoScreen');
+    navigation.navigate('EnterPhotoScreen', {
+        email: route.params.email,
+        password: route.params.password,
+        gender: route.params.gender,
+        birthday: route.params.birthday,
+        zipcode: route.params.zipcode,
+        genre: route.params.genre,
+        books: bookList
+    });
   };
 
   const addNewBook = () => {

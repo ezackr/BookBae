@@ -2,14 +2,22 @@ import React, {useState} from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker'
 
-const EnterGenreScreen = ({navigation}) => {
+const EnterGenreScreen = ({route, navigation}) => {
 
     const [selectedValue, setSelectedValue] = useState("java");
 
     //add necessary function to store favorite genre
     const onPress = () => {
         console.log(selectedValue)
-        navigation.navigate('EnterBooksScreen')
+        console.log(route.params.zipcode)
+        navigation.navigate('EnterBooksScreen', {
+            email: route.params.email,
+            password: route.params.password,
+            gender: route.params.gender,
+            birthday: route.params.birthday,
+            zipcode: route.params.zipcode,
+            genre: selectedValue
+        })
     }
 
     return (

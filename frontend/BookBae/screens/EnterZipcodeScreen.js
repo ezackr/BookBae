@@ -1,14 +1,21 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
 
-const EnterZipcodeScreen = ({navigation}) => {
+const EnterZipcodeScreen = ({route, navigation}) => {
 
     const [zipcode, onChangeText] = React.useState(null);
 
     //add necessary function to store zipcode
     const onPress = () => {
         console.log(zipcode)
-        navigation.navigate('EnterGenreScreen')
+        console.log(route.params.birthday)
+        navigation.navigate('EnterGenreScreen', {
+            email: route.params.email,
+            password: route.params.password,
+            gender: route.params.gender,
+            birthday: route.params.birthday,
+            zipcode: zipcode
+        })
     }
 
     return (
