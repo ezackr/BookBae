@@ -13,8 +13,8 @@ const LoginScreen = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
 
-  const handleLogin = () => {
-    const success = Client.logIn(email, password);
+  const handleLogin = async () => {
+    const success = await Client.logIn(email, password);
     if (success) {
       navigation.navigate('TabNavigation');
     } else {
