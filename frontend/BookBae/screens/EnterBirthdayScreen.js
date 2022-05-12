@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import moment from 'moment'
 
-const EnterBirthdayScreen = ({navigation}) => {
+const EnterBirthdayScreen = ({route, navigation}) => {
 
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
@@ -10,7 +11,12 @@ const EnterBirthdayScreen = ({navigation}) => {
     //add necessary function to store birthday
     const onPress = () => {
         console.log(date)
-        navigation.navigate('EnterZipcodeScreen')
+        navigation.navigate('EnterZipcodeScreen', {
+            email: route.params.email,
+            password: route.params.password,
+            gender: route.params.gender,
+            birthday: moment(date).format('YYYY-MM-DD')
+        })
     }
 
     return (

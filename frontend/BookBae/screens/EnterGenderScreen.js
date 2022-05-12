@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 
-const EnterGenderScreen = ({navigation}) => {
+const EnterGenderScreen = ({route, navigation}) => {
 
     const genders = [{ label: 'female', value: 'female'}, {label: 'male', value: 'male'}, {label: 'non-binary', value: 'non-binary'}]
 
@@ -11,7 +11,11 @@ const EnterGenderScreen = ({navigation}) => {
     //add necessary function to store gender
     const onPress = () => {
         console.log(option)
-        navigation.navigate('EnterBirthdayScreen')
+        navigation.navigate('EnterBirthdayScreen', {
+            email: route.params.email,
+            password: route.params.password,
+            gender: option
+        })
     }
 
     return (
