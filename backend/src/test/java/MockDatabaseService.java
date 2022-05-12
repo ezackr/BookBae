@@ -23,7 +23,7 @@ public class MockDatabaseService implements DatabasePoolService {
             "  email VARCHAR(254) NOT NULL,\n" +
             "  zipcode CHAR(5),\n" +
             "  bio VARCHAR(500),\n" +
-            "  preferred_gender VARCHAR,\n" +
+            "  preferred_gender VARCHAR(6),\n" +
             "  phone_num VARCHAR(15),\n" +
             "  PRIMARY KEY (user_id)\n" +
             ");\n" +
