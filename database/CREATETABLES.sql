@@ -8,7 +8,7 @@ CREATE TABLE user_info
     email VARCHAR(254) NOT NULL,
     zipcode CHAR(5),
     bio VARCHAR(500),
-    preferred_gender VARCHAR,
+    preferred_gender VARCHAR(6),
     phone_num VARCHAR(15),
     PRIMARY KEY (user_id)
 );
