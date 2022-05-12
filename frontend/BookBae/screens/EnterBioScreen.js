@@ -1,13 +1,27 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
+import Client from '../Client'
 
-const EnterBioScreen = ({navigation}) => {
+const EnterBioScreen = ({route, navigation}) => {
 
     const [bio, onChangeText] = React.useState(null);
 
     //add necessary function to store bio
-    const onPress = () => {
+    const onPress = async () => {
         console.log(bio)
+        await Client.logIn(route.params.email, route.params.password);
+        const userInfo = await Client.setUserInfo({
+            email: route.params.email,
+            name: 'There is no page for entering name yet',
+            password: route.params.password,
+            preferredGender: '_',
+            gender: route.params.gender,
+            birthday: route.params.birthday,
+            zipcode: route.params.zipcode,
+            favGenre: route.params.genre,
+            bio: bio
+        })
+        console.log(userInfo);
         navigation.navigate('TabNavigation')
     }
 
