@@ -67,7 +67,7 @@ public class LikeTest {
     @Test
     void basicLikeTest() {
         LikeRequest likeRequest = new LikeRequest();
-        likeRequest.setUserId(likedUserId);
+        likeRequest.userid = likedUserId;
         var resp = likeResource.doLike(new MockSecurityContext(likerUserId), likeRequest);
         assertEquals(200, resp.getStatus());
 
@@ -78,12 +78,12 @@ public class LikeTest {
         LikeRequest likeRequest = new LikeRequest();
 
         // liker likes liked request
-        likeRequest.setUserId(likedUserId);
+        likeRequest.userid = likedUserId;
         var resp = likeResource.doLike(new MockSecurityContext(likerUserId), likeRequest);
         assertEquals(200, resp.getStatus());
 
         // liked likes liker request
-        likeRequest.setUserId(likerUserId);
+        likeRequest.userid = likerUserId;
         resp = likeResource.doLike(new MockSecurityContext(likedUserId), likeRequest);
         assertEquals(200, resp.getStatus());
 

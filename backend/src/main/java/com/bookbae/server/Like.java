@@ -49,13 +49,12 @@ public class Like {
     }
 
     @PUT
-    @Produces("application/json")
     @Consumes("application/json")
     public Response doLike(@Context SecurityContext ctx, LikeRequest likeRequest) {
         try (Connection conn = this.database.getConnection()) {
 
             String clientUserId = ctx.getUserPrincipal().getName();
-            String otherUserId = likeRequest.getUserId();
+            String otherUserId = likeRequest.userid;
 
             // check if client user already likes other user
                 // if so, then this is a duplicate call, so throw exception? do nothing?
