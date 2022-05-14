@@ -112,7 +112,8 @@ Starting the app:
    - Note: all tests run automatically when changes are pushed to branches/main via continuous integration, which is why testing in the local repository is optional.
    
 ### Bug Tracking, Testing, and CI:
-      As briefly described above, the repository has implemented continuous integration to test commits/merges to the project. Pull requests and conflicts are resolved by other users (user who made pull request cannot also be the reviewer) to ensure all code is properly reviewed. See the optional testing sections above, and the testing portion of the living document, for further details regarding test types, build system, and more. The continuous integration uses GitHub Actions to catch any potential bugs within the code. In doing so, code is checked *immediately* before any further damage can be dealt.
+
+As briefly described above, the repository has implemented continuous integration to test commits/merges to the project. Pull requests and conflicts are resolved by other users (user who made pull request cannot also be the reviewer) to ensure all code is properly reviewed. See the optional testing sections above, and the testing portion of the living document, for further details regarding test types, build system, and more. The continuous integration uses GitHub Actions to catch any potential bugs within the code. In doing so, code is checked *immediately* before any further damage can be dealt.
    
 ### Functional Use Cases:
    
