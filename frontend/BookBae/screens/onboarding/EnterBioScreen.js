@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
-import Client from '../Client'
+import Client from '../../Client'
 
 const EnterBioScreen = ({route, navigation}) => {
 
