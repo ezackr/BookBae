@@ -23,7 +23,10 @@ class Client {
       headers: {Authorization: 'Bearer ' + Client.authToken},
     })
       .then(response => response.data)
-      .catch(response => null);
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
   }
 
   /**
@@ -42,7 +45,10 @@ class Client {
       data: userInfo,
     })
       .then(response => response.data)
-      .catch(response => null);
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
   }
 
   /**
@@ -63,7 +69,7 @@ class Client {
         return true;
       })
       .catch(response => {
-        // failure
+        console.log(response);
         return false;
       });
   }
@@ -106,7 +112,10 @@ class Client {
       headers: {Authorization: 'Bearer ' + Client.authToken},
     })
       .then(response => response.data)
-      .catch(response => null);
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
   }
 
   /**
@@ -123,7 +132,10 @@ class Client {
       data: {userid: userid},
     })
       .then(response => true)
-      .catch(response => false);
+      .catch(response => {
+        console.log(response);
+        return false;
+      });
   }
 
   /**
@@ -138,7 +150,10 @@ class Client {
       headers: {Authorization: 'Bearer ' + Client.authToken},
     })
       .then(response => response.data)
-      .catch(response => null);
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
   }
 }
 
