@@ -155,6 +155,35 @@ class Client {
         return null;
       });
   }
+
+  static async getMessages(matchId) {
+    await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/chats/' + matchId,
+      method: 'get',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+    })
+      .then(response => response.data)
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
+  }
+
+  static async sendMessage(matchId, message) {
+    await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/chats/' + matchId,
+      method: 'post',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+      data: {text: message}
+    })
+      .then(response => response.data)
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
+  }
 }
 
 export default Client;
