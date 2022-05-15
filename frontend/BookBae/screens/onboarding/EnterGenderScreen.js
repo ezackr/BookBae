@@ -6,15 +6,13 @@ const EnterGenderScreen = ({route, navigation}) => {
 
     const genders = [{ label: 'female', value: 'f'}, {label: 'male', value: 'm'}, {label: 'non-binary', value: 'n'}]
 
-    const [option, setOption] = useState('female');
+    const [option, setOption] = useState('f');
 
     //add necessary function to store gender
     const onPress = () => {
         console.log(option)
         navigation.navigate('EnterBirthdayScreen', {
-            email: route.params.email,
-            password: route.params.password,
-            name: route.params.name,
+            ...route.params,
             gender: option
         })
     }

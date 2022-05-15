@@ -22,24 +22,22 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 const Stack = createStackNavigator();
 
-class Onboarder extends React.Component {
-    render() {
-        return (
-            <Stack.Navigator>
-                <Stack.Screen name="EnterEmailScreen" component={EnterEmailScreen} />
-                <Stack.Screen name="EnterPasswordScreen" component={EnterPasswordScreen} />
-                <Stack.Screen name="EnterNameScreen" component={EnterNameScreen} />
-                <Stack.Screen name="EnterGenderScreen" component={EnterGenderScreen} />
-                <Stack.Screen name="EnterBirthdayScreen" component={EnterBirthdayScreen} />
-                <Stack.Screen name="EnterZipcodeScreen" component={EnterZipcodeScreen} />
-                <Stack.Screen name="EnterGenreScreen" component={EnterGenreScreen} />
-                <Stack.Screen name="EnterBooksScreen" component={EnterBooksScreen} />
-                <Stack.Screen name="EnterPhotoScreen" component={EnterPhotoScreen} />
-                <Stack.Screen name="EnterBioScreen" component={EnterBioScreen} />
-                <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
-            </Stack.Navigator>
-        );
-    }
+const Onboarder = () => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="EnterEmailScreen" component={EnterEmailScreen} />
+            <Stack.Screen name="EnterPasswordScreen" component={EnterPasswordScreen} />
+            <Stack.Screen name="EnterNameScreen" component={EnterNameScreen} />
+            <Stack.Screen name="EnterGenderScreen" component={EnterGenderScreen} />
+            <Stack.Screen name="EnterBirthdayScreen" component={EnterBirthdayScreen} />
+            <Stack.Screen name="EnterZipcodeScreen" component={EnterZipcodeScreen} />
+            <Stack.Screen name="EnterGenreScreen" component={EnterGenreScreen} />
+            <Stack.Screen name="EnterBooksScreen" component={EnterBooksScreen} />
+            <Stack.Screen name="EnterPhotoScreen" component={EnterPhotoScreen} />
+            <Stack.Screen name="EnterBioScreen" component={EnterBioScreen} />
+            <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
+        </Stack.Navigator>
+    );
 }
 
 export default Onboarder;

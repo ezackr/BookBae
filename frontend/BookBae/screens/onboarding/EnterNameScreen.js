@@ -10,8 +10,7 @@ const EnterNameScreen = ({route, navigation}) => {
         console.log(name)
         console.log(route.params.birthday)
         navigation.navigate('EnterGenderScreen', {
-            email: route.params.email,
-            password: route.params.password,
+            ...route.params,
             name: name
         })
     }

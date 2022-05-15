@@ -10,11 +10,7 @@ const EnterZipcodeScreen = ({route, navigation}) => {
         console.log(zipcode)
         console.log(route.params.birthday)
         navigation.navigate('EnterGenreScreen', {
-            email: route.params.email,
-            password: route.params.password,
-            name: route.params.name,
-            gender: route.params.gender,
-            birthday: route.params.birthday,
+            ...route.params,
             zipcode: zipcode
         })
     }

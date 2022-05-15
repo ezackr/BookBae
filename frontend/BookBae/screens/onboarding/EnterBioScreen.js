@@ -8,7 +8,7 @@ const EnterBioScreen = ({route, navigation}) => {
 
     //add necessary function to store bio
     const onPress = async () => {
-        console.log(bio)
+        console.log(route.params)
         await Client.logIn(route.params.email, route.params.password);
         const userInfo = await Client.setUserInfo({
             email: route.params.email,

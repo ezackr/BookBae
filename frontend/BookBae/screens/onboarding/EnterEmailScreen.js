@@ -7,13 +7,13 @@ import {
   Pressable,
 } from 'react-native';
 
-const EnterEmailScreen = ({navigation}) => {
+const EnterEmailScreen = ({route, navigation}) => {
   const [email, onChangeText] = React.useState(null);
 
-  //add necessary function to store email
+  // add necessary function to store email
   const onPress = () => {
     console.log(email);
-    navigation.navigate('EnterPasswordScreen', {myEmail: email,});
+    navigation.navigate('EnterPasswordScreen', {email: email,});
   };
 
   return (

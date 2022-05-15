@@ -9,10 +9,9 @@ const EnterPasswordScreen = ({route, navigation}) => {
     //add necessary function to store password
     const onPress = () => {
         console.log(password)
-        console.log(route.params.myEmail)
-        Client.createUser(route.params.myEmail, password);
+        Client.createUser(route.params.email, password);
         navigation.navigate('EnterNameScreen', {
-            email: route.params.myEmail,
+            ...route.params,
             password: password
         })
     }
