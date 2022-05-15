@@ -22,13 +22,7 @@ const EnterBooksScreen = ({route, navigation}) => {
   const onPress = () => {
     console.log(bookCover);
     navigation.navigate('EnterBioScreen', {
-        email: route.params.email,
-        password: route.params.password,
-        name: route.params.name,
-        gender: route.params.gender,
-        birthday: route.params.birthday,
-        zipcode: route.params.zipcode,
-        genre: route.params.genre,
+        ...route.params,
         books: bookList
     });
   };
