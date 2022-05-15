@@ -18,7 +18,7 @@ const EnterGenreScreen = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Enter Your Zipcode</Text>
+            <Text style={styles.title}>Enter Your Favorite Genre</Text>
             <Picker
                 selectedValue={selectedValue}
                 style={{ height: 50, width: 150 }}
