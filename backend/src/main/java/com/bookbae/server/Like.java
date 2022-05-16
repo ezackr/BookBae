@@ -26,7 +26,7 @@ public class Like {
             " WHERE (liker_user_id = ? AND liked_user_id = ?)" +
             // liker_user_id = other user, liked_user_id = client user
             // client user has liked other user before and was second to like, is mutual
-            " OR (liker_user_id = ? AND liked_user_id = ? AND is_mutual);";
+            " OR (liker_user_id = ? AND liked_user_id = ? AND is_mutual = 'y');";
 
 
     private static String checkIfOtherUserLikesClientUserString = "SELECT * FROM likes" +
@@ -35,13 +35,13 @@ public class Like {
             " WHERE liker_user_id = ? AND liked_user_id = ?;";
 
     private static String updateMutualLikeString = "UPDATE likes" +
-            " SET is_mutual = 1" +
+            " SET is_mutual = 'y'" +
             // liker_user_id = other user, liked_user_id = client user
             " WHERE liker_user_id = ? AND liked_user_id = ?;";
 
     private static String insertNonMutualLikeString = "INSERT INTO likes" +
             // is_mutual, like_id, liker_user_id, liked_user_id
-            " VALUES(0, ?, ?, ?);";
+            " VALUES('n', ?, ?, ?);";
 
     @Inject
     public Like(DatabasePoolService database) {
@@ -91,10 +91,6 @@ public class Like {
 
                 onMutualLike(otherUserId, clientUserId);
 
-                //make sure something is inserted into likes, to delete
-//                PreparedStatement checkStatement = conn.prepareStatement("SELECT * FROM likes WHERE is_mutual;");
-//                ResultSet checkResults = checkStatement.executeQuery();
-//                System.out.println("IS SOMETHING INSERTED INTO LIKE? : " + checkResults.next());
             }
             // the like is not mutual
             else {
@@ -104,10 +100,6 @@ public class Like {
                 insertNonMutualLikeStatement.setString(3, otherUserId);
                 insertNonMutualLikeStatement.execute();
 
-                //make sure something is inserted into likes, to delete
-//                PreparedStatement checkStatement = conn.prepareStatement("SELECT * FROM likes;");
-//                ResultSet checkResults = checkStatement.executeQuery();
-//                System.out.println("IS SOMETHING INSERTED INTO LIKE? : " + checkResults.next());
             }
             resultSet.close();
         } catch (SQLException e) {
