@@ -3,15 +3,15 @@ package com.bookbae.server.json;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class EmailResponse {
-    private boolean isEmailValid;
+    private boolean doesEmailExist;
 
     @JsonProperty("emailExists")
-    public boolean getIsEmailValid() {
-        return isEmailValid;
+    public boolean getDoesEmailExist() {
+        return doesEmailExist;
     }
 
     @JsonProperty("emailExists")
-    public void setIsEmailValid(boolean isEmailValid) {
-        this.isEmailValid = isEmailValid;
+    public void setDoesEmailExist(boolean doesEmailExist) {
+        this.doesEmailExist = doesEmailExist;
     }
 }

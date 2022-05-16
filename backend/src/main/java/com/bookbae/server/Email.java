@@ -8,11 +8,15 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.core.Response;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import jakarta.inject.Inject;
 
 @Path("/email")
 public class Email {
     private DatabasePoolService database;
+
+    private String checkEmailExistsString = "SELECT * FROM user_info WHERE email = ?;";
     @Inject
     public Email(DatabasePoolService database) {
         this.database = database;
@@ -26,11 +30,21 @@ public class Email {
             return Response.status(404).build();
         }
         try (Connection conn = this.database.getConnection()) {
+            PreparedStatement checkEmailExistsStatement = conn.prepareStatement(checkEmailExistsString);
+            checkEmailExistsStatement.setString(1, email);
+            ResultSet resultSet = checkEmailExistsStatement.executeQuery();
+
+            // email already in use
+            if(resultSet.next()) {
+                emailIsInDatabase = true;
+            }
+
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         EmailResponse resp = new EmailResponse();
-        resp.setIsEmailValid(emailIsInDatabase);
+        resp.setDoesEmailExist(emailIsInDatabase);
         return Response.ok(resp).build();
     }
 }
