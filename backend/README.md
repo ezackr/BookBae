@@ -39,7 +39,7 @@ The application offers a number of API endpoints accessible from the root path. 
     - Does Not Return USERID!
     - Birthday must be of the form "yyy-mm-dd"
 - FUTURE OPTION: /user/{userid} : gets the above object for a specific userid
-- /email/{email}
+- /email?email=<email@email.com>
     - GET
       - Returns true if email is in the database, false otherwise
       - Produces: `{“emailexists”: “<boolean>}`
