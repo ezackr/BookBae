@@ -1,26 +1,24 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
-import Client from '../Client'
+import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
 
-const EnterPasswordScreen = ({route, navigation}) => {
+const EnterNameScreen = ({route, navigation}) => {
 
-    const [password, onChangeText] = React.useState(null);
+    const [name, onChangeText] = React.useState(null);
 
-    //add necessary function to store password
+    //add necessary function to store zipcode
     const onPress = () => {
-        console.log(password)
-        console.log(route.params.myEmail)
-        Client.createUser(route.params.myEmail, password);
-        navigation.navigate('EnterNameScreen', {
-            email: route.params.myEmail,
-            password: password
+        console.log(name)
+        console.log(route.params.birthday)
+        navigation.navigate('EnterGenderScreen', {
+            ...route.params,
+            name: name
         })
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Enter Your Password</Text>
-            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={password} placeholder="xxxxxxxx"/>
+            <Text style={styles.title}>Enter Your Name:</Text>
+            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={name} placeholder="Herbert Ferdinand"/>
             <Pressable
                 style={styles.button}
                 onPress={onPress}>
@@ -71,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnterPasswordScreen;
+export default EnterNameScreen;

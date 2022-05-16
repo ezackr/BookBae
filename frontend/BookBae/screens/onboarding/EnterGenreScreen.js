@@ -11,19 +11,14 @@ const EnterGenreScreen = ({route, navigation}) => {
         console.log(selectedValue)
         console.log(route.params.zipcode)
         navigation.navigate('EnterBooksScreen', {
-            email: route.params.email,
-            password: route.params.password,
-            name: route.params.name,
-            gender: route.params.gender,
-            birthday: route.params.birthday,
-            zipcode: route.params.zipcode,
-            genre: selectedValue
+            ...route.params,
+            favGenre: selectedValue
         })
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Enter Your Zipcode</Text>
+            <Text style={styles.title}>Enter Your Favorite Genre</Text>
             <Picker
                 selectedValue={selectedValue}
                 style={{ height: 50, width: 150 }}

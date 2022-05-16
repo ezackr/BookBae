@@ -12,10 +12,7 @@ const EnterBirthdayScreen = ({route, navigation}) => {
     const onPress = () => {
         console.log(date)
         navigation.navigate('EnterZipcodeScreen', {
-            email: route.params.email,
-            password: route.params.password,
-            name: route.params.name,
-            gender: route.params.gender,
+            ...route.params,
             birthday: moment(date).format('YYYY-MM-DD')
         })
     }
