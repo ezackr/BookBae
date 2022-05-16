@@ -1,0 +1,19 @@
+#!/bin/bash
+set -x
+URL="http://localhost:8080"
+JSON="Content-Type: application/json"
+JWT_REQ='{ "email": "'$1'", "password": "hunter2"}'
+curl -s -d "$JWT_REQ" -X POST -H "$JSON" $URL/api/v1/create
+JWT_RESP=$(curl -s -d "$JWT_REQ" -H "$JSON" $URL/api/v1/login)
+AUTH_TOKEN=$(echo $JWT_RESP | python3 -c "import sys, json; print(json.load(sys.stdin)['authToken'])")
+AUTH_HEADER="Authorization: Bearer "$AUTH_TOKEN
+USER_RESP=$(curl -s -H "$AUTH_HEADER" $URL/api/v1/user)
+UPDATE_USER_REQUEST='{ "email": "after@example.com", "bio": "after a long day of work, I like to go home to my family - IDK why im dating if i have a family", "birthday": "1975-1-1" }'
+UPDATE_USER_RESPONSE=$(curl -s -d "$UPDATE_USER_REQUEST" -X PUT -H "$AUTH_HEADER" -H "$JSON" $URL/api/v1/user)
+USER_RESP=$(curl -s -H "$AUTH_HEADER" $URL/api/v1/user)
+RECOMMENDED_USERS=$(curl -s -H "$AUTH_HEADER" $URL/api/v1/recommends)
+for i in `echo $RECOMMENDED_USERS | python3 -c $'import sys, json;\nfor x in json.load(sys.stdin):\n    print(x[\'userId\'])'`
+do
+  LIKE_USER='{ "userid": "'$i'" }'
+  curl -s -d "$LIKE_USER" -X PUT -H "$AUTH_HEADER" -H "$JSON" $URL/api/v1/like
+done

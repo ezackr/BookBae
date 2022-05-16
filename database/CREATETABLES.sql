@@ -1,28 +1,26 @@
 CREATE TABLE user_info
 (
-    id UNIQUEIDENTIFIER NOT NULL,
-    name VARCHAR(64) NOT NULL,
-    gender VARCHAR(2) NOT NULL,
-    phone_num VARCHAR(15) NOT NULL,
-    fav_genre VARCHAR(20) NOT NULL,
-    birthday DATE NOT NULL,
+    user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
+    name VARCHAR(64),
+    gender VARCHAR(2),
+    fav_genre VARCHAR(20),
+    birthday DATE,
     email VARCHAR(254) NOT NULL,
-    zipcode CHAR(5) NOT NULL,
-    bio VARCHAR(500) NOT NULL,
-    profile_photo_url VARCHAR NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE (phone_num),
-    UNIQUE (email)
+    zipcode CHAR(5),
+    bio VARCHAR(500),
+    preferred_gender VARCHAR(6),
+    phone_num VARCHAR(15),
+    PRIMARY KEY (user_id)
 );
 
 CREATE TABLE prompt
 (
-    id TINYINT NOT NULL,
+    prompt_id TINYINT NOT NULL,
     question VARCHAR(100) NOT NULL,
     answer VARCHAR(250) NOT NULL,
-    user_id UNIQUEIDENTIFIER NOT NULL,
-    PRIMARY KEY (id, user_id),
-    FOREIGN KEY (user_id) REFERENCES user_info(id)
+    user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
+    PRIMARY KEY (prompt_id, user_id),
+    FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 );
 
 CREATE TABLE preference
@@ -30,68 +28,46 @@ CREATE TABLE preference
     low_target_age TINYINT NOT NULL,
     high_target_age TINYINT NOT NULL,
     within_x_miles SMALLINT NOT NULL,
-    user_id UNIQUEIDENTIFIER NOT NULL,
+    user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES user_info(id)
-);
-
-CREATE TABLE target_gender
-(
-    gender CHAR(2) NOT NULL,
-    user_id UNIQUEIDENTIFIER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user_info(id)
+    FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 );
 
 CREATE TABLE user_book
 (
     book_id VARCHAR(12) NOT NULL,
-    user_id UNIQUEIDENTIFIER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user_info(id)
-);
-
-CREATE TABLE photo
-(
-    url VARCHAR(500) NOT NULL,
-    user_id UNIQUEIDENTIFIER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user_info(id)
+    user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 );
 
 CREATE TABLE login_info
 (
-    salt TEXT NOT NULL,
-    password TEXT NOT NULL,
-    hash TEXT NOT NULL,
-    user_id UNIQUEIDENTIFIER NOT NULL,
+    salt VARCHAR(29) NOT NULL,
+    hash VARCHAR(60) NOT NULL,
+    user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES user_info(id)
+    FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 );
 
 CREATE TABLE likes
 (
     is_mutual BIT NOT NULL,
-    liker_user_id UNIQUEIDENTIFIER NOT NULL,
-    liked_user_id UNIQUEIDENTIFIER NOT NULL,
-    PRIMARY KEY (liker_user_id, liked_user_id),
-    FOREIGN KEY (liker_user_id) REFERENCES user_info(id),
-    FOREIGN KEY (liked_user_id) REFERENCES user_info(id)
-);
-
-CREATE TABLE chat
-(
-    id UNIQUEIDENTIFIER NOT NULL,
-    user_id1 UNIQUEIDENTIFIER NOT NULL,
-    user_id2 UNIQUEIDENTIFIER NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (user_id1) REFERENCES user_info(id),
-    FOREIGN KEY (user_id2) REFERENCES user_info(id)
+    like_id UNIQUEIDENTIFIER NOT NULL,
+    liker_user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
+    liked_user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
+    PRIMARY KEY (like_id),
+    FOREIGN KEY (liker_user_id) REFERENCES user_info(user_id),
+    FOREIGN KEY (liked_user_id) REFERENCES user_info(user_id)
 );
 
 CREATE TABLE chat_line
 (
-    id INT NOT NULL,
+    line_id INT IDENTITY(1,1) NOT NULL,
     line_text TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
-    chat_id UNIQUEIDENTIFIER NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (chat_id) REFERENCES chat(id)
+    like_id UNIQUEIDENTIFIER NOT NULL,
+    sender_user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
+    PRIMARY KEY (line_id),
+    FOREIGN KEY (like_id) REFERENCES likes(like_id),
+    FOREIGN KEY (sender_user_id) REFERENCES user_info(user_id)
 );
