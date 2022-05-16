@@ -29,43 +29,69 @@ The application offers a number of API endpoints accessible from the root path. 
 
 - /user - for the authenticated user (the client)
     - GET
+        - Gets the following user data for the authenticated user
         - Produces: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
         - Returns 403 response code if user does not exist
     - PUT
+        - Saves the passed data for the authenticated user
         - Consumes: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “gender”, “favGenre”: “favGenre”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
         - Produces: `{“email”: “<email>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
     - Does Not Return USERID!
     - Birthday must be of the form "yyy-mm-dd"
 - FUTURE OPTION: /user/{userid} : gets the above object for a specific userid
+- /email/{email}
+    - GET
+      - Returns true if email is in the database, false otherwise
+      - Produces: `{“emailexists”: “<boolean>}`
+    - Returns 404 response code if email is null
 - /create
     - POST
+        - Creates a user account with the given email and password
         - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
         - Returns 403 response code if email already in use
 - /login
     - POST
+        - Attempts to login with the given email and password, upon successful login returns an auth token to use in future calls
         - Consumes: `{“email”: “<email>”, “password”: “<password>”}`
         - Produces: `{“authToken”: “<token>”}`
         - Returns 403 response code if email or password are wrong
 - /recommends
     - GET
+        - Returns a list of recommended users
         - Produces: `[{“userid”: “<userid>”, “name”: “<name>”, “preferredGender”: “<preferredGender>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”}, ...]`
         - Returns 403 response code if there are no users to recommend (to be changed to return empty list in future version)
     - Will not return email or zipcode to protect privacy!
 - /like
     - PUT
+        - Saves that the authenticated user likes the given user
         - Consumes: `{"userid": "<userid>"}`
         - Returns 403 response code if client user has already liked the other user
-    - userid is of the liked user, not the liker
 - /chats
     - GET
+        - Gets basic information on all chats the authenticated user is involved in
         - Produces: `[{"displayName": "<name>", "photoUrl": "<url>", "lastMessage": "<msg>", "likeId": "<uuid>"}, ...]`
 - /chats/{likeId}
     - GET
+        - Gets the chat lines from the chat specified by likeId, userid is of the sender
         - Produces: `[{"userid": "<userid>", "timestamp": "<timestamp>", "text": "<text>", "nthMessage": "<nthMessage>"}, ...]`
     - POST
+        - Sends a chat from the authenticated user to the chat specified by likeId
         - Consumes: `{"text": "<words>"}`
-    - userid is of the sender
-    
+- /book/get
+    - GET
+        - Gets a list of book ids for the authenticated user
+        - Produces: `[{"bookid": "<bookid>"},...]`
+- /book/add
+    - PUT
+        - Takes in a list of book ids to add to the authenticated user's book list, returns the updated book list
+        - Consumes: `[{"bookid": "<bookid>"},...]`
+        - Produces: `[{"bookid": "<bookid>"},...]`
+- /book/remove
+    - PUT
+        - Takes in a list of book ids to remove from the authenticated user's book list, returns the updated book list
+        - Consumes: `[{"bookid": "<bookid>"},...]`
+        - Produces: `[{"bookid": "<bookid>"},...]`
+
 Endpoints return a 500 response code in the event of a SQL error   
 The `authToken` returned from the login endpoint is a JWT token that should be kept by the client and must be used to access authenticated endpoints (for now, just /user, but will include photo upload and accessing matches and chat).
 
