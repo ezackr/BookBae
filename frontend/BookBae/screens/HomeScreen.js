@@ -11,6 +11,9 @@ import {
 const HomeScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.topMenu}>
+        <Text style={styles.title}>BookBae</Text>
+      </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
         <ProfileOverview />
       </SafeAreaView>
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 48,
     fontWeight: 'bold',
-    paddingTop: 20,
+    padding: 10,
   },
   button: {
     height: 50,
