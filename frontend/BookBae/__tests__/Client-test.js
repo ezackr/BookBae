@@ -2,6 +2,9 @@ import Client from '../Client';
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter'
 
+// suppress error logs
+console.log = () => {}
+
 describe('Client', () => {
     let mock;
     beforeAll(() => {
@@ -99,7 +102,29 @@ describe('Client', () => {
     });
 
     describe('getBooks', () => {
+        test('makes correct request', async () => {
+            Client.authToken = 'myauthtoken';
+            await Client.getBooks();
+            expect(mock.history.get[0].headers.Authorization).toBe('Bearer myauthtoken');
+        });
 
+        test('returns book IDs as a list of strings', async () => {
+            mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(200, [{bookid: '1234'}, {bookid: '2345'}, {bookid: '3456'}]);
+            const books = await Client.getBooks();
+            expect(books).toStrictEqual(['1234', '2345', '3456']);
+        });
+
+        test('returns empty list when there are no books', async () => {
+            mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(200, []);
+            const books = await Client.getBooks();
+            expect(books).toStrictEqual([]);
+        });
+
+        test('returns null on failure', async () => {
+            mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(400, []);
+            const books = await Client.getBooks();
+            expect(books).toBeNull();
+        })
     });
 
     describe('addBooks', () => {

@@ -143,7 +143,7 @@ class Client {
    * @return {{displayName, photoUrl, lastMessage, likeId}}, or null for failure
    */
   static async getChats() {
-    await axios({
+    return await axios({
       baseURL: Client.ROOT_PATH,
       url: '/chats',
       method: 'get',
@@ -162,7 +162,7 @@ class Client {
   * @return [{"userid": "<userid>", "timestamp": "<timestamp>", "text": "<text>", "nthMessage": "<nthMessage>"}, ...]
   */
   static async getMessages(matchId) {
-    await axios({
+    return await axios({
       baseURL: Client.ROOT_PATH,
       url: '/chats/' + matchId,
       method: 'get',
@@ -182,7 +182,7 @@ class Client {
   * @return {boolean} true iff message was sent successfully
   */
   static async sendMessage(matchId, message) {
-    await axios({
+    return await axios({
       baseURL: Client.ROOT_PATH,
       url: '/chats/' + matchId,
       method: 'post',
@@ -202,7 +202,7 @@ class Client {
     * @return true iff there is already an account associated with email, null if request fails
     */
     static async emailIsUsed(email) {
-      await axios({
+      return await axios({
         baseURL: Client.ROOT_PATH,
         url: '/email',
         method: 'get',
@@ -212,7 +212,7 @@ class Client {
         .catch(response => {
           console.log(response)
           return null
-        })
+        });
     }
 
     /**
@@ -220,17 +220,17 @@ class Client {
     * @return {[string]} the user's book IDs, or null for failed request
     */
     static async getBooks() {
-      await axios({
+      return await axios({
         baseURL: Client.ROOT_PATH,
         url: '/book/get',
         method: 'get',
         headers: {Authorization: 'Bearer ' + Client.authToken},
       })
-        .then(response => response.data.forEach((bookObj) => bookObj.bookid))
+        .then(response => response.data.map((bookObj) => bookObj.bookid))
         .catch(response => {
           console.log(response)
           return null
-        })
+        });
     }
 
     /**
@@ -239,18 +239,18 @@ class Client {
     * @return {[string]} updated list of user's book IDs, or null for failed request
     */
     static async addBooks(books) {
-      await axios({
+      return await axios({
         baseURL: Client.ROOT_PATH,
         url: '/book/add',
         method: 'put',
         headers: {Authorization: 'Bearer ' + Client.authToken},
-        data: books.forEach((book) => {bookid: book})
+        data: books.map((book) => {bookid: book})
       })
-        .then(response => response.data.forEach((bookObj) => bookObj.bookid))
+        .then(response => response.data.map((bookObj) => bookObj.bookid))
         .catch(response => {
           console.log(response)
           return null
-        })
+        });
     }
 
     /**
@@ -259,18 +259,18 @@ class Client {
     * @return {[string]} updated list of user's book IDs, or null for failed request
     */
     static async removeBooks(books) {
-      await axios({
+      return await axios({
         baseURL: Client.ROOT_PATH,
         url: '/book/remove',
         method: 'put',
         headers: {Authorization: 'Bearer ' + Client.authToken},
-        data: books.forEach((book) => {bookid: book})
+        data: books.map((book) => {bookid: book})
       })
-        .then(response => response.data.forEach((bookObj) => bookObj.bookid))
+        .then(response => response.data.map((bookObj) => bookObj.bookid))
         .catch(response => {
           console.log(response)
           return null
-        })
+        });
     }
 }
 
