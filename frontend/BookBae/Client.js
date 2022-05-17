@@ -244,7 +244,7 @@ class Client {
         url: '/book/add',
         method: 'put',
         headers: {Authorization: 'Bearer ' + Client.authToken},
-        data: books.map((book) => {bookid: book})
+        data: books.map((book) => {return {bookid: book}})
       })
         .then(response => response.data.map((bookObj) => bookObj.bookid))
         .catch(response => {
@@ -264,7 +264,7 @@ class Client {
         url: '/book/remove',
         method: 'put',
         headers: {Authorization: 'Bearer ' + Client.authToken},
-        data: books.map((book) => {bookid: book})
+        data: books.map((book) => {return {bookid: book}})
       })
         .then(response => response.data.map((bookObj) => bookObj.bookid))
         .catch(response => {

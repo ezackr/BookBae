@@ -128,10 +128,56 @@ describe('Client', () => {
     });
 
     describe('addBooks', () => {
+        test('makes correct request', async () => {
+            Client.authToken = 'myauthtoken';
+            await Client.addBooks(['1234', '2345']);
+            expect(mock.history.put[0].headers.Authorization).toBe('Bearer myauthtoken');
+            expect(mock.history.put[0].data).toBe(JSON.stringify([{bookid: '1234'}, {bookid: '2345'}]));
+        })
 
+        test('returns updated book IDs as a list of strings', async () => {
+            mock.onPut(Client.ROOT_PATH + '/book/add').replyOnce(200, [{bookid: '1234'}, {bookid: '2345'}, {bookid: '3456'}]);
+            const books = await Client.addBooks([]);
+            expect(books).toStrictEqual(['1234', '2345', '3456']);
+        });
+
+        test('returns empty list when there are no books', async () => {
+            mock.onPut(Client.ROOT_PATH + '/book/add').replyOnce(200, []);
+            const books = await Client.addBooks([]);
+            expect(books).toStrictEqual([]);
+        });
+
+        test('returns null on failure', async () => {
+            mock.onPut(Client.ROOT_PATH + '/book/add').replyOnce(400, []);
+            const books = await Client.addBooks([]);
+            expect(books).toBeNull();
+        })
     });
 
     describe('removeBooks', () => {
+        test('makes correct request', async () => {
+            Client.authToken = 'myauthtoken';
+            await Client.removeBooks(['1234', '2345']);
+            expect(mock.history.put[0].headers.Authorization).toBe('Bearer myauthtoken');
+            expect(mock.history.put[0].data).toBe(JSON.stringify([{bookid: '1234'}, {bookid: '2345'}]));
+        })
 
+        test('returns updated book IDs as a list of strings', async () => {
+            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(200, [{bookid: '1234'}, {bookid: '2345'}, {bookid: '3456'}]);
+            const books = await Client.removeBooks([]);
+            expect(books).toStrictEqual(['1234', '2345', '3456']);
+        });
+
+        test('returns empty list when there are no books', async () => {
+            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(200, []);
+            const books = await Client.removeBooks([]);
+            expect(books).toStrictEqual([]);
+        });
+
+        test('returns null on failure', async () => {
+            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(400, []);
+            const books = await Client.removeBooks([]);
+            expect(books).toBeNull();
+        })
     });
 })
