@@ -68,5 +68,45 @@ describe('Client', () => {
             await Client.getUserInfo();
             expect(mock.history.get[0].headers.Authorization).toBe('Bearer myauthtoken');
         })
-    })
+    });
+
+    describe('setUserInfo', () => {
+
+    });
+
+    describe('getPotentialMatches', () => {
+
+    });
+
+    describe('sendLike', () => {
+
+    });
+
+    describe('getChats', () => {
+
+    });
+
+    describe('getMessages', () => {
+
+    });
+
+    describe('sendMessage', () => {
+
+    });
+
+    describe('emailIsUsed', () => {
+
+    });
+
+    describe('getBooks', () => {
+
+    });
+
+    describe('addBooks', () => {
+
+    });
+
+    describe('removeBooks', () => {
+
+    });
 })
