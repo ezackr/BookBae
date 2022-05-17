@@ -20,8 +20,10 @@ public class CreateAccount {
     private static String checkIfUserAlreadyExistsString = "SELECT * FROM user_info WHERE email = ?;";
 
     private static String insertUserInfoString = "INSERT INTO user_info" +
-            " VALUES(?, NULL, NULL, NULL, NULL, ?, NULL, NULL, NULL, NULL);";
+            " VALUES(?, NULL, NULL, NULL, NULL, ?, NULL, NULL, NULL);";
     private static String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
+
+    private static String insertNullPreferencesString = "INSERT INTO preference VALUES(0, 0, 0, '', ?);";
     private DatabasePoolService database;
 
     @Inject
@@ -42,7 +44,7 @@ public class CreateAccount {
         String userId = UUID.randomUUID().toString();
 
         try (Connection conn = this.database.getConnection()) {
-            // maybe make a transaction here? IDK how transactions work
+            // TODO: we can probably get rid of this now that there's an email endpoint
             // Check if email exists in db first
             PreparedStatement checkIfUserAlreadyExistsStatement = conn.prepareStatement(checkIfUserAlreadyExistsString);
             checkIfUserAlreadyExistsStatement.setString(1, email);
@@ -66,12 +68,17 @@ public class CreateAccount {
             insertLoginInfoStatement.setString(2, hashedPw);
             insertLoginInfoStatement.setString(3, userId);
             insertLoginInfoStatement.executeUpdate();
+
+            // insert user into preferences
+            PreparedStatement insertNullPreferencesStatement = conn.prepareStatement(insertNullPreferencesString);
+            insertNullPreferencesStatement.setString(1, userId);
+            insertNullPreferencesStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();
         }
-        // Get UUID from above and return it
-        // Possibly return stuff in accountcreationresponse if frontend team requests it
+
         return Response.ok().build();
     }
 }

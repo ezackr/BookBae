@@ -9,7 +9,6 @@ public class UserRequest {
 
     protected String email;
     protected String name;
-    protected String preferredGender;
     protected String gender;
     protected String favGenre;
     protected String birthday;
@@ -34,16 +33,6 @@ public class UserRequest {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
-    }
-
-    @JsonProperty("preferredGender")
-    public String getPreferredGender() {
-        return preferredGender;
-    }
-
-    @JsonProperty("preferredGender")
-    public void setPreferredGender(String preferredGender) {
-        this.preferredGender = preferredGender;
     }
 
     @JsonProperty("gender")

@@ -23,7 +23,6 @@ public class MockDatabaseService implements DatabasePoolService {
             "  email VARCHAR(254) NOT NULL,\n" +
             "  zipcode CHAR(5),\n" +
             "  bio VARCHAR(500),\n" +
-            "  preferred_gender VARCHAR(6),\n" +
             "  phone_num VARCHAR(15),\n" +
             "  PRIMARY KEY (user_id)\n" +
             ");\n" +
@@ -40,9 +39,10 @@ public class MockDatabaseService implements DatabasePoolService {
             "\n" +
             "CREATE TABLE preference\n" +
             "(\n" +
-            "  low_target_age TINYINT NOT NULL,\n" +
-            "  high_target_age TINYINT NOT NULL,\n" +
-            "  within_x_miles SMALLINT NOT NULL,\n" +
+            "  low_target_age TINYINT,\n" +
+            "  high_target_age TINYINT,\n" +
+            "  within_x_miles SMALLINT,\n" +
+            "  preferred_gender VARCHAR(6),\n" +
             "  user_id UUID NOT NULL,\n" +
             "  PRIMARY KEY (user_id),\n" +
             "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
