@@ -200,7 +200,7 @@ public class ChatsTest {
 
     private void doLike(String likerUserId, String likedUserId) {
         LikeRequest likeRequest = new LikeRequest();
-        likeRequest.setUserId(likedUserId);
+        likeRequest.userid = likedUserId;
         var resp = likeResource.doLike(new MockSecurityContext(likerUserId), likeRequest);
         assertEquals(200, resp.getStatus());
     }
