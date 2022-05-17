@@ -7,21 +7,39 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import Client from '../Client.js';
 
 const HomeScreen = ({navigation}) => {
+  const [matches, setMatches] = React.useState(null);
+
+  const getMatchData = async () => {
+    let data = await Client.getPotentialMatches();
+    if (data) {
+      setMatches(data);
+    } else {
+      console.log('error fetching matches: ' + data);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.topMenu}>
         <Text style={styles.title}>BookBae</Text>
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
-        <ProfileOverview />
+        <ProfileCard />
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
-        <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.5}
+          onPress={getMatchData}>
           <Image source={require('../images/deny.png')} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.5}
+          onPress={getMatchData}>
           <Image source={require('../images/accept.png')} />
         </TouchableOpacity>
       </SafeAreaView>
@@ -31,7 +49,7 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen;
 
-const ProfileOverview = () => {
+const ProfileCard = ({profile}) => {
   return (
     <SafeAreaView style={matchStyles.matchBox}>
       <SafeAreaView style={matchStyles.bookDisplay}>
