@@ -37,8 +37,20 @@ The frontend folder contains an immediate subdirectory titled 'BookBae' hosting 
 ## How to Test:
 
 ## Adding New Tests:
-
 ### Backend:
+Back end tests:
+Currently, the backend unit tests are spread out over several files within backend/src/test:
+BookTest.java
+ChatsTest.java
+CreateAccountTest.java
+EmailTest.java
+LoginTest.java
+UserTest.java
+LikeTest.java
+RecommendsTest.java
+UserTest.java
+
+To add a test, add a method containing your test to one of the above files and mark the method with an @Test annotation.
 
 ### Frontend:
 Add new tests to /frontend/BookBae/__tests__. These tests should use the Jest testing framework. It is best to name the test files by appending "-test.js" to the name of the file being tested. 
