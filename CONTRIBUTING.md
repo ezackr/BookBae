@@ -32,9 +32,11 @@ The backend folder contains the structure for the REST API that powers the proje
 
 The frontend folder contains an immediate subdirectory titled 'BookBae' hosting the React Native development environment. Tests are stored in the "tests" folder, using Jest to test the components. The "android" folder builds the application, using the command "npx react-native run-android", on an emulator. The main BookBae frontend folder also has the App.js file, which outlines navigation between screens. The Client.js file provides the frontend development with connections to the backend/database. The "screens" folder stores the main app screens, with an extra folder dedicated to the onboarding process.
 
-## How to Build:
+## How to Build/Test:
 
-## How to Test:
+For the backend, navigate to the backend folder and run "./gradlew build" to build the api.war file which will be uploaded to Glassfish. Building the api.war file will automatically run the automatic test suite. For the frontend, navigate into the lower-level BookBae repository within the frontend folder. By running the application using "npx react-native start" and "npx react-native run-android" (in a separate terminal from the first command), the testing suite checks if the frontend components are functional and if the build is successful.
+
+Building a release of the software does not require updating a version number as the software does not have defined versions. Although this feature is optional for developing users.
 
 ## Adding New Tests:
 
@@ -56,4 +58,3 @@ To add a test, add a method containing your test to one of the above files and m
 ### Frontend:
 Add new tests to /frontend/BookBae/__tests__. These tests should use the Jest testing framework. It is best to name the test files by appending "-test.js" to the name of the file being tested. 
 
-## How to Build a Release:
