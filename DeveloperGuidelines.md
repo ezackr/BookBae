@@ -26,4 +26,8 @@ The frontend folder contains an immediate subdirectory titled 'BookBae' hosting 
 
 ## Adding New Tests:
 
+### Backend:
+
+### Frontend:
+
 ## How to Build a Release:
