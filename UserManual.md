@@ -2,6 +2,9 @@
 
 ## Description:
 
+BookBae is a dating/friendship app that matches people based on their literary preferences. A user’s profile on BookBae includes all the normal aspects of a dating profile, in addition to a “bookshelf.” A bookshelf is a collection of books the user selects to represent themselves. This lets users showcase their interests and personality in a unique way.
+Users are prompted to swipe on profiles of other users that like similar genres and meet their set parameters. Like most swipe-based dating apps, swiping right conveys interest, while swiping left conveys disinterest. If two users both swipe right on each other, they are "matched" and can begin a conversation in-app. Users are encouraged to draw on their similar literary preferences to start their conversation.
+
 ## How to Install: 
 
 BookBae is currently still under production, but will soon be available in the Android App Store.
