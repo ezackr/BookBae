@@ -23,7 +23,7 @@ const LoginScreen = ({navigation}) => {
   };
 
   const handleCreateAccount = () => {
-    navigation.navigate('EnterEmailScreen');
+    navigation.navigate('Onboarder');
   };
 
   const handleForgotPassword = () => {

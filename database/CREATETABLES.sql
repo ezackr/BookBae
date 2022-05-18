@@ -51,7 +51,7 @@ CREATE TABLE login_info
 
 CREATE TABLE likes
 (
-    is_mutual BIT NOT NULL,
+    is_mutual CHAR(1) NOT NULL,
     like_id UNIQUEIDENTIFIER NOT NULL,
     liker_user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     liked_user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,

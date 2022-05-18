@@ -1,34 +1,24 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-native';
-import Client from '../Client'
 
-const EnterBioScreen = ({route, navigation}) => {
+const EnterZipcodeScreen = ({route, navigation}) => {
 
-    const [bio, onChangeText] = React.useState(null);
+    const [zipcode, onChangeText] = React.useState(null);
 
-    //add necessary function to store bio
-    const onPress = async () => {
-        console.log(bio)
-        await Client.logIn(route.params.email, route.params.password);
-        const userInfo = await Client.setUserInfo({
-            email: route.params.email,
-            password: route.params.password,
-            name: route.params.name,
-            preferredGender: '_',
-            gender: route.params.gender,
-            birthday: route.params.birthday,
-            zipcode: route.params.zipcode,
-            favGenre: route.params.genre,
-            bio: bio
+    //add necessary function to store zipcode
+    const onPress = () => {
+        console.log(zipcode)
+        console.log(route.params.birthday)
+        navigation.navigate('EnterGenreScreen', {
+            ...route.params,
+            zipcode: zipcode
         })
-        console.log(userInfo);
-        navigation.navigate('TabNavigation')
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Enter a Bio (max 500 characters):</Text>
-            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={bio} maxLength={500} placeholder="xxxxx"/>
+            <Text style={styles.title}>Enter Your Zipcode</Text>
+            <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={zipcode} placeholder="xxxxx"/>
             <Pressable
                 style={styles.button}
                 onPress={onPress}>
@@ -79,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnterBioScreen;
+export default EnterZipcodeScreen;

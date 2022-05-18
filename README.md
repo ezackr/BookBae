@@ -1,13 +1,5 @@
 # BookBae
 
-## Project Overview:
-   
-Our goal is to create a dating/friendship app that matches people based on their literary preferences, aptly named “BookBae.” A user’s profile on BookBae includes all the normal aspects of a dating profile, in addition to a “bookshelf.” A bookshelf is a collection of books the user selects to represent themselves. This lets users showcase their interests and personality in a unique way.
-
-Our goal is for BookBae to be a well-rounded swipe-based dating app. Users are prompted to swipe on profiles of other users that like similar genres and meet their set parameters. Like most swipe-based dating apps, swiping right conveys interest, while swiping left conveys disinterest. If two users both swipe right on each other, they are "matched" and can begin a conversation in-app. Users are encouraged to draw on their similar literary preferences to start their conversation.
-  
-<br/>
-
 ## Layout:
 
 The repository is primarily organized by functionality, with the main sections being frontend, backend, and database. A short description of each internal folder is provided below:
@@ -111,8 +103,9 @@ Starting the app:
    - run "npm test" to run tests.
    - Note: all tests run automatically when changes are pushed to branches/main via continuous integration, which is why testing in the local repository is optional.
    
-### Bug Tracking, Testing, and CI:
-      As briefly described above, the repository has implemented continuous integration to test commits/merges to the project. Pull requests and conflicts are resolved by other users (user who made pull request cannot also be the reviewer) to ensure all code is properly reviewed. See the optional testing sections above, and the testing portion of the living document, for further details regarding test types, build system, and more. The continuous integration uses GitHub Actions to catch any potential bugs within the code. In doing so, code is checked *immediately* before any further damage can be dealt.
+### Testing, and CI:
+
+As briefly described above, the repository has implemented continuous integration to test commits/merges to the project. Pull requests and conflicts are resolved by other users (user who made pull request cannot also be the reviewer) to ensure all code is properly reviewed. See the optional testing sections above, and the testing portion of the living document, for further details regarding test types, build system, and more. The continuous integration uses GitHub Actions to catch any potential bugs within the code. In doing so, code is checked *immediately* before any further damage can be dealt.
    
 ### Functional Use Cases:
    
