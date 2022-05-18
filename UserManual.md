@@ -5,10 +5,13 @@
 ## How to Install: 
 
 BookBae is currently still under production, but will soon be available in the Android App Store.
+Once it is available, to install, simply download the app through the app store! 
 
 ## How to Run:
+Like other apps, BookBae is run by opening the app on your android device. 
 
 ## How to Use:
+On your first use of the app, you will need to create an account. Press the "Create Account" button on the landing page to begin this process. Once you have created your account, you will be prompted to create a profile. Creating a profile entails writing a short self-bio, uploading a profile picture, and selecting some of your favorite books through the Book Picker. With that, you are ready to begin swiping on potential matches! Use the navigation bar to navigate to the swiping area, and begin checking out profiles. If you match with another user, a chat will be created for you two in your chat section, which is accessible through the navigation bar. 
 
 ## Known Bugs/Deficiencies:
 Known bugs can be viewed at the following link: https://docs.google.com/document/d/1kywHLT3OdfBRYAaiAyOP3Fqx1QtKbCcWqFymZPzjE6k/edit?usp=sharing
