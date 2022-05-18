@@ -32,6 +32,7 @@ dependencies {
 
     intTestImplementation 'org.glassfish.main.extras:glassfish-embedded-all:6.2.5'
     intTestImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    intTestImplementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.0.0'
 }
 
 test {
