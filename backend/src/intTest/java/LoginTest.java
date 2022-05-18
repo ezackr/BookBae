@@ -31,6 +31,17 @@ public class LoginTest {
         assertEquals(401, res.getStatus());
     }
 
+    @Test
+    void loginTest() {
+        var client = ClientBuilder.newClient();
+        var res = client.target("http://localhost:8008/api/v1/login")
+                        .request("application/json")
+                        .buildPost(json("{\"email\": \"jpete4@uw.edu\", \"password\": \"hunter2\"}"))
+                        .invoke();
+        
+                        
+    }
+
     @AfterAll
     static void teardownGlassfish() throws GlassFishException {
         deployer.undeploy("api");
