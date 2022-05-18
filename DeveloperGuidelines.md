@@ -41,14 +41,14 @@ The frontend folder contains an immediate subdirectory titled 'BookBae' hosting 
 ### Backend:
 Back end tests:
 Currently, the backend unit tests are spread out over several files within backend/src/test:
-BookTest.java
-ChatsTest.java
-CreateAccountTest.java
-EmailTest.java
-LoginTest.java
-UserTest.java
-LikeTest.java
-RecommendsTest.java
+BookTest.java, 
+ChatsTest.java, 
+CreateAccountTest.java, 
+EmailTest.java, 
+LoginTest.java, 
+UserTest.java, 
+LikeTest.java, 
+RecommendsTest.java, 
 UserTest.java
 
 To add a test, add a method containing your test to one of the above files and mark the method with an @Test annotation. For naming test files, simply name the class, followed by "Test". Within each Test class should be atomic unit tests of the class's functionality.
