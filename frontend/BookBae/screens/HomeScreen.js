@@ -10,16 +10,23 @@ import {
 import Client from '../Client.js';
 
 const HomeScreen = ({navigation}) => {
-  const [matches, setMatches] = React.useState(null);
+  const [matches, setMatches] = React.useState([]);
 
   const getMatchData = async () => {
-    let data = await Client.getPotentialMatches();
-    if (data) {
-      setMatches(data);
-    } else {
-      console.log('error fetching matches: ' + data);
+    if (matches.length === 0) {
+      let data = await Client.getPotentialMatches();
+      if (data) {
+        console.log(data);
+        setMatches(data);
+      } else {
+        console.log('error fetching matches: ' + data);
+      }
     }
   };
+
+  React.useEffect(() => {
+    getMatchData();
+  });
 
   return (
     <SafeAreaView style={styles.container}>
