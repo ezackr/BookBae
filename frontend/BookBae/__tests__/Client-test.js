@@ -62,7 +62,7 @@ describe('Client', () => {
             mock.onPost(Client.ROOT_PATH + '/create').replyOnce(400);
             const success = await Client.createUser('e', 'p');
             expect(success).toBeFalsy();
-        })
+        });
     });
 
     describe('getUserInfo', () => {
@@ -70,11 +70,36 @@ describe('Client', () => {
             Client.authToken = 'myauthtoken';
             await Client.getUserInfo();
             expect(mock.history.get[0].headers.Authorization).toBe('Bearer myauthtoken');
+        });
+
+        test('returns server response when successful', async () => {
+            const expectedInfo =  {
+                email: 'myemail',
+                name: 'myname',
+                gender: 'mygender',
+                favGenre: 'myfavgenre',
+                birthday: 'mybirthday',
+                bio: 'mybio',
+                zipcode: 'myzipcode'
+            }
+            mock.onGet(Client.ROOT_PATH + '/user').replyOnce(200, expectedInfo);
+            const actualInfo = await Client.getUserInfo();
+            expect(actualInfo).toStrictEqual(expectedInfo);
+        });
+
+        test('returns null when unsuccessful', async () => {
+            mock.onGet(Client.ROOT_PATH + '/user').replyOnce(400);
+            const response = await Client.getUserInfo();
+            expect(response).toBeNull();
         })
     });
 
     describe('setUserInfo', () => {
-
+        test('makes correct request with authToken', async () => {
+            Client.authToken = 'myauthtoken';
+            await Client.setUserInfo();
+            expect(mock.history.put[0].headers.Authorization).toBe('Bearer myauthtoken');
+        })
     });
 
     describe('getPotentialMatches', () => {
@@ -98,7 +123,24 @@ describe('Client', () => {
     });
 
     describe('emailIsUsed', () => {
+        test('makes correct request', async () => {
+            Client.authToken = 'myauthtoken';
+            await Client.emailIsUsed('myemail@email.com');
+            expect(mock.history.get[0].params.email).toBe('myemail@email.com');
 
+        });
+
+        test('returns boolean response', async () => {
+            mock.onGet(Client.ROOT_PATH + '/email').replyOnce(200, {emailexists: true});
+            const used = await Client.emailIsUsed('myemail@email.com');
+            expect(used).toBe(true);
+        })
+
+        test('returns null on failure', async () => {
+            mock.onGet(Client.ROOT_PATH + '/email').replyOnce(400);
+            const used = await Client.emailIsUsed('myemail@email.com');
+            expect(used).toBeNull();
+        });
     });
 
     describe('getBooks', () => {
@@ -124,7 +166,7 @@ describe('Client', () => {
             mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(400, []);
             const books = await Client.getBooks();
             expect(books).toBeNull();
-        })
+        });
     });
 
     describe('addBooks', () => {
@@ -175,7 +217,7 @@ describe('Client', () => {
         });
 
         test('returns null on failure', async () => {
-            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(400, []);
+            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(400);
             const books = await Client.removeBooks([]);
             expect(books).toBeNull();
         })
