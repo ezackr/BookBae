@@ -29,5 +29,6 @@ The frontend folder contains an immediate subdirectory titled 'BookBae' hosting 
 ### Backend:
 
 ### Frontend:
+Add new tests to /frontend/BookBae/__tests__. These tests should use the Jest testing framework. It is best to name the test files by appending "-test.js" to the name of the file being tested. 
 
 ## How to Build a Release:
