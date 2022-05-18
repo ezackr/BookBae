@@ -26,7 +26,7 @@ The backend folder contains the structure for the REST API that powers the proje
   - security: This folder contains classes needed to implement security on the backend, like authentication tokens
   - service: This folder contains implementations of interfaces
   - Floating Files: The remaining floating files are our resource files, which contain the server functionality
-
+- src/test/java: This folder contains our JUnit tests and mock files
 
 ### Frontend:
 
