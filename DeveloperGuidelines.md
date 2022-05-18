@@ -14,7 +14,19 @@ The database folder outlines the structure of the SQL database being used, with 
 
 ### Backend:
 
-The backend folder contains the structure for the REST API that powers the project. The folder also has the gradle files used to build the project. 
+The backend folder contains the structure for the REST API that powers the project. 
+- .gradle:
+  - This folder contains the gradle files used to build the project
+- build:
+  - This file contains the files built by gradle, including the api.war file used in deploying the server and various testing logs
+- gradle:
+  - This folder contains the gradle wrapper used to build the project
+- src/main/java/com/bookbae/server:
+  - json: This folder contains the json classes used to send data to and from the server
+  - security: This folder contains classes needed to implement security on the backend, like authentication tokens
+  - service: This folder contains implementations of interfaces
+  - Floating Files: The remaining floating files are our resource files, which contain the server functionality
+
 
 ### Frontend:
 
