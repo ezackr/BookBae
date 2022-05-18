@@ -127,7 +127,7 @@ class Client {
     return await axios({
       baseURL: Client.ROOT_PATH,
       url: '/like',
-      method: 'get',
+      method: 'put',
       headers: {Authorization: 'Bearer ' + Client.authToken},
       data: {userid: userid},
     })
@@ -168,10 +168,10 @@ class Client {
       method: 'get',
       headers: {Authorization: 'Bearer ' + Client.authToken},
     })
-      .then(response => true)
+      .then(response => response.data)
       .catch(response => {
         console.log(response);
-        return false;
+        return null;
       });
   }
 
@@ -189,7 +189,7 @@ class Client {
       headers: {Authorization: 'Bearer ' + Client.authToken},
       data: {text: message}
     })
-      .then(response => response.data)
+      .then(response => true)
       .catch(response => {
         console.log(response);
         return false;
