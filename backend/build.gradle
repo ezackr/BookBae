@@ -48,7 +48,7 @@ tasks.register('integrationTest', Test) {
     testClassesDirs = sourceSets.intTest.output.classesDirs
     classpath = sourceSets.intTest.runtimeClasspath
     systemProperty "bookbae.archive",       "$buildDir/libs/api.war"
-    systemProperty "bookbae.database_name", "BookBaeDB"
+    systemProperty "bookbae.database_name", "BookBaeTestDB"
     systemProperty "bookbae.password",      project.findProperty('PASSWORD') ?: ''
     systemProperty "bookbae.server_url",    "bookbaeserver.database.windows.net"
     systemProperty "bookbae.username",      "TeamBookBae@bookbaeserver"
