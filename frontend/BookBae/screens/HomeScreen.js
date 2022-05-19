@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   SafeAreaView,
-  Pressable,
   Image,
   TouchableOpacity,
 } from 'react-native';
@@ -43,7 +42,9 @@ const HomeScreen = ({navigation}) => {
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
         {matches.map(match => (
-          <Text key={match.key} style={styles.bodyText}>{match.name}</Text>
+          <Text key={match.key} style={styles.bodyText}>
+            {match.name}
+          </Text>
         ))}
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
