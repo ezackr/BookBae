@@ -43,7 +43,7 @@ const HomeScreen = ({navigation}) => {
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
         {matches.map(match => (
-          <Text key={match.key}>{match.name}</Text>
+          <Text key={match.key} style={styles.bodyText}>{match.name}</Text>
         ))}
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
@@ -123,6 +123,10 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: 'bold',
     padding: 10,
+  },
+  bodyText: {
+    color: 'black',
+    fontSize: 18,
   },
   button: {
     height: 50,
