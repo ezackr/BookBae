@@ -23,7 +23,7 @@ This Week (5/11 - 5/18):
 
 Goals For Next Week (5/19 - 5/25):
 -Isabelle: Make user profile screen, including an edit mode. Add input validation checks to onboarding.
--Emily: Clean up endpoints code to reduce duplicated code, improve style, add more unit tests, improve recommendations algorithm.
+-Emily: Clean up endpoints code to reduce duplicated code, improve style, add more unit tests, improve recommendations algorithm, work on deploying the server to Azure
 -Helena: Implement image uploading for front end
--Joshua: Continue working on integration testing, improve existing documentation
--Elliott: 
+-Joshua: Continue working on integration testing, work on deploying the server to Azure
+-Elliott: Make screen to load user profiles to swipe on fully functional.
