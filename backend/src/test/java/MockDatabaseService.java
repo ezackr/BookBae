@@ -5,109 +5,42 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.io.IOException;
 import java.io.File;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+import java.net.URISyntaxException;
 
 public class MockDatabaseService implements DatabasePoolService {
     private BasicDataSource dataSource;
+    private static String createTables;
+    private static String dropTables;
 
-    //private static String createTables = makeSQLH2Compatible(readFromFile("../database/CREATETABLES.sql"));//"./../../../../database/CREATETABLES.sql"));
-    //private static String dropTables = readFromFile("DROPTABLES.sql");//"./../../../../database/DROPTABLES.sql");
-    private static String createTables = "CREATE TABLE user_info\n" +
-            "(\n" +
-            "  user_id UUID NOT NULL,\n" +
-            "  name VARCHAR(64),\n" +
-            "  gender VARCHAR(2),\n" +
-            "  fav_genre VARCHAR(20),\n" +
-            "  birthday DATE,\n" +
-            "  email VARCHAR(254) NOT NULL,\n" +
-            "  zipcode CHAR(5),\n" +
-            "  bio VARCHAR(500),\n" +
-            "  preferred_gender VARCHAR(6),\n" +
-            "  phone_num VARCHAR(15),\n" +
-            "  PRIMARY KEY (user_id)\n" +
-            ");\n" +
-            "\n" +
-            "CREATE TABLE prompt\n" +
-            "(\n" +
-            "  prompt_id TINYINT NOT NULL,\n" +
-            "  question VARCHAR(100) NOT NULL,\n" +
-            "  answer VARCHAR(250) NOT NULL,\n" +
-            "  user_id UUID NOT NULL,\n" +
-            "  PRIMARY KEY (prompt_id, user_id),\n" +
-            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
-            ");\n" +
-            "\n" +
-            "CREATE TABLE preference\n" +
-            "(\n" +
-            "  low_target_age TINYINT NOT NULL,\n" +
-            "  high_target_age TINYINT NOT NULL,\n" +
-            "  within_x_miles SMALLINT NOT NULL,\n" +
-            "  user_id UUID NOT NULL,\n" +
-            "  PRIMARY KEY (user_id),\n" +
-            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
-            ");\n" +
-            "\n" +
-            "CREATE TABLE user_book\n" +
-            "(\n" +
-            "  book_id VARCHAR(12) NOT NULL,\n" +
-            "  user_id UUID NOT NULL,\n" +
-            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
-            ");\n" +
-            "\n" +
-            "CREATE TABLE login_info\n" +
-            "(\n" +
-            "  salt VARCHAR(29) NOT NULL,\n" +
-            "  hash VARCHAR(60) NOT NULL,\n" +
-            "  user_id UUID NOT NULL,\n" +
-            "  PRIMARY KEY (user_id),\n" +
-            "  FOREIGN KEY (user_id) REFERENCES user_info(user_id)\n" +
-            ");\n" +
-            "\n" +
-            "CREATE TABLE likes\n" +
-            "(\n" +
-            "  is_mutual CHAR(1) NOT NULL,\n" +
-            "  like_id UUID NOT NULL,\n" +
-            "  liker_user_id UUID NOT NULL,\n" +
-            "  liked_user_id UUID NOT NULL,\n" +
-            "  PRIMARY KEY (like_id),\n" +
-            "  FOREIGN KEY (liker_user_id) REFERENCES user_info(user_id),\n" +
-            "  FOREIGN KEY (liked_user_id) REFERENCES user_info(user_id)\n" +
-            ");\n" +
-            "\n" +
-            "CREATE TABLE chat_line\n" +
-            "(\n" +
-            "  line_id INT AUTO_INCREMENT NOT NULL,\n" +
-            "  line_text TEXT NOT NULL,\n" +
-            "  timestamp TIMESTAMP NOT NULL,\n" +
-            "  like_id UUID NOT NULL,\n" +
-            "  sender_user_id UUID NOT NULL,\n" +
-            "  PRIMARY KEY (line_id),\n" +
-            "  FOREIGN KEY (like_id) REFERENCES likes(like_id)\n" +
-            ");";
-
-    private static String dropTables = "DROP TABLE chat_line;\n" +
-            "DROP TABLE likes;\n" +
-            "DROP TABLE login_info;\n" +
-            "DROP TABLE user_book;\n" +
-            "DROP TABLE preference;\n" +
-            "DROP TABLE prompt;\n" +
-            "DROP TABLE user_info;\n";
+    static {
+        createTables = makeSQLH2Compatible(readFromFile("CREATETABLES.sql"));
+        dropTables = readFromFile("DROPTABLES.sql");
+    }
 
     public MockDatabaseService(String name) {
         this.dataSource = new BasicDataSource();
         this.dataSource.setUrl("jdbc:h2:mem:" + name);
         this.dataSource.setDriverClassName("org.h2.Driver");
         this.dataSource.setPoolPreparedStatements(true);
-
-        // System.out.println(Path.of(ClassLoader.getSystemResource("CREATETABLES.sql").getFile())); //getClass().getResource("/CREATETABLES.sql").getFile());
     }
 
-    private static String readFromFile (String fileName) {
+    private static String readFromFile(String fileName) {
         ClassLoader loader = ClassLoader.getSystemClassLoader();
-        InputStream file = loader.getResourceAsStream(fileName);
-        return new BufferedReader(new InputStreamReader(file))
-                    .lines().collect(Collectors.joining("\n"));
+        String ret;
+        try {
+            var url = loader.getResource(fileName);
+            var uri = url.toURI();
+            ret = Files.readString(Path.of(uri));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ret = "";
+        }
+        return ret;
     }
 
     // UNIQUEIDENTIFIER is Microsoft's naming convention, must change to UUID for H2

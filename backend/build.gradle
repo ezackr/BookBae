@@ -10,7 +10,7 @@ repositories {
 sourceSets {
     test {
         resources {
-            srcDirs = [ $projectDir + '/../database' ]
+            srcDirs = [ "$projectDir/../database" ]
         }
     }
 }
@@ -22,18 +22,16 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     implementation 'com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider:2.13.0'
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
-    implementation 'com.h2database:h2:2.1.212' //TODO: get a real database driver, not H2
-    implementation 'com.microsoft.sqlserver:mssql-jdbc:7.2.2.jre11' //sql driver
-    implementation 'org.springframework.security:spring-security-crypto:5.6.2' // bcrypt
+    implementation 'com.microsoft.sqlserver:mssql-jdbc:7.2.2.jre11'
+    implementation 'org.springframework.security:spring-security-crypto:5.6.2'
     implementation 'com.azure:azure-storage-blob:12.16.1'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
     testImplementation 'com.h2database:h2:2.1.212'
-    testImplementation 'com.microsoft.sqlserver:mssql-jdbc:7.2.2.jre11' //sql driver
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.0.0'
     testImplementation 'org.glassfish.jersey.core:jersey-server:3.0.4'
-
 }
 
 test {
