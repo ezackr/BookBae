@@ -13,7 +13,7 @@ import org.glassfish.embeddable.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class E2ETest {
+public class IntegrationTests {
     private static Deployer deployer;
     private static File archive;
     private static String userInfo = "{\"email\": \"test3@example.com\", \"password\": \"hunter2\"}";
