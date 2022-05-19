@@ -104,14 +104,10 @@ public class MockDatabaseService implements DatabasePoolService {
     }
 
     private static String readFromFile (String fileName) {
-
-        String fileContents = "";
-        try {
-            fileContents = Files.readString(Path.of(fileName));
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-        return fileContents;
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        InputStream file = loader.getResourceAsStream(fileName);
+        return new BufferedReader(new InputStreamReader(file))
+                    .lines().collect(Collectors.joining("\n"));
     }
 
     // UNIQUEIDENTIFIER is Microsoft's naming convention, must change to UUID for H2

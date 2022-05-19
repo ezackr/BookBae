@@ -7,6 +7,14 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    test {
+        resources {
+            srcDirs = [ $projectDir + '/../database' ]
+        }
+    }
+}
+
 dependencies {
     providedCompile 'jakarta.ws.rs:jakarta.ws.rs-api:3.0.0'
     providedCompile 'jakarta.enterprise:jakarta.enterprise.cdi-api:3.0.1'
