@@ -142,6 +142,7 @@ public class Chats {
             PreparedStatement getChatsBetweenTwoUsersStatement = conn.prepareStatement(getChatsBetweenTwoUsersString);
             getChatsBetweenTwoUsersStatement.setString(1, likeId);
             ResultSet resultSet = getChatsBetweenTwoUsersStatement.executeQuery();
+            conn.commit();
             ChatLineResponse nextChatLine;
 
             while (resultSet.next()) {
@@ -175,6 +176,7 @@ public class Chats {
             insertChatBetweenTwoUsersStatement.setString(3, likeId);
             insertChatBetweenTwoUsersStatement.setString(4, clientUserId);
             insertChatBetweenTwoUsersStatement.execute();
+            conn.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();

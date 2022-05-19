@@ -97,6 +97,8 @@ public class User {
             updateUserInfoStatement.setString(8, req.getZipcode());
             updateUserInfoStatement.setString(9, userId);
             updateUserInfoStatement.executeUpdate();
+            conn.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();

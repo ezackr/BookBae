@@ -23,7 +23,9 @@ public class DatabasePoolServiceImpl implements DatabasePoolService {
 
     @Override
     public Connection getConnection() throws SQLException {
-        return this.dataSource.getConnection();
+        Connection conn = this.dataSource.getConnection();
+        conn.setAutoCommit(false);
+        return conn;
     }
 
     private static String getConnectionUrl() {

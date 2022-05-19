@@ -60,12 +60,15 @@ public class CreateAccount {
             insertUserStatement.setString(1, userId);
             insertUserStatement.setString(2, email);
             insertUserStatement.executeUpdate();
+            conn.commit();
 
             PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
             insertLoginInfoStatement.setString(1, salt);
             insertLoginInfoStatement.setString(2, hashedPw);
             insertLoginInfoStatement.setString(3, userId);
             insertLoginInfoStatement.executeUpdate();
+            conn.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.serverError().build();

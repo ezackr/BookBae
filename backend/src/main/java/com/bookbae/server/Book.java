@@ -88,6 +88,7 @@ public class Book {
             // update database
             PreparedStatement addBooksStatement = conn.prepareStatement(addBooksBuffer.toString());
             addBooksStatement.executeUpdate();
+            conn.commit();
 
             // currentList now represents existing and added entries
             currentList.entries.addAll(toAddList.entries);
@@ -127,6 +128,7 @@ public class Book {
             PreparedStatement removeBooksStatement = conn.prepareStatement(removeBooksBuffer.toString());
             removeBooksStatement.setString(1, clientUserId);
             removeBooksStatement.execute();
+            conn.commit();
 
             // currentList now represents existing books after remove operation
             // because BookListEntry does not override equality method, cannot use removeAll within Collections

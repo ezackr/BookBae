@@ -66,6 +66,7 @@ public class Like {
             checkForDuplicateLikeStatement.setString(3, otherUserId);
             checkForDuplicateLikeStatement.setString(4, clientUserId);
             ResultSet resultSet = checkForDuplicateLikeStatement.executeQuery();
+            conn.commit();
 
             // client has already liked other user before, what should we do in this case?
             if(resultSet.next()) {
@@ -87,7 +88,7 @@ public class Like {
                 updateMutualLikeStatement.setString(1, otherUserId);
                 updateMutualLikeStatement.setString(2, clientUserId);
                 updateMutualLikeStatement.executeUpdate();
-
+                conn.commit();
                 onMutualLike(otherUserId, clientUserId);
 
             }
@@ -98,6 +99,7 @@ public class Like {
                 insertNonMutualLikeStatement.setString(2, clientUserId);
                 insertNonMutualLikeStatement.setString(3, otherUserId);
                 insertNonMutualLikeStatement.execute();
+                conn.commit();
 
             }
             resultSet.close();
