@@ -14,13 +14,18 @@ const HomeScreen = ({navigation}) => {
 
   const getMatchData = async () => {
     if (matches.length === 0) {
-      let data = await Client.getPotentialMatches();
-      if (data) {
-        console.log(data);
-        setMatches(data);
-      } else {
-        console.log('error fetching matches: ' + data);
-      }
+      Client.getPotentialMatches().then(data => {
+        for (let i = 0; i < data.length; i++) {
+          let match = data[i];
+          if ('name' in match) {
+            setMatches(prevState => {
+              prevState.push(match.name);
+              return [...prevState];
+            });
+          }
+        }
+        console.log('matches: ' + matches);
+      });
     }
   };
 
@@ -34,7 +39,7 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.title}>BookBae</Text>
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
-        <ProfileCard />
+        <Text>{matches}</Text>
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
         <TouchableOpacity
