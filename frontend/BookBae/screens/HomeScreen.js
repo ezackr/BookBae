@@ -19,7 +19,10 @@ const HomeScreen = ({navigation}) => {
           let match = data[i];
           if ('name' in match) {
             setMatches(prevState => {
-              prevState.push(match.name);
+              prevState.push({
+                key: i,
+                name: match.name,
+              });
               return [...prevState];
             });
           }
@@ -39,7 +42,9 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.title}>BookBae</Text>
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
-        <Text>{matches}</Text>
+        {matches.map(match => (
+          <Text key={match.key}>{match.name}</Text>
+        ))}
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
         <TouchableOpacity
