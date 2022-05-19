@@ -16,7 +16,7 @@ dependencies {
     providedCompile 'jakarta.enterprise:jakarta.enterprise.cdi-api:3.0.1'
     providedCompile 'jakarta.inject:jakarta.inject-api:2.0.1'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-    implementation 'com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider:2.13.0'
+    implementation 'com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider:2.13.3'
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     implementation 'com.h2database:h2:2.1.212' //TODO: get a real database driver, not H2
     implementation 'com.microsoft.sqlserver:mssql-jdbc:7.2.2.jre11' //sql driver
@@ -33,6 +33,7 @@ dependencies {
     intTestImplementation 'org.glassfish.main.extras:glassfish-embedded-all:6.2.5'
     intTestImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     intTestImplementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.0.0'
+    intTestImplementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 }
 
 test {
@@ -46,7 +47,11 @@ tasks.register('integrationTest', Test) {
 
     testClassesDirs = sourceSets.intTest.output.classesDirs
     classpath = sourceSets.intTest.runtimeClasspath
-    systemProperty "bookbae.archive", "$buildDir/libs/api.war"
+    systemProperty "bookbae.archive",       "$buildDir/libs/api.war"
+    systemProperty "bookbae.database_name", "BookBaeDB"
+    systemProperty "bookbae.password",      project.findProperty('PASSWORD') ?: ''
+    systemProperty "bookbae.server_url",    "bookbaeserver.database.windows.net"
+    systemProperty "bookbae.username",      "TeamBookBae@bookbaeserver"
     shouldRunAfter test
     dependsOn assemble
     useJUnitPlatform()
