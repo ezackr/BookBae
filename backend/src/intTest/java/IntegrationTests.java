@@ -73,7 +73,6 @@ public class IntegrationTests {
         var user_node = om.readTree(user_res.readEntity(String.class));
         String email = user_node.get("email").asText();
         assertEquals("test3@example.com", email);
-
     }
 
     @AfterAll
