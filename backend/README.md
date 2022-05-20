@@ -95,6 +95,7 @@ The application offers a number of API endpoints accessible from the root path. 
     - POST
         - Saves the authenticated user's profile picture as the given image
         - Consumes: image/jpeg
+        - Produces: `{"url": "<url>"}`
 
 Endpoints return a 500 response code in the event of a SQL error   
 The `authToken` returned from the login endpoint is a JWT token that should be kept by the client and must be used to access authenticated endpoints (for now, just /user, but will include photo upload and accessing matches and chat).
