@@ -81,8 +81,7 @@ public class Like {
             checkIfOtherUserLikesClientUserStatement.setString(2, clientUserId);
             resultSet = checkIfOtherUserLikesClientUserStatement.executeQuery();
 
-            // the like is mutual
-            if(resultSet.next()) {
+            if(resultSet.next()) { // the like is mutual
                 PreparedStatement updateMutualLikeStatement = conn.prepareStatement(updateMutualLikeString);
                 updateMutualLikeStatement.setString(1, otherUserId);
                 updateMutualLikeStatement.setString(2, clientUserId);
@@ -90,9 +89,7 @@ public class Like {
 
                 onMutualLike(otherUserId, clientUserId);
 
-            }
-            // the like is not mutual
-            else {
+            } else { // the like is not mutual
                 PreparedStatement insertNonMutualLikeStatement = conn.prepareStatement(insertNonMutualLikeString);
                 insertNonMutualLikeStatement.setString(1, UUID.randomUUID().toString());
                 insertNonMutualLikeStatement.setString(2, clientUserId);
