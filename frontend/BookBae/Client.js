@@ -53,7 +53,7 @@ class Client {
 
   /**
   * Gets user matching preferences
-  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}}
+  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}}, or null for failure
   */
   static async getPreferences() {
     return await axios({
@@ -72,9 +72,21 @@ class Client {
   /**
   * Sets user matching preferences
   * @param {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} preferences
-  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} new preferences
+  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} new preferences, or null for failure
   */
   static async setPreferences(preferences) {
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/preferences/set',
+      method: 'put',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+      data: preferences,
+    })
+      .then(response => response.data)
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
   }
 
   /**
