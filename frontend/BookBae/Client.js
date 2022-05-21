@@ -52,6 +52,21 @@ class Client {
   }
 
   /**
+  * Gets user matching preferences
+  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}}
+  */
+  static async getPreferences() {
+  }
+
+  /**
+  * Sets user matching preferences
+  * @param {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} preferences
+  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} new preferences
+  */
+  static async setPreferences(preferences) {
+  }
+
+  /**
    * Creates a new user account
    * @param {string} email - the email to associate new account with
    * @param {string} password - the password that the user will use to access account
