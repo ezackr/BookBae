@@ -56,6 +56,17 @@ class Client {
   * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}}
   */
   static async getPreferences() {
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/preferences/get',
+      method: 'get',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+    })
+      .then(response => response.data)
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
   }
 
   /**
