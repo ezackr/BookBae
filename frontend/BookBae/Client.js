@@ -12,7 +12,7 @@ class Client {
 
   /**
    * Gets the user info given the user's authToken
-   * @return {{email, name, preferredGender, gender,
+   * @return {{email, name, gender,
    *          favGenre, birthday, bio, zipcode}}, or null for failure
    */
   static async getUserInfo() {
@@ -31,7 +31,7 @@ class Client {
 
   /**
    * Updates user info
-   * @param {{email, name, preferredGender, gender,
+   * @param {{email, name, gender,
    *          favGenre, birthday, bio, zipcode}} userInfo
    * @return {{email, name, preferredGender, gender,
    *          favGenre, birthday, bio, zipcode}} the server's (new) user info, or null for failure
