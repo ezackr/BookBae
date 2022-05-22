@@ -17,7 +17,7 @@ import io.jsonwebtoken.Jwts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class LoginTest {
+public class LoginTest extends TestClass {
     private MockDatabaseService database;
     private SecretKeyService keys;
     private AccountRequest accountRequest;
@@ -27,11 +27,12 @@ public class LoginTest {
     @BeforeEach
     void init() {
         database = new MockDatabaseService("loginTest");
-        createAccountResource = new CreateAccount(database);
         keys     = new SecretKeyServiceImpl();
         loginResource = new Login(database, keys);
         accountRequest = getExampleAccountRequest();
         database.init();
+
+        super.createMockUser(database, false);
     }
 
     @AfterEach
@@ -41,7 +42,6 @@ public class LoginTest {
 
     @Test
     void successfulLoginTest() {
-        createAccountResource.tryCreate(accountRequest);
         var resp = loginResource.tryLogin(accountRequest);
         var entity = (LoginResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
@@ -53,7 +53,6 @@ public class LoginTest {
 
     @Test
     void wrongEmailLoginTest() {
-        createAccountResource.tryCreate(accountRequest);
         accountRequest.setEmail("wrongemail@gmail.com");
         var resp = loginResource.tryLogin(accountRequest);
         assertEquals(403, resp.getStatus());
@@ -61,7 +60,6 @@ public class LoginTest {
 
     @Test
     void wrongPasswordLoginTest() {
-        createAccountResource.tryCreate(accountRequest);
         accountRequest.setPassword("wrongpassword");
         var resp = loginResource.tryLogin(accountRequest);
         assertEquals(403, resp.getStatus());
@@ -69,16 +67,9 @@ public class LoginTest {
 
     @Test
     void sqlFailureTest() {
-        createAccountResource.tryCreate(accountRequest);
         loginResource = new Login(new SQLFailService(), keys);
         var resp = loginResource.tryLogin(accountRequest);
         assertEquals(500, resp.getStatus());
     }
 
-    private AccountRequest getExampleAccountRequest() {
-        var req = new AccountRequest();
-        req.setEmail("test@example.com");
-        req.setPassword("hunter2");
-        return req;
-    }
 }

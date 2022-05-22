@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CreateAccountTest {
+public class CreateAccountTest extends TestClass {
 
     private AccountRequest accountRequest;
     private MockDatabaseService database;
@@ -50,11 +50,4 @@ public class CreateAccountTest {
         assertEquals(500, resp.getStatus());
     }
 
-    private AccountRequest getExampleAccountRequest() {
-        var req = new AccountRequest();
-        req.setEmail("test@example.com");
-        req.setPassword("hunter2");
-        return req;
-    }
-    
 }
