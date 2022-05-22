@@ -100,7 +100,7 @@ The application offers a number of API endpoints accessible from the root path. 
 Endpoints return a 500 response code in the event of a SQL error   
 The `authToken` returned from the login endpoint is a JWT token that should be kept by the client and must be used to access authenticated endpoints (for now, just /user, but will include photo upload and accessing matches and chat).
 
-Attempting to access a secured resource with an expired JWT will return a response with an UNAUTHORIZED status code, and attempting to access a secured resource with an invalid JWT will return UNAUTHORIZED. If a client recieves an unauthorized response, it should attempt to get a fresh JWT by hitting the /login endpoint again. 
+Attempting to access a secured resource with an expired JWT will return a response with an UNAUTHORIZED status code, and attempting to access a secured resource with an invalid JWT will return UNAUTHORIZED. If a client recieves an unauthorized response, it should attempt to get a fresh JWT by hitting the /login endpoint again. If a client recieves a FORBIDDEN response, then they should not attempt to get a new token from the login endpoint as their credentials are incorrect in some way.
 
 To access a secured resource, the JWT must be passed in the "Authorization" HTTP header. The header must have a value of `Bearer <insert token here>`, where the token is the value of the `authToken` field recieved from the /login endpoint.
 
