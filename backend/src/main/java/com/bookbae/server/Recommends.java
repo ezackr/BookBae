@@ -54,7 +54,6 @@ public class Recommends {
                 // nextUserResponse.setEmail(resultSet.getString("email")); Do not return email!
                 nextUserResponse.setUserId(resultSet.getString("user_id"));
                 nextUserResponse.setName(resultSet.getString("name"));
-                nextUserResponse.setPreferredGender(resultSet.getString("preferred_gender"));
                 nextUserResponse.setGender(resultSet.getString("gender"));
                 nextUserResponse.setFavGenre(resultSet.getString("fav_genre"));
                 // saves birthday as a string if not null

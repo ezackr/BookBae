@@ -12,7 +12,7 @@ class Client {
 
   /**
    * Gets the user info given the user's authToken
-   * @return {{email, name, preferredGender, gender,
+   * @return {{email, name, gender,
    *          favGenre, birthday, bio, zipcode}}, or null for failure
    */
   static async getUserInfo() {
@@ -31,7 +31,7 @@ class Client {
 
   /**
    * Updates user info
-   * @param {{email, name, preferredGender, gender,
+   * @param {{email, name, gender,
    *          favGenre, birthday, bio, zipcode}} userInfo
    * @return {{email, name, preferredGender, gender,
    *          favGenre, birthday, bio, zipcode}} the server's (new) user info, or null for failure
@@ -43,6 +43,44 @@ class Client {
       method: 'put',
       headers: {Authorization: 'Bearer ' + Client.authToken},
       data: userInfo,
+    })
+      .then(response => response.data)
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
+  }
+
+  /**
+  * Gets user matching preferences
+  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}}, or null for failure
+  */
+  static async getPreferences() {
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/preferences/get',
+      method: 'get',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+    })
+      .then(response => response.data)
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
+  }
+
+  /**
+  * Sets user matching preferences
+  * @param {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} preferences
+  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} new preferences, or null for failure
+  */
+  static async setPreferences(preferences) {
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/preferences/set',
+      method: 'put',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+      data: preferences,
     })
       .then(response => response.data)
       .catch(response => {

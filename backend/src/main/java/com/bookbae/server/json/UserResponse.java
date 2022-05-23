@@ -8,7 +8,6 @@ import java.util.UUID;
 public class UserResponse {
     protected String email;
     protected String name;
-    protected String preferredGender;
     protected String gender;
     protected String favGenre;
     protected String birthday;
@@ -21,7 +20,6 @@ public class UserResponse {
     public UserResponse(UserRequest req) {
         this.email = req.email;
         this.name = req.name;
-        this.preferredGender = req.preferredGender;
         this.gender = req.gender;
         this.favGenre = req.favGenre;
         this.birthday = req.birthday;
@@ -47,16 +45,6 @@ public class UserResponse {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
-    }
-
-    @JsonProperty("preferredGender")
-    public String getPreferredGender() {
-        return preferredGender;
-    }
-
-    @JsonProperty("preferredGender")
-    public void setPreferredGender(String preferredGender) {
-        this.preferredGender = preferredGender;
     }
 
     @JsonProperty("gender")

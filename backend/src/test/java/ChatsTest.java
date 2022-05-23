@@ -188,7 +188,6 @@ public class ChatsTest {
             userRequests[i] = new UserRequest();
             userRequests[i].setEmail(acctRequests[i].getEmail());
             userRequests[i].setName("Name " + i);
-            userRequests[i].setPreferredGender("M_F_NB");
             userRequests[i].setGender("F");
             userRequests[i].setFavGenre("Comedy");
             userRequests[i].setBirthday("2000-01-01");

@@ -8,7 +8,6 @@ CREATE TABLE user_info
     email VARCHAR(254) NOT NULL,
     zipcode CHAR(5),
     bio VARCHAR(500),
-    preferred_gender VARCHAR(6),
     phone_num VARCHAR(15),
     PRIMARY KEY (user_id)
 );
@@ -25,9 +24,10 @@ CREATE TABLE prompt
 
 CREATE TABLE preference
 (
-    low_target_age TINYINT NOT NULL,
-    high_target_age TINYINT NOT NULL,
-    within_x_miles SMALLINT NOT NULL,
+    low_target_age TINYINT,
+    high_target_age TINYINT,
+    within_x_miles SMALLINT,
+    preferred_gender VARCHAR(6),
     user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES user_info(user_id)
