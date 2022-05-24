@@ -31,7 +31,7 @@ public class PreferencesTest extends AbstractTest {
         database.init();
 
         AccountRequest accountRequest = super.getExampleAccountRequest();
-        userId = super.createMockUser(database);
+        userId = super.createMockUser(database, true);
     }
 
     @AfterEach
