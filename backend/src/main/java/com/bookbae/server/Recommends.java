@@ -22,8 +22,9 @@ import jakarta.inject.Inject;
 @Path("/recommends")
 public class Recommends {
     private DatabasePoolService database;
-    // user_id = client user id; for now, return all users but self
-    private String getRecommendedUsersString = "SELECT * FROM user_info WHERE user_id != ?;";
+    private String getUserPreferencesString = "SELECT * FROM preference WHERE user_id = ?;";
+    private String getRecommendedUsersString = "SELECT * FROM user_info " +
+            "WHERE user_id != ?";
 
     @Inject
     public Recommends(DatabasePoolService database) {
@@ -38,9 +39,20 @@ public class Recommends {
         UserResponse nextUserResponse;
 
         try (Connection conn = this.database.getConnection()) {
+
+            PreparedStatement getUserPreferencesStatement = conn.prepareStatement(getUserPreferencesString);
+            getUserPreferencesStatement.setString(1, clientUserId);
+            ResultSet resultSet = getUserPreferencesStatement.executeQuery();
+            resultSet.next(); // assume user exists
+
+            int lowerAge = resultSet.getInt("low_target_age");
+            int upperAge = resultSet.getInt("high_target_age");
+            int withinXMiles = resultSet.getInt("within_x_miles");
+            String[] preferredGenders = resultSet.getString("preferred_gender").split("_");
+
             PreparedStatement getRecommendedUsersStatement = conn.prepareStatement(getRecommendedUsersString);
             getRecommendedUsersStatement.setString(1, clientUserId);
-            ResultSet resultSet = getRecommendedUsersStatement.executeQuery();
+            resultSet = getRecommendedUsersStatement.executeQuery();
 
             while(resultSet.next()) {
                 nextUserResponse = new UserResponse();
