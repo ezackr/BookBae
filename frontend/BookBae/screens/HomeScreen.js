@@ -3,22 +3,61 @@ import {
   StyleSheet,
   Text,
   SafeAreaView,
-  Pressable,
   Image,
   TouchableOpacity,
 } from 'react-native';
+import Client from '../Client.js';
 
 const HomeScreen = ({navigation}) => {
+  const [matches, setMatches] = React.useState([]);
+
+  const getMatchData = async () => {
+    if (matches.length === 0) {
+      Client.getPotentialMatches().then(data => {
+        for (let i = 0; i < data.length; i++) {
+          let match = data[i];
+          if ('name' in match) {
+            setMatches(prevState => {
+              prevState.push({
+                key: i,
+                name: match.name,
+              });
+              return [...prevState];
+            });
+          }
+        }
+        console.log('matches: ' + matches);
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    getMatchData();
+  });
+
   return (
     <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.topMenu}>
+        <Text style={styles.title}>BookBae</Text>
+      </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
-        <ProfileOverview />
+        {matches.map(match => (
+          <Text key={match.key} style={styles.bodyText}>
+            {match.name}
+          </Text>
+        ))}
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
-        <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.5}
+          onPress={getMatchData}>
           <Image source={require('../images/deny.png')} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.5}
+          onPress={getMatchData}>
           <Image source={require('../images/accept.png')} />
         </TouchableOpacity>
       </SafeAreaView>
@@ -28,7 +67,7 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen;
 
-const ProfileOverview = () => {
+const ProfileCard = ({profile}) => {
   return (
     <SafeAreaView style={matchStyles.matchBox}>
       <SafeAreaView style={matchStyles.bookDisplay}>
@@ -84,7 +123,11 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 48,
     fontWeight: 'bold',
-    paddingTop: 20,
+    padding: 10,
+  },
+  bodyText: {
+    color: 'black',
+    fontSize: 18,
   },
   button: {
     height: 50,
