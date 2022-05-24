@@ -26,8 +26,9 @@ import java.util.ArrayList;
 @Path("/chats")
 public class Chats {
     private DatabasePoolService database;
-    // TODO: It would be better to not split up the database calls this way but this is simple and good enough for now
-    // return all likeids and user_ids where the user is mutually liked
+
+    private String photoUrlBase = "https://bookbaephotos.blob.core.windows.net/userphotos/";
+
     private String getAllChatsWhereClientUserHasMutualLikeString = "SELECT like_id, liked_user_id, liker_user_id" +
             " FROM likes" +
             " WHERE is_mutual" +
@@ -80,6 +81,9 @@ public class Chats {
                 } else { // client user is liked
                     otherUserId = resultSet.getString("liker_user_id"); // other user is liker
                 }
+
+                // set photoUrl
+                nextChatCardResponse.photoUrl = photoUrlBase + otherUserId;
 
                 // obtain display name
                 PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
