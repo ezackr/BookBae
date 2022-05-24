@@ -23,7 +23,7 @@ public class CreateAccount {
             " VALUES(?, NULL, NULL, NULL, NULL, ?, NULL, NULL, NULL);";
     private static String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
 
-    private static String insertNullPreferencesString = "INSERT INTO preference VALUES(0, 0, 0, '', ?);";
+    private static String insertNullPreferencesString = "INSERT INTO preference VALUES(0, 0, 0, 'M_F_NB', ?);";
     private DatabasePoolService database;
 
     @Inject

@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.UUID;
 import java.util.ArrayList;
@@ -23,12 +24,20 @@ import jakarta.inject.Inject;
 public class Recommends {
     private DatabasePoolService database;
     private String getUserPreferencesString = "SELECT * FROM preference WHERE user_id = ?;";
-    private String getRecommendedUsersString = "SELECT * FROM user_info " +
-            "WHERE user_id != ?";
+    private String getRecommendedsString = "SELECT * FROM user_info " +
+            "WHERE user_id != ? " +
+            "AND DATEDIFF(year, birthday, GETDATE()) >= ? " +
+            "AND DATEDIFF(year, birthday, GETDATE()) <= ? " +
+            "AND ";
 
     @Inject
     public Recommends(DatabasePoolService database) {
         this.database = database;
+
+        // GETDATE is Microsoft's syntax, CURRENT_TIMESTAMP is H2's syntax
+        if (database.isMockDatabase()) {
+            getRecommendedsString = getRecommendedsString.replace("GETDATE", "CURRENT_TIMESTAMP");
+        }
     }
 
     @GET
@@ -40,6 +49,7 @@ public class Recommends {
 
         try (Connection conn = this.database.getConnection()) {
 
+            // get user's preferences
             PreparedStatement getUserPreferencesStatement = conn.prepareStatement(getUserPreferencesString);
             getUserPreferencesStatement.setString(1, clientUserId);
             ResultSet resultSet = getUserPreferencesStatement.executeQuery();
@@ -47,13 +57,30 @@ public class Recommends {
 
             int lowerAge = resultSet.getInt("low_target_age");
             int upperAge = resultSet.getInt("high_target_age");
-            int withinXMiles = resultSet.getInt("within_x_miles");
+            // int withinXMiles = resultSet.getInt("within_x_miles");
             String[] preferredGenders = resultSet.getString("preferred_gender").split("_");
 
-            PreparedStatement getRecommendedUsersStatement = conn.prepareStatement(getRecommendedUsersString);
-            getRecommendedUsersStatement.setString(1, clientUserId);
-            resultSet = getRecommendedUsersStatement.executeQuery();
+            // extend getRecommendsString to fit number of preferred genders
+            StringBuffer getRecommendsBuffer = new StringBuffer(getRecommendedsString);
+            getRecommendsBuffer.append("(");
+            for(int i = 0; i < preferredGenders.length; i++) {
+                getRecommendsBuffer.append(" gender = ? OR");
+            }
+            // remove last "OR", add ");"
+            getRecommendsBuffer.delete(getRecommendsBuffer.length() - 3, getRecommendsBuffer.length());
+            getRecommendsBuffer.append(");");
 
+            // get recommendations for the user based on their preferences
+            PreparedStatement getRecommendedsStatement = conn.prepareStatement(getRecommendsBuffer.toString());
+            getRecommendedsStatement.setString(1, clientUserId);
+            getRecommendedsStatement.setInt(2, lowerAge);
+            getRecommendedsStatement.setInt(3, upperAge);
+            for(int i = 0; i < preferredGenders.length; i++) {
+                getRecommendedsStatement.setString(4 + i, preferredGenders[i]);
+            }
+            resultSet = getRecommendedsStatement.executeQuery();
+
+            // load up user preferences into json response
             while(resultSet.next()) {
                 nextUserResponse = new UserResponse();
                 nextUserResponse.setUserId(resultSet.getString("user_id"));
