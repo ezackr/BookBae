@@ -69,7 +69,7 @@ The application offers a number of API endpoints accessible from the root path. 
 - /chats
     - GET
         - Gets basic information on all chats the authenticated user is involved in
-        - Produces: `[{"displayName": "<name>", "photoUrl": "<url>", "lastMessage": "<msg>", "likeId": "<uuid>"}, ...]`
+        - Produces: `[{"displayName": "<name>", "photoUrl": "<url>", "likeId": "<uuid>"}, ...]`
 - /chats/{likeId}
     - GET
         - Gets the chat lines from the chat specified by likeId, userid is of the sender
