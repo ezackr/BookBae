@@ -32,7 +32,6 @@ public class Preferences {
         this.database = database;
     }
 
-    @Path("/get")
     @GET
     @Produces("application/json")
     public Response getPreferences(@Context SecurityContext ctx) {
@@ -64,7 +63,6 @@ public class Preferences {
         return Response.ok(prefs).build();
     }
 
-    @Path("/set")
     @PUT
     @Consumes("application/json")
     public Response setPreferences(@Context SecurityContext ctx, PreferencesMessage prefs) {
@@ -79,10 +77,6 @@ public class Preferences {
             setPreferencesStatement.setString(5, clientUserId);
             setPreferencesStatement.executeUpdate();
 
-//            PreparedStatement checkStatement = conn.prepareStatement("SELECT * FROM preference;");
-//            ResultSet resultSet = checkStatement.executeQuery();
-//            System.out.println(resultSet.next());
-//            System.out.println(resultSet.getString("preferred_gender"));
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -91,13 +91,12 @@ The application offers a number of API endpoints accessible from the root path. 
         - Takes in a list of book ids to remove from the authenticated user's book list, returns the updated book list
         - Consumes: `[{"bookid": "<bookid>"},...]`
         - Produces: `[{"bookid": "<bookid>"},...]`
-- /preferences/get
+- /preferences
     - GET
         - Gets the preferences for the client user
         - Produces: `{"lowerAgeLimit": "<lowerAgeLimit>", "upperAgeLimit": "<upperAgeLimit>", "withinXMiles": "<withinXMiles>", "preferredGender": "<preferredGender>"}`
         - Returns 403 response code if user does not exist
         - Returns `{"lowerAgeLimit": "0", "upperAgeLimit": "0", "withinXMiles": "0", "preferredGender": ""}` if preferences have not been set yet
-- /preferences/set
     - PUT
         - Sets the preferences for the client user
         - Consumes: `{"lowerAgeLimit": "<lowerAgeLimit>", "upperAgeLimit": "<upperAgeLimit>", "withinXMiles": "<withinXMiles>", "preferredGender": "<preferredGender>"}`
