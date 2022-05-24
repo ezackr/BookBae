@@ -91,7 +91,6 @@ public class LikeTest extends TestClass {
         var req = new UserRequest();
         req.setEmail("liker@example.com");
         req.setName("Liker Name");
-        req.setPreferredGender("M");
         req.setGender("F");
         req.setFavGenre("Mystery"); //TODO: what genres has the front end come up with? What are the legal genres?
         req.setBirthday("1998-10-31");
@@ -111,7 +110,6 @@ public class LikeTest extends TestClass {
         var req = new UserRequest();
         req.setEmail("liked@example.com");
         req.setName("Liked Name");
-        req.setPreferredGender("F_NB");
         req.setGender("M");
         req.setFavGenre("Western"); //TODO: what genres has the front end come up with? What are the legal genres?
         req.setBirthday("1999-02-11");

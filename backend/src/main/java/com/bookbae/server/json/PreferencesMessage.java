@@ -11,4 +11,7 @@ public class PreferencesMessage {
 
     @JsonProperty
     public int withinXMiles;
+
+    @JsonProperty
+    public String preferredGender;
 }

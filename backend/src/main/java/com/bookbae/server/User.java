@@ -28,7 +28,7 @@ public class User {
             "FROM user_info " +
             "WHERE user_id = ?;";
     private static String updateUserInfoString = "UPDATE user_info " +
-            "SET name = ?, preferred_gender = ?, gender = ?, fav_genre = ?," +
+            "SET name = ?, gender = ?, fav_genre = ?," +
             "birthday = ?, bio = ?, email = ?, zipcode = ? " +
             "WHERE user_id = ?;";
 
@@ -62,7 +62,6 @@ public class User {
              // populate resp object
              resp.setEmail(resultSet.getString("email"));
              resp.setName(resultSet.getString("name"));
-             resp.setPreferredGender(resultSet.getString("preferred_gender"));
              resp.setGender(resultSet.getString("gender"));
              resp.setFavGenre(resultSet.getString("fav_genre"));
              resp.setBirthday(Objects.toString(resultSet.getDate("birthday"))); // saves birthday as a string if not null
@@ -88,14 +87,13 @@ public class User {
             String userId = ctx.getUserPrincipal().getName();
             PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
             updateUserInfoStatement.setString(1, req.getName());
-            updateUserInfoStatement.setString(2, req.getPreferredGender());
-            updateUserInfoStatement.setString(3, req.getGender());
-            updateUserInfoStatement.setString(4, req.getFavGenre());
-            updateUserInfoStatement.setDate(5, java.sql.Date.valueOf(req.getBirthday()));
-            updateUserInfoStatement.setString(6, req.getBio());
-            updateUserInfoStatement.setString(7, req.getEmail());
-            updateUserInfoStatement.setString(8, req.getZipcode());
-            updateUserInfoStatement.setString(9, userId);
+            updateUserInfoStatement.setString(2, req.getGender());
+            updateUserInfoStatement.setString(3, req.getFavGenre());
+            updateUserInfoStatement.setDate(4, java.sql.Date.valueOf(req.getBirthday()));
+            updateUserInfoStatement.setString(5, req.getBio());
+            updateUserInfoStatement.setString(6, req.getEmail());
+            updateUserInfoStatement.setString(7, req.getZipcode());
+            updateUserInfoStatement.setString(8, userId);
             updateUserInfoStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

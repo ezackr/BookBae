@@ -14,7 +14,6 @@ const EnterBioScreen = ({route, navigation}) => {
             email: route.params.email,
             password: route.params.password,
             name: route.params.name,
-            preferredGender: '_',
             gender: route.params.gender,
             birthday: route.params.birthday,
             zipcode: route.params.zipcode,
