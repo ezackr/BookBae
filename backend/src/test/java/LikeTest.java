@@ -22,13 +22,8 @@ import io.jsonwebtoken.Jwts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class LikeTest {
+public class LikeTest extends AbstractTest {
     private MockDatabaseService database;
-    private SecretKeyService keys;
-    private AccountRequest accountRequest;
-    private CreateAccount createAccountResource;
-    private Login loginResource;
-    private User userResource;
     private Like likeResource;
     private AccountRequest likerAccountRequest;
     private UserRequest likerUserRequest;
@@ -40,22 +35,18 @@ public class LikeTest {
     @BeforeEach
     void init() {
         database = new MockDatabaseService("likeTest");
-        createAccountResource = new CreateAccount(database);
-        keys     = new SecretKeyServiceImpl();
-        loginResource = new Login(database, keys);
-        userResource = new User(database);
         likeResource = new Like(database);
         database.init();
 
         // create liker
         likerAccountRequest = getLikerAccountRequest();
         likerUserRequest = getLikerUserRequest();
-        likerUserId = createMockUser(likerAccountRequest, likerUserRequest);
+        likerUserId = createMockUser(database, likerAccountRequest, likerUserRequest);
 
         //create liked
         likedAccountRequest = getLikedAccountRequest();
         likedUserRequest = getLikedUserRequest();
-        likedUserId = createMockUser(likedAccountRequest, likedUserRequest);
+        likedUserId = createMockUser(database, likedAccountRequest, likedUserRequest);
     }
 
     @AfterEach
@@ -87,31 +78,6 @@ public class LikeTest {
         resp = likeResource.doLike(new MockSecurityContext(likedUserId), likeRequest);
         assertEquals(200, resp.getStatus());
 
-    }
-
-    // create an account with the given AccountRequest, put the User
-    private String createMockUser(AccountRequest accountRequest, UserRequest userRequest) {
-        var resp = createAccountResource.tryCreate(accountRequest);
-        assertEquals(200, resp.getStatus());
-        var acct = (LoginResponse) loginResource.tryLogin(accountRequest).getEntity();
-        var token = acct.getAuthToken();
-        Jws<Claims> jws;
-        try {
-            jws = Jwts.parserBuilder()
-                    .setSigningKey(keys.getKey())
-                    .build()
-                    .parseClaimsJws(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-        String userId = jws.getBody().getSubject();
-        // assume ^ work
-
-        resp = userResource.putUser(new MockSecurityContext(userId), userRequest);
-        assertEquals(200, resp.getStatus());
-
-        return userId;
     }
 
     private AccountRequest getLikerAccountRequest() {

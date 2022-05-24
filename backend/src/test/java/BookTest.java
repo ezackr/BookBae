@@ -7,22 +7,17 @@ import com.bookbae.server.DatabasePoolService;
 import com.bookbae.server.SecretKeyService;
 import com.bookbae.server.service.SecretKeyServiceImpl;
 import com.bookbae.server.RestApplication;
-import com.bookbae.server.CreateAccount;
-import com.bookbae.server.Login;
 import com.bookbae.server.Book;
 import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.LoginResponse;
 import com.bookbae.server.json.BookList;
 import com.bookbae.server.json.BookListEntry;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class BookTest {
+public class BookTest extends AbstractTest {
 
     private MockDatabaseService database;
     private AccountRequest accountRequest = getExampleAccountRequest();
@@ -36,7 +31,7 @@ public class BookTest {
         bookResource = new Book(database);
         database.init();
 
-        userId = createMockUser();
+        userId = super.createMockUser(database, false);
 
     }
 
@@ -106,37 +101,5 @@ public class BookTest {
         BookList resultList = (BookList) resp.getEntity();
         assertEquals(1, resultList.entries.size());
         assertEquals(true, books.entries.contains(book2));
-    }
-
-
-
-    // create an account and get the user id of the created account
-    private String createMockUser() {
-        var keys = new SecretKeyServiceImpl();
-        var createAccountResource = new CreateAccount(database);
-        createAccountResource.tryCreate(accountRequest);
-        var loginResource = new Login(database, keys);
-        var acct = (LoginResponse) loginResource.tryLogin(accountRequest).getEntity();
-        var token = acct.getAuthToken();
-        Jws<Claims> jws;
-        try {
-            jws = Jwts.parserBuilder()
-                    .setSigningKey(keys.getKey())
-                    .build()
-                    .parseClaimsJws(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-        String subj = jws.getBody().getSubject();
-        // assume ^ work
-        return subj;
-    }
-
-    private AccountRequest getExampleAccountRequest() {
-        AccountRequest req = new AccountRequest();
-        req.setEmail("example@email.com");
-        req.setPassword("password");
-        return req;
     }
 }

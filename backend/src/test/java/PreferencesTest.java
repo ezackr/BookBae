@@ -19,30 +19,19 @@ import com.bookbae.server.service.SecretKeyServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PreferencesTest {
+public class PreferencesTest extends AbstractTest {
     private MockDatabaseService database;
-    private CreateAccount createAccountResource;
-
-    private Login loginResource;
     private Preferences preferencesResource;
-
-    private AccountRequest accountRequest;
     private String userId;
-    private SecretKeyServiceImpl keys;
 
     @BeforeEach
     void init() {
         database = new MockDatabaseService("preferencesTest");
-        createAccountResource = new CreateAccount(database);
-        keys = new SecretKeyServiceImpl();
-        loginResource = new Login(database, keys);
         preferencesResource = new Preferences(database);
         database.init();
 
-        accountRequest = new AccountRequest();
-        accountRequest.setEmail("test@example.com");
-        accountRequest.setPassword("hunter2");
-        userId = createMockUser();
+        AccountRequest accountRequest = super.getExampleAccountRequest();
+        userId = super.createMockUser(database);
     }
 
     @AfterEach
@@ -90,26 +79,6 @@ public class PreferencesTest {
         assertEquals(prefs.upperAgeLimit, returnedPrefs.upperAgeLimit);
         assertEquals(prefs.withinXMiles, returnedPrefs.withinXMiles);
         assertEquals(prefs.preferredGender, returnedPrefs.preferredGender);
-    }
-
-    // create an account and get the user id of the created account
-    private String createMockUser() {
-        createAccountResource.tryCreate(accountRequest);
-        var acct = (LoginResponse) loginResource.tryLogin(accountRequest).getEntity();
-        var token = acct.getAuthToken();
-        Jws<Claims> jws;
-        try {
-            jws = Jwts.parserBuilder()
-                    .setSigningKey(keys.getKey())
-                    .build()
-                    .parseClaimsJws(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-        String subj = jws.getBody().getSubject();
-        // assume ^ work
-        return subj;
     }
 
 }
