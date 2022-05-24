@@ -47,7 +47,7 @@ public class PreferencesTest extends AbstractTest {
         assertEquals(0, returnedPrefs.lowerAgeLimit);
         assertEquals(0, returnedPrefs.upperAgeLimit);
         assertEquals(0, returnedPrefs.withinXMiles);
-        assertEquals("", returnedPrefs.preferredGender);
+        assertEquals("M_F_NB", returnedPrefs.preferredGender);
 
     }
 
@@ -57,7 +57,7 @@ public class PreferencesTest extends AbstractTest {
         prefs.lowerAgeLimit = 30;
         prefs.upperAgeLimit = 40;
         prefs.withinXMiles = 20;
-        prefs.preferredGender = "M";
+        prefs.preferredGender = "M_";
         var resp = preferencesResource.setPreferences(new MockSecurityContext(userId), prefs);
         assertEquals(200, resp.getStatus());
     }
@@ -68,7 +68,7 @@ public class PreferencesTest extends AbstractTest {
         prefs.lowerAgeLimit = 30;
         prefs.upperAgeLimit = 40;
         prefs.withinXMiles = 20;
-        prefs.preferredGender = "M";
+        prefs.preferredGender = "M_";
         var resp = preferencesResource.setPreferences(new MockSecurityContext(userId), prefs);
         assertEquals(200, resp.getStatus());
         resp = preferencesResource.getPreferences(new MockSecurityContext(userId));
@@ -79,6 +79,13 @@ public class PreferencesTest extends AbstractTest {
         assertEquals(prefs.upperAgeLimit, returnedPrefs.upperAgeLimit);
         assertEquals(prefs.withinXMiles, returnedPrefs.withinXMiles);
         assertEquals(prefs.preferredGender, returnedPrefs.preferredGender);
+    }
+
+    @Test
+    void sqlFailureTest() {
+        Preferences badResource = new Preferences(new SQLFailService());
+        var resp = badResource.getPreferences(new MockSecurityContext(userId));
+        assertEquals(500, resp.getStatus());
     }
 
 }

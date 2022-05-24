@@ -43,8 +43,8 @@ public class Login {
     @Produces("application/json")
     public Response tryLogin(AccountRequest data) {
 
-        String email = data.getEmail();
-        String password = data.getPassword();
+        String email = data.email;
+        String password = data.password;
         String userId = "";
 
         try (Connection conn = this.database.getConnection()) {

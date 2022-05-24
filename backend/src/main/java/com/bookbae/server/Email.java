@@ -42,9 +42,10 @@ public class Email {
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return Response.serverError().build();
         }
         EmailResponse resp = new EmailResponse();
-        resp.setDoesEmailExist(emailIsInDatabase);
+        resp.doesEmailExist = emailIsInDatabase;
         return Response.ok(resp).build();
     }
 }

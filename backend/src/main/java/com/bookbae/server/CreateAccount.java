@@ -23,7 +23,7 @@ public class CreateAccount {
             " VALUES(?, NULL, NULL, NULL, NULL, ?, NULL, NULL, NULL);";
     private static String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
 
-    private static String insertNullPreferencesString = "INSERT INTO preference VALUES(0, 0, 0, '', ?);";
+    private static String insertNullPreferencesString = "INSERT INTO preference VALUES(0, 0, 0, 'M_F_NB', ?);";
     private DatabasePoolService database;
 
     @Inject
@@ -37,8 +37,8 @@ public class CreateAccount {
     public Response tryCreate(AccountRequest req) {
 
         // new account data
-        String email = req.getEmail();
-        String password = req.getPassword();
+        String email = req.email;
+        String password = req.password;
         String salt = BCrypt.gensalt();
         String hashedPw = BCrypt.hashpw(password, salt);
         String userId = UUID.randomUUID().toString();

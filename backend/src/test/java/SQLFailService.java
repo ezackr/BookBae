@@ -7,4 +7,9 @@ public class SQLFailService implements DatabasePoolService {
     public Connection getConnection() throws SQLException {
         throw new SQLException();
     }
+
+    @Override
+    public boolean isMockDatabase() {
+        return false;
+    }
 }

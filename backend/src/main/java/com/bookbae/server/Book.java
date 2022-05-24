@@ -55,6 +55,7 @@ public class Book {
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return Response.serverError().build();
         }
         return Response.ok(newList).build();
     }
@@ -97,6 +98,7 @@ public class Book {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return Response.serverError().build();
         }
         return Response.ok(currentList).build();
     }
@@ -138,6 +140,7 @@ public class Book {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return Response.serverError().build();
         }
         return Response.ok(currentList).build();
     }
