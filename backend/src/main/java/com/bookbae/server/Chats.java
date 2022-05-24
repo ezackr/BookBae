@@ -27,17 +27,11 @@ import java.util.ArrayList;
 public class Chats {
     private DatabasePoolService database;
     // TODO: It would be better to not split up the database calls this way but this is simple and good enough for now
-    // return all likeids and liked_user_ids where the client user is the liker and the like is mutual
-    private String getAllChatsWhereClientUserIsLikerString = "SELECT like_id, liked_user_id" +
+    // return all likeids and user_ids where the user is mutually liked
+    private String getAllChatsWhereClientUserHasMutualLikeString = "SELECT like_id, liked_user_id, liker_user_id" +
             " FROM likes" +
             " WHERE is_mutual" +
-            " AND liker_user_id = ?;";
-
-    //returns all likeids and liker_usr_ids where the client user id the liked user and the like is mutual
-    private String getAllChatsWhereClientUserIsLikedString = "SELECT like_id, liker_user_id" +
-            " FROM likes" +
-            " WHERE is_mutual" +
-            " AND liked_user_id = ?;";
+            " AND (liker_user_id = ? OR liked_user_id = ?);";
 
     private String getNameFromUserIdString = "SELECT name" +
             " FROM user_info" +
@@ -56,7 +50,6 @@ public class Chats {
         this.database = database;
     }
 
-    // @TODO: this is so repetitive it hurts I need to learn how to pass database parameters like connection & resultset
     @GET
     @Produces("application/json")
     public Response getAllChats(@Context SecurityContext ctx) {
@@ -65,11 +58,13 @@ public class Chats {
         ChatCardResponse nextChatCardResponse;
 
         try (Connection conn = this.database.getConnection()) {
-            // get all ChatCardResponses for when user is liker
-            PreparedStatement getAllChatsWhereClientUserIsLikerStatement = conn.prepareStatement(
-                    getAllChatsWhereClientUserIsLikerString);
-            getAllChatsWhereClientUserIsLikerStatement.setString(1, clientUserId);
-            ResultSet resultSet = getAllChatsWhereClientUserIsLikerStatement.executeQuery();
+            // get all ChatCardResponses for when user has a mutual like
+            PreparedStatement getAllChatsWhereClientUserHasMutualLikeStatement = conn.prepareStatement(
+                    getAllChatsWhereClientUserHasMutualLikeString);
+            getAllChatsWhereClientUserHasMutualLikeStatement.setString(1, clientUserId);
+            getAllChatsWhereClientUserHasMutualLikeStatement.setString(2, clientUserId);
+            ResultSet resultSet = getAllChatsWhereClientUserHasMutualLikeStatement.executeQuery();
+
             while (resultSet.next()) {
 
                 // create response
@@ -78,38 +73,15 @@ public class Chats {
                 // set like_id
                 nextChatCardResponse.likeId = resultSet.getString("like_id");
 
-                // obtain display name
-                String otherUserId = resultSet.getString("liked_user_id");
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
-                getNameFromUserIdStatement.setString(1, otherUserId);
-                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                assert(nameResultSet.next());
-
-                // set display name
-                nextChatCardResponse.displayName = nameResultSet.getString("name");
-                nameResultSet.close();
-
-                // add to entities
-                entities.add(nextChatCardResponse);
-            }
-
-            resultSet.close();
-
-            // get all ChatCardResponses for when user is liked
-            PreparedStatement getAllChatsWhereClientUserIsLikedStatement = conn.prepareStatement(
-                    getAllChatsWhereClientUserIsLikedString);
-            getAllChatsWhereClientUserIsLikedStatement.setString(1, clientUserId);
-            resultSet = getAllChatsWhereClientUserIsLikedStatement.executeQuery();
-            while (resultSet.next()) {
-
-                // create response
-                nextChatCardResponse = new ChatCardResponse();
-
-                // set like_id
-                nextChatCardResponse.likeId = resultSet.getString("like_id");
+                // find out whether user is liked or liker
+                String otherUserId;
+                if(resultSet.getString("liker_user_id").equals(clientUserId)) { // client user is liker
+                    otherUserId = resultSet.getString("liked_user_id"); // other user is liked
+                } else { // client user is liked
+                    otherUserId = resultSet.getString("liker_user_id"); // other user is liker
+                }
 
                 // obtain display name
-                String otherUserId = resultSet.getString("liker_user_id");
                 PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
                 getNameFromUserIdStatement.setString(1, otherUserId);
                 ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
