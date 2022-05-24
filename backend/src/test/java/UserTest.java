@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserTest extends TestClass {
+public class UserTest extends AbstractTest {
     private MockDatabaseService database;
     private User userResource;
     private AccountRequest accountRequest = super.getExampleAccountRequest();

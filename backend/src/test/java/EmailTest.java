@@ -11,7 +11,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class EmailTest extends TestClass {
+public class EmailTest extends AbstractTest {
     private MockDatabaseService database;
     private Email emailResource;
 

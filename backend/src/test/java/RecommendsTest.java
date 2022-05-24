@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class RecommendsTest extends TestClass {
+public class RecommendsTest extends AbstractTest {
     private MockDatabaseService database;
     private Recommends recommendsResource;
     private int numAccountRequests = 20; // arbitrarily set to 20

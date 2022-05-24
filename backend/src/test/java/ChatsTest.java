@@ -20,7 +20,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ChatsTest extends TestClass {
+public class ChatsTest extends AbstractTest {
     private MockDatabaseService database;
     private Like likeResource;
     private Chats chatsResource;

@@ -22,7 +22,7 @@ import io.jsonwebtoken.Jwts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class LikeTest extends TestClass {
+public class LikeTest extends AbstractTest {
     private MockDatabaseService database;
     private Like likeResource;
     private AccountRequest likerAccountRequest;

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class BookTest extends TestClass {
+public class BookTest extends AbstractTest {
 
     private MockDatabaseService database;
     private AccountRequest accountRequest = getExampleAccountRequest();

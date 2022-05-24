@@ -17,7 +17,7 @@ import io.jsonwebtoken.Jwts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class LoginTest extends TestClass {
+public class LoginTest extends AbstractTest {
     private MockDatabaseService database;
     private SecretKeyService keys;
     private AccountRequest accountRequest;
