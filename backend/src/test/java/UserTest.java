@@ -83,8 +83,8 @@ public class UserTest extends AbstractTest {
 
     @Test
     void sqlFailureTest() {
-        userResource = new User(new SQLFailService());
-        var resp = userResource.getUser(new MockSecurityContext(UUID.randomUUID().toString()));
+        User badResource = new User(new SQLFailService());
+        var resp = badResource.getUser(new MockSecurityContext(UUID.randomUUID().toString()));
         assertEquals(500, resp.getStatus());
     }
 }

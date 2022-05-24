@@ -81,4 +81,11 @@ public class PreferencesTest extends AbstractTest {
         assertEquals(prefs.preferredGender, returnedPrefs.preferredGender);
     }
 
+    @Test
+    void sqlFailureTest() {
+        Preferences badResource = new Preferences(new SQLFailService());
+        var resp = badResource.getPreferences(new MockSecurityContext(userId));
+        assertEquals(500, resp.getStatus());
+    }
+
 }

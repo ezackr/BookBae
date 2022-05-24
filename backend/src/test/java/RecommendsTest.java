@@ -171,4 +171,11 @@ public class RecommendsTest extends AbstractTest {
         assertEquals(1, entities.size()); // should just return NB user
         assertEquals(nonBinUser.getGender(), entities.get(0).getGender());
     }
+
+    @Test
+    void sqlFailureTest() {
+        Recommends badResource = new Recommends(new SQLFailService());
+        var resp = badResource.getRecommends(new MockSecurityContext(userIds[0]));
+        assertEquals(500, resp.getStatus());
+    }
 }

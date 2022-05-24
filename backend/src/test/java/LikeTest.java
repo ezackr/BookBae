@@ -80,6 +80,16 @@ public class LikeTest extends AbstractTest {
 
     }
 
+    @Test
+    void sqlFailureTest() {
+        LikeRequest likeRequest = new LikeRequest();
+        likeRequest.userid = likedUserId;
+
+        Like badResource = new Like(new SQLFailService());
+        var resp = badResource.doLike(new MockSecurityContext(likedUserId), likeRequest);
+        assertEquals(500, resp.getStatus());
+    }
+
     private AccountRequest getLikerAccountRequest() {
         var req = new AccountRequest();
         req.setEmail("liker@example.com");

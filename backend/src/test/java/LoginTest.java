@@ -67,8 +67,8 @@ public class LoginTest extends AbstractTest {
 
     @Test
     void sqlFailureTest() {
-        loginResource = new Login(new SQLFailService(), keys);
-        var resp = loginResource.tryLogin(accountRequest);
+        Login badResource = new Login(new SQLFailService(), keys);
+        var resp = badResource.tryLogin(accountRequest);
         assertEquals(500, resp.getStatus());
     }
 

@@ -42,4 +42,11 @@ public class EmailTest extends AbstractTest {
         EmailResponse emailResponse = (EmailResponse) resp.getEntity();
         assertEquals(true, emailResponse.getDoesEmailExist());
     }
+
+    @Test
+    void sqlFailureTest() {
+        Email badResource = new Email(new SQLFailService());
+        var resp = badResource.checkEmail("example@email.com");
+        assertEquals(500, resp.getStatus());
+    }
 }

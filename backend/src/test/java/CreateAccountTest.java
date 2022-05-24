@@ -45,8 +45,8 @@ public class CreateAccountTest extends AbstractTest {
 
     @Test
     void sqlFailureTest() {
-        resource = new CreateAccount(new SQLFailService());
-        var resp = resource.tryCreate(accountRequest);
+        CreateAccount badResource = new CreateAccount(new SQLFailService());
+        var resp = badResource.tryCreate(accountRequest);
         assertEquals(500, resp.getStatus());
     }
 
