@@ -42,16 +42,8 @@ public class Recommends {
             getRecommendedUsersStatement.setString(1, clientUserId);
             ResultSet resultSet = getRecommendedUsersStatement.executeQuery();
 
-            // no users to recommend!
-            if (!resultSet.next()) {
-                //TODO: what to do in this case?
-                resultSet.close();
-                return Response.status(Response.Status.FORBIDDEN).build(); // is this the right thing to return?
-            }
-
-            do {
+            while(resultSet.next()) {
                 nextUserResponse = new UserResponse();
-                // nextUserResponse.setEmail(resultSet.getString("email")); Do not return email!
                 nextUserResponse.setUserId(resultSet.getString("user_id"));
                 nextUserResponse.setName(resultSet.getString("name"));
                 nextUserResponse.setGender(resultSet.getString("gender"));
@@ -59,9 +51,8 @@ public class Recommends {
                 // saves birthday as a string if not null
                 nextUserResponse.setBirthday(Objects.toString(resultSet.getDate("birthday")));
                 nextUserResponse.setBio(resultSet.getString("bio"));
-                // nextUserResponse.setZipcode(resultSet.getString("zipcode")); Do not return zipcode!
                 entries.add(nextUserResponse);
-            } while(resultSet.next());
+            }
             resultSet.close();
 
         } catch (SQLException e) {

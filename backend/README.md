@@ -38,7 +38,6 @@ The application offers a number of API endpoints accessible from the root path. 
         - Produces: `{“email”: “<email>”, “name”: “<name>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
     - Does Not Return USERID!
     - Birthday must be of the form "yyy-mm-dd"
-- FUTURE OPTION: /user/{userid} : gets the above object for a specific userid
 - /email?email=<email@email.com>
     - GET
       - Returns true if email is in the database, false otherwise
@@ -59,7 +58,6 @@ The application offers a number of API endpoints accessible from the root path. 
     - GET
         - Returns a list of recommended users
         - Produces: `[{“userid”: “<userid>”, “name”: “<name>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”}, ...]`
-        - Returns 403 response code if there are no users to recommend (to be changed to return empty list in future version)
     - Will not return email or zipcode to protect privacy!
 - /like
     - PUT
