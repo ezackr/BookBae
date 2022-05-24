@@ -53,7 +53,11 @@ public class Recommends {
             PreparedStatement getUserPreferencesStatement = conn.prepareStatement(getUserPreferencesString);
             getUserPreferencesStatement.setString(1, clientUserId);
             ResultSet resultSet = getUserPreferencesStatement.executeQuery();
-            resultSet.next(); // assume user exists
+
+            // if no preferences have been set
+            if(!resultSet.next()) {
+                return Response.ok(entries).build();
+            }
 
             int lowerAge = resultSet.getInt("low_target_age");
             int upperAge = resultSet.getInt("high_target_age");
