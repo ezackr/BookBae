@@ -102,6 +102,17 @@ Starting the app:
    - run "npm ci" to add the Jest testing setup.
    - run "npm test" to run tests.
    - Note: all tests run automatically when changes are pushed to branches/main via continuous integration, which is why testing in the local repository is optional.
+  
+5. (POSSIBLE ERROR) ERROR: JAVA_HOME is set to an invalid directory:
+  The following error occurs if the JDK is not properly setup for the Android Studio environment. To fix this issue...
+  For MacOS, if using Catalina and above...
+  - In the command line, run "vim ~/.zshrc"
+  - Add the following lines to the file:
+      export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+      export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+      export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+  For other versions of MacOS, follow the instructions here: https://stackoverflow.com/questions/43211282/using-jdk-that-is-bundled-inside-android-studio-as-java-home-on-mac
+  For Windows, ensure the Android Studio environment is properly setup with a valid path for JDK.
    
 ### Testing, and CI:
 
