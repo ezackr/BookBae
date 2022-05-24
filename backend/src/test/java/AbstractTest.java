@@ -13,7 +13,7 @@ import java.util.Random;
 import com.bookbae.server.service.SecretKeyServiceImpl;
 
 
-public abstract class TestClass {
+public abstract class AbstractTest {
 
     static AccountRequest getExampleAccountRequest() {
         AccountRequest req = new AccountRequest();
