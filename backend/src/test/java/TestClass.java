@@ -26,7 +26,6 @@ public abstract class TestClass {
         var req = new UserRequest();
         req.setEmail("email@uw.edu");
         req.setName("Name Name");
-        req.setPreferredGender("F_NB");
         req.setGender("F");
         req.setFavGenre("Horror");
         req.setBirthday("2000-01-01");
@@ -57,7 +56,6 @@ public abstract class TestClass {
             userRequests[i] = new UserRequest();
             userRequests[i].setEmail(acctRequests[i].getEmail());
             userRequests[i].setName("Name " + i);
-            userRequests[i].setPreferredGender("M_F_NB");
             userRequests[i].setGender("F");
             userRequests[i].setFavGenre("Comedy");
             userRequests[i].setBirthday("2000-01-01");
