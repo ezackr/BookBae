@@ -10,7 +10,7 @@ const EnterPasswordScreen = ({route, navigation}) => {
     const onPress = () => {
         console.log(password)
         Client.createUser(route.params.email, password);
-        navigation.navigate('EnterNameScreen', {
+        navigation.navigate('EnterPhotoScreen', {
             ...route.params,
             password: password
         })
