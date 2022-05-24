@@ -2,6 +2,7 @@ package com.bookbae.server;
 
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.SecurityContext;
@@ -76,6 +77,7 @@ public class User {
     }
 
     @PUT
+    @Consumes("application/json")
     @Produces("application/json")
     public Response putUser(@Context SecurityContext ctx, UserRequest req) {
         if(ctx == null) {
