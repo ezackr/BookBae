@@ -74,7 +74,6 @@ public class UserTest extends TestClass {
         var getRespEntity = (UserResponse) getResp.getEntity();
         assertEquals(userReq.getEmail(), getRespEntity.getEmail());
         assertEquals(userReq.getName(), getRespEntity.getName());
-        assertEquals(userReq.getPreferredGender(), getRespEntity.getPreferredGender());
         assertEquals(userReq.getGender(), getRespEntity.getGender());
         assertEquals(userReq.getFavGenre(), getRespEntity.getFavGenre());
         assertEquals(userReq.getBirthday(), getRespEntity.getBirthday());
@@ -88,5 +87,4 @@ public class UserTest extends TestClass {
         var resp = userResource.getUser(new MockSecurityContext(UUID.randomUUID().toString()));
         assertEquals(500, resp.getStatus());
     }
-
 }
