@@ -45,7 +45,7 @@ public class Email {
             return Response.serverError().build();
         }
         EmailResponse resp = new EmailResponse();
-        resp.setDoesEmailExist(emailIsInDatabase);
+        resp.doesEmailExist = emailIsInDatabase;
         return Response.ok(resp).build();
     }
 }

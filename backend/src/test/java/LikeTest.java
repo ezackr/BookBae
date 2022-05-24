@@ -92,39 +92,39 @@ public class LikeTest extends AbstractTest {
 
     private AccountRequest getLikerAccountRequest() {
         var req = new AccountRequest();
-        req.setEmail("liker@example.com");
-        req.setPassword("badpassword!");
+        req.email = "liker@example.com";
+        req.password = "badpassword!";
         return req;
     }
 
     private UserRequest getLikerUserRequest() {
         var req = new UserRequest();
-        req.setEmail("liker@example.com");
-        req.setName("Liker Name");
-        req.setGender("F");
-        req.setFavGenre("Mystery"); //TODO: what genres has the front end come up with? What are the legal genres?
-        req.setBirthday("1998-10-31");
-        req.setBio("Liker bio");
-        req.setZipcode("12345");
+        req.email = "liker@example.com";
+        req.name = "Liker Name";
+        req.gender = "F";
+        req.favGenre = "Mystery"; //TODO: what genres has the front end come up with? What are the legal genres?
+        req.birthday = "1998-10-31";
+        req.bio = "Liker bio";
+        req.zipcode = "12345";
         return req;
     }
 
     private AccountRequest getLikedAccountRequest() {
         var req = new AccountRequest();
-        req.setEmail("liked@example.com");
-        req.setPassword("anotherbadpassword!");
+        req.email = "liked@example.com";
+        req.password = "anotherbadpassword!";
         return req;
     }
 
     private UserRequest getLikedUserRequest() {
         var req = new UserRequest();
-        req.setEmail("liked@example.com");
-        req.setName("Liked Name");
-        req.setGender("M");
-        req.setFavGenre("Western"); //TODO: what genres has the front end come up with? What are the legal genres?
-        req.setBirthday("1999-02-11");
-        req.setBio("Liked bio");
-        req.setZipcode("12323");
+        req.email = "liked@example.com";
+        req.name = "Liked Name";
+        req.gender = "M";
+        req.favGenre = "Western"; //TODO: what genres has the front end come up with? What are the legal genres?
+        req.birthday = "1999-02-11";
+        req.bio = "Liked bio";
+        req.zipcode = "12323";
         return req;
     }
 

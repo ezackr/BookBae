@@ -54,13 +54,13 @@ public class RecommendsTest extends AbstractTest {
         // - zipcode is 1000i (last number is i)
         for (int i = 0; i < accountRequests.length; i++) {
             userRequests[i] = new UserRequest();
-            userRequests[i].setEmail(accountRequests[0].getEmail());
-            userRequests[i].setName("User " + i);
-            userRequests[i].setGender(i % 2 == 0 ? "M" : "F");
-            userRequests[i].setFavGenre("Comedy");
-            userRequests[i].setBirthday("199" + i + "-01-01");
-            userRequests[i].setBio("Bio " + i);
-            userRequests[i].setZipcode("1000" + i);
+            userRequests[i].email = accountRequests[0].email;
+            userRequests[i].name = "User " + i;
+            userRequests[i].gender = i % 2 == 0 ? "M" : "F";
+            userRequests[i].favGenre = "Comedy";
+            userRequests[i].birthday = "199" + i + "-01-01";
+            userRequests[i].bio = "Bio " + i;
+            userRequests[i].zipcode = "1000" + i;
             userIds[i] = createMockUser(database, accountRequests[i], userRequests[i]);
         }
     }
@@ -109,7 +109,7 @@ public class RecommendsTest extends AbstractTest {
         assertEquals(4, entities.size()); // four users were born between 1996 and 1999
 
         for (UserResponse userResponse : entities) {
-            int yearBorn = Integer.parseInt(userResponse.getBirthday().substring(0, 4));
+            int yearBorn = Integer.parseInt(userResponse.birthday.substring(0, 4));
             assertTrue(yearBorn >= 1996 && yearBorn <= 1999);
         }
     }
@@ -128,7 +128,7 @@ public class RecommendsTest extends AbstractTest {
         ArrayList<UserResponse> entities = (ArrayList<UserResponse>) resp.getEntity();
         assertEquals(numAccountRequests/2, entities.size()); // exactly half of the accounts are female
         for (UserResponse userResponse : entities) {
-            assertEquals("F", userResponse.getGender());
+            assertEquals("F", userResponse.gender);
         }
     }
 
@@ -147,17 +147,17 @@ public class RecommendsTest extends AbstractTest {
     @Test
     void returnsCorrectNBTest() {
         AccountRequest nonBinAccount = new AccountRequest();
-        nonBinAccount.setEmail("example@gmail.com");
-        nonBinAccount.setPassword("password");
+        nonBinAccount.email = "example@gmail.com";
+        nonBinAccount.password = "password";
 
         UserRequest nonBinUser = new UserRequest();
-        nonBinUser.setEmail("example@gmail.com");
-        nonBinUser.setName("User");
-        nonBinUser.setGender("NB");
-        nonBinUser.setFavGenre("Comedy");
-        nonBinUser.setBirthday("1990-01-01");
-        nonBinUser.setBio("Bio");
-        nonBinUser.setZipcode("1000");
+        nonBinUser.email = "example@gmail.com";
+        nonBinUser.name = "User";
+        nonBinUser.gender = "NB";
+        nonBinUser.favGenre = "Comedy";
+        nonBinUser.birthday = "1990-01-01";
+        nonBinUser.bio = "Bio";
+        nonBinUser.zipcode = "1000";
         createMockUser(database, nonBinAccount, nonBinUser);
 
         PreferencesMessage userZeroPrefs = getAllInclusivePreferencesMessage();
@@ -169,7 +169,7 @@ public class RecommendsTest extends AbstractTest {
         assertEquals(200, resp.getStatus());
         ArrayList<UserResponse> entities = (ArrayList<UserResponse>) resp.getEntity();
         assertEquals(1, entities.size()); // should just return NB user
-        assertEquals(nonBinUser.getGender(), entities.get(0).getGender());
+        assertEquals(nonBinUser.gender, entities.get(0).gender);
     }
 
     @Test

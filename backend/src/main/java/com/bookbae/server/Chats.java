@@ -76,7 +76,7 @@ public class Chats {
                 nextChatCardResponse = new ChatCardResponse();
 
                 // set like_id
-                nextChatCardResponse.setLikeId(resultSet.getString("like_id"));
+                nextChatCardResponse.likeId = resultSet.getString("like_id");
 
                 // obtain display name
                 String otherUserId = resultSet.getString("liked_user_id");
@@ -86,7 +86,7 @@ public class Chats {
                 assert(nameResultSet.next());
 
                 // set display name
-                nextChatCardResponse.setDisplayName(nameResultSet.getString("name"));
+                nextChatCardResponse.displayName = nameResultSet.getString("name");
                 nameResultSet.close();
 
                 // add to entities
@@ -106,7 +106,7 @@ public class Chats {
                 nextChatCardResponse = new ChatCardResponse();
 
                 // set like_id
-                nextChatCardResponse.setLikeId(resultSet.getString("like_id"));
+                nextChatCardResponse.likeId = resultSet.getString("like_id");
 
                 // obtain display name
                 String otherUserId = resultSet.getString("liker_user_id");
@@ -116,7 +116,7 @@ public class Chats {
                 assert(nameResultSet.next());
 
                 // set display name
-                nextChatCardResponse.setDisplayName(nameResultSet.getString("name"));
+                nextChatCardResponse.displayName = nameResultSet.getString("name");
                 nameResultSet.close();
 
                 // add to entities
@@ -146,10 +146,10 @@ public class Chats {
 
             while (resultSet.next()) {
                 nextChatLine = new ChatLineResponse();
-                nextChatLine.setText(resultSet.getString("line_text"));
-                nextChatLine.setNthMessage(resultSet.getInt("line_id"));
-                nextChatLine.setTimestamp(resultSet.getTimestamp("timestamp"));
-                nextChatLine.setUserId(resultSet.getString("sender_user_id"));
+                nextChatLine.text = resultSet.getString("line_text");
+                nextChatLine.nthMessage = resultSet.getInt("line_id");
+                nextChatLine.timestamp = resultSet.getTimestamp("timestamp");
+                nextChatLine.userId = resultSet.getString("sender_user_id");
                 entities.add(nextChatLine);
             }
 
@@ -170,7 +170,7 @@ public class Chats {
         try (Connection conn = this.database.getConnection()) {
             // text, timestamp, like_id, sender_user_id
             PreparedStatement insertChatBetweenTwoUsersStatement = conn.prepareStatement(insertChatBetweenTwoUsersString);
-            insertChatBetweenTwoUsersStatement.setString(1, chatRequest.getText());
+            insertChatBetweenTwoUsersStatement.setString(1, chatRequest.text);
             insertChatBetweenTwoUsersStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
             insertChatBetweenTwoUsersStatement.setString(3, likeId);
             insertChatBetweenTwoUsersStatement.setString(4, clientUserId);

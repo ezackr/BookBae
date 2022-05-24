@@ -60,13 +60,13 @@ public class User {
             }
 
              // populate resp object
-             resp.setEmail(resultSet.getString("email"));
-             resp.setName(resultSet.getString("name"));
-             resp.setGender(resultSet.getString("gender"));
-             resp.setFavGenre(resultSet.getString("fav_genre"));
-             resp.setBirthday(Objects.toString(resultSet.getDate("birthday"))); // saves birthday as a string if not null
-             resp.setBio(resultSet.getString("bio"));
-             resp.setZipcode(resultSet.getString("zipcode"));
+             resp.email = resultSet.getString("email");
+             resp.name = resultSet.getString("name");
+             resp.gender = resultSet.getString("gender");
+             resp.favGenre = resultSet.getString("fav_genre");
+             resp.birthday = Objects.toString(resultSet.getDate("birthday")); // saves birthday as a string if not null
+             resp.bio = resultSet.getString("bio");
+             resp.zipcode = resultSet.getString("zipcode");
              resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,13 +86,13 @@ public class User {
             // update user info
             String userId = ctx.getUserPrincipal().getName();
             PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
-            updateUserInfoStatement.setString(1, req.getName());
-            updateUserInfoStatement.setString(2, req.getGender());
-            updateUserInfoStatement.setString(3, req.getFavGenre());
-            updateUserInfoStatement.setDate(4, java.sql.Date.valueOf(req.getBirthday()));
-            updateUserInfoStatement.setString(5, req.getBio());
-            updateUserInfoStatement.setString(6, req.getEmail());
-            updateUserInfoStatement.setString(7, req.getZipcode());
+            updateUserInfoStatement.setString(1, req.name);
+            updateUserInfoStatement.setString(2, req.gender);
+            updateUserInfoStatement.setString(3, req.favGenre);
+            updateUserInfoStatement.setDate(4, java.sql.Date.valueOf(req.birthday));
+            updateUserInfoStatement.setString(5, req.bio);
+            updateUserInfoStatement.setString(6, req.email);
+            updateUserInfoStatement.setString(7, req.zipcode);
             updateUserInfoStatement.setString(8, userId);
             updateUserInfoStatement.executeUpdate();
         } catch (SQLException e) {

@@ -70,7 +70,7 @@ public class ChatsTest extends AbstractTest {
 
         // ChatCardResponse arraylist should contain chatcardresponse of 1st user
         ChatCardResponse userOneChatCard = chatCardResponses.get(0);
-        assertEquals(userOneChatCard.getDisplayName(), userRequests[1].getName());
+        assertEquals(userOneChatCard.displayName, userRequests[1].name);
 
         // get chats for 1st user
         resp = chatsResource.getAllChats(new MockSecurityContext(userIds[1]));
@@ -82,7 +82,7 @@ public class ChatsTest extends AbstractTest {
 
         // ChatCardResponse arraylist should contain chatcardresponse of 0th user
         ChatCardResponse userZeroChatCard = chatCardResponses.get(0);
-        assertEquals(userZeroChatCard.getDisplayName(), userRequests[0].getName());
+        assertEquals(userZeroChatCard.displayName, userRequests[0].name);
     }
 
     @Test
@@ -92,11 +92,11 @@ public class ChatsTest extends AbstractTest {
         var resp = chatsResource.getAllChats(new MockSecurityContext(userIds[0]));
         assertEquals(200, resp.getStatus());
         ArrayList<ChatCardResponse> chatCardResponses = (ArrayList<ChatCardResponse>) resp.getEntity();
-        String likeId = chatCardResponses.get(0).getLikeId();
+        String likeId = chatCardResponses.get(0).likeId;
 
         // create ChatRequest
         var chatRequest = new ChatRequest();
-        chatRequest.setText("Hello World!");
+        chatRequest.text = "Hello World!";
 
         // put chat "Hello World!" from user 0 to user 1
         resp = chatsResource.putChat(new MockSecurityContext(userIds[0]), likeId, chatRequest);
@@ -107,11 +107,11 @@ public class ChatsTest extends AbstractTest {
     void basicPutThenGetChatTest(){
         // get likeId of 0th user's chat with 1st user
         var resp = chatsResource.getAllChats(new MockSecurityContext(userIds[0]));
-        String likeId = ((ArrayList<ChatCardResponse>) resp.getEntity()).get(0).getLikeId();
+        String likeId = ((ArrayList<ChatCardResponse>) resp.getEntity()).get(0).likeId;
 
         // create ChatRequest
         var chatRequest = new ChatRequest();
-        chatRequest.setText("Hello World!");
+        chatRequest.text = "Hello World!";
 
         // put chat "Hello World!" from user 0 to user 1
         chatsResource.putChat(new MockSecurityContext(userIds[0]), likeId, chatRequest);
@@ -122,9 +122,9 @@ public class ChatsTest extends AbstractTest {
         ChatLineResponse firstLine = chatLines.get(0);
 
         // check values
-        assertEquals(firstLine.getText(), "Hello World!");
-        assertEquals(firstLine.getUserId(), userIds[0]);
-        assertEquals(firstLine.getNthMessage(), 1);
+        assertEquals("Hello World!", firstLine.text);
+        assertEquals(userIds[0], firstLine.userId);
+        assertEquals(1, firstLine.nthMessage);
 
     }
 

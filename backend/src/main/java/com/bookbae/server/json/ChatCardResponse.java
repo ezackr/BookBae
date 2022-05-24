@@ -4,37 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 
 public class ChatCardResponse {
-    private String displayName;
-    private String photoUrl;
-    private String likeId;
-
     @JsonProperty("displayName")
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
-    @JsonProperty("displayName")
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
+    public String displayName;
 
     @JsonProperty("photoUrl")
-    public String getPhotoUrl() {
-        return this.photoUrl;
-    }
-
-    @JsonProperty("photoUrl")
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
+    public String photoUrl;
 
     @JsonProperty("likeId")
-    public String getLikeId() {
-        return likeId;// == null ? null : this.likeId.toString();
-    }
+    public String likeId;
 
-    @JsonProperty("likeId")
-    public void setLikeId(String likeId) {
-        this.likeId = likeId;
-    }
 }

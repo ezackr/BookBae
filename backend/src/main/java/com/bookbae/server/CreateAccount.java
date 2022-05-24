@@ -37,8 +37,8 @@ public class CreateAccount {
     public Response tryCreate(AccountRequest req) {
 
         // new account data
-        String email = req.getEmail();
-        String password = req.getPassword();
+        String email = req.email;
+        String password = req.password;
         String salt = BCrypt.gensalt();
         String hashedPw = BCrypt.hashpw(password, salt);
         String userId = UUID.randomUUID().toString();

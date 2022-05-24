@@ -83,13 +83,13 @@ public class Recommends {
             // load up user preferences into json response
             while(resultSet.next()) {
                 nextUserResponse = new UserResponse();
-                nextUserResponse.setUserId(resultSet.getString("user_id"));
-                nextUserResponse.setName(resultSet.getString("name"));
-                nextUserResponse.setGender(resultSet.getString("gender"));
-                nextUserResponse.setFavGenre(resultSet.getString("fav_genre"));
+                nextUserResponse.userId = resultSet.getString("user_id");
+                nextUserResponse.name = resultSet.getString("name");
+                nextUserResponse.gender = resultSet.getString("gender");
+                nextUserResponse.favGenre = resultSet.getString("fav_genre");
                 // saves birthday as a string if not null
-                nextUserResponse.setBirthday(Objects.toString(resultSet.getDate("birthday")));
-                nextUserResponse.setBio(resultSet.getString("bio"));
+                nextUserResponse.birthday = Objects.toString(resultSet.getDate("birthday"));
+                nextUserResponse.bio = resultSet.getString("bio");
                 entries.add(nextUserResponse);
             }
             resultSet.close();
