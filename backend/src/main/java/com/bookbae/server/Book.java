@@ -95,6 +95,7 @@ public class Book {
 
         // get current books and user id
         BookList currentList = (BookList) getBooks(ctx).getEntity();
+        //TODO: can we pull the above out to a helper method
         String clientUserId = ctx.getUserPrincipal().getName();
 
         // nothing to add
@@ -106,6 +107,8 @@ public class Book {
         for (BookListEntry ble : toAddList.entries) {
             addBooksBuffer.append(String.format("('%s', '%s'),", ble.bookId, clientUserId));
         }
+
+        //TODO: sanitize this better? IDK
 
         // remove last comma and add semicolon
         addBooksBuffer.deleteCharAt(addBooksBuffer.length() - 1);
