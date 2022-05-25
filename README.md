@@ -46,48 +46,30 @@ The main BookBae project has a "Projects" tab which outlines the milestones with
 
 ### Set up Instructions (Backend)
 
-These are the set up instructions to set up an instance of our server. For the final turn in, we will host the server on Azure.
-
-1. Build the backend .war file
-    - In command line, navigate to the backend folder
-    - run "./gradlew build" this command will build an .war file called api.war within backend/build/libs
-    
-2. Download Glassfish, our interim server, and start the server
-    - Go to https://projects.eclipse.org/projects/ee4j.glassfish/downloads and download Glassfish version 6.2.5 Full Profile
-    - Extract the glassfish-6.2.5.zip to a safe place
-    - In command line, navigate to the glassfish-6.2.5 folder
-    - In command line, run the following command:
-      On Unix: glassfish6/glassfish/bin/asadmin start-domain
-      On Windows: glassfish6\glassfish\bin\asadmin start-domain
-      
-3. Upload the .war file
-   - In your browser, navigate to localhost:4848. This will pull up the Glassfish configuration portal
-   - On the left navigation bar, click "Application" to navigate to the application page
-   - Click "deploy". This will prompt you to upload a .war file. Chose the api.war file within backend/build/libs
-   - In the "Context Path" blank, write "/api"
-   - Click "Ok" to save
-    
-4. Configure properties
-    - On the left navigation bar, click "server-config". It is the last option.
-    - Click JVM Settings
-    - Click the JVM Options tab 
-    - delete the javax.net.ssl.keyStore and javax.net.ssl.trustStore properties
-    - Add the following four properties. Contact BookBae team for password.
-      "-Dbookbae.server_url=bookbaeserver.database.windows.net'
-      "-Dbookbae.database_name=BookBaeDB'
-      "-Dbookbae.username=TeamBookBae@bookbaeserver'
-      "-Dbookbae.password=<password>'
-    - Click "Ok" to save
-    - Press the "Restart Server" button to save changes
-      
-    At this point your server is set up and ready to take requests!
-   
-5. (Optional) Test your server connection
-    - From the Application page (Click "Application" on left navigation tab)
-    - Click "Launch". This will load a page with two launch links to choose from.
-    - Click the first link, the one at port 8080
-    - add "/v1/user" to the url
-    - If you see a 401 server error (as opposed to a 404 server error) you are properly configured. At this point, the server is denying your request only because you have not provided the appropriate token.
+1. Generate a new, project-specific ssh key
+  - On macOS or Linux, use your favorite terminal to navigate to the directory `~/.ssh`
+  - On Windows, use Powershell to navigate to `~/.ssh`
+    - Regardless of what terminal environment is used on Windows, for this specific use case, the native port of OpenSSH should be used via PowerShell
+    - macOS and Linux operating systems provide their own ssh implementation which is almost certainly OpenSSH as well
+  - `ssh-keygen -f bookbae`
+    - If it asks if you wish to overwrite, you likely should decline and replace `bookbae` in the above command with another name - if you do so, note that name down for later
+  - Open the ssh config file `~/.ssh/config` for editing
+2. Configure your ssh
+  - Append the following to the file
+```
+Host bookbae
+Hostname <hostname>
+IdentityFile ~/.ssh/bookbae
+LocalForward 4848 127.0.0.1:4848
+LocalForward 8080 127.0.0.1:8080
+ExitOnForwardFailure yes
+```
+  - If you noted down an alternate name earlier, you should substitute it for "bookbae" in the line beginning with "IdentityFile"
+  - To get the hostname, please contact the BookBae Team
+3. Connect
+  - Open the file `~/.ssh/bookbae.pub`. This is your public key. If you noted down an alternate name, substitute it. Contact the BookBae team with the contents of this public key file so they may add it to the list of accepted keys. Once they have added it, you are free to move on to the next step
+  - Type `ssh bookbae` into your favorite terminal or PowerShell, depending
+  - Until you close the ssh connection, you will now be able to connect to the production glassfish server as if it were running on your local machine! Visit http://localhost:4848 to view the Admin Console
 
 ### Set up Instructions (Frontend)
    
