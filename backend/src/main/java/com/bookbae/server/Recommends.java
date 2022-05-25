@@ -23,8 +23,14 @@ import jakarta.inject.Inject;
 @Path("/recommends")
 public class Recommends {
     private DatabasePoolService database;
-    private String getUserPreferencesString = "SELECT * FROM preference WHERE user_id = ?;";
-    private String getRecommendedsString = "SELECT * FROM user_info " +
+
+    private static final String GET_USER_PREFERENCES = "SELECT * " +
+            "FROM preference " +
+            "WHERE user_id = ?;";
+
+    // not static final because we need to swap out GETDATE for CURRENT_TIMESTAMP for testing
+    private String get_recommendations = "SELECT * " +
+            "FROM user_info " +
             "WHERE user_id != ? " +
             "AND DATEDIFF(year, birthday, GETDATE()) >= ? " +
             "AND DATEDIFF(year, birthday, GETDATE()) <= ? " +
@@ -36,7 +42,7 @@ public class Recommends {
 
         // GETDATE is Microsoft's syntax, CURRENT_TIMESTAMP is H2's syntax
         if (database.isMockDatabase()) {
-            getRecommendedsString = getRecommendedsString.replace("GETDATE", "CURRENT_TIMESTAMP");
+            get_recommendations = get_recommendations.replace("GETDATE", "CURRENT_TIMESTAMP");
         }
     }
 
@@ -50,7 +56,7 @@ public class Recommends {
         try (Connection conn = this.database.getConnection()) {
 
             // get user's preferences
-            PreparedStatement getUserPreferencesStatement = conn.prepareStatement(getUserPreferencesString);
+            PreparedStatement getUserPreferencesStatement = conn.prepareStatement(GET_USER_PREFERENCES);
             getUserPreferencesStatement.setString(1, clientUserId);
             ResultSet resultSet = getUserPreferencesStatement.executeQuery();
 
@@ -65,7 +71,7 @@ public class Recommends {
             String[] preferredGenders = resultSet.getString("preferred_gender").split("_");
 
             // extend getRecommendsString to fit number of preferred genders
-            StringBuffer getRecommendsBuffer = new StringBuffer(getRecommendedsString);
+            StringBuffer getRecommendsBuffer = new StringBuffer(get_recommendations);
             getRecommendsBuffer.append("(");
             for(int i = 0; i < preferredGenders.length; i++) {
                 getRecommendsBuffer.append(" gender = ? OR");

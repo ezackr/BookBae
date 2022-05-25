@@ -23,11 +23,16 @@ import jakarta.inject.Inject;
 public class Book {
     private DatabasePoolService database;
 
-    private String getBooksString = "SELECT DISTINCT book_id FROM user_book WHERE user_id = ?;";
+    private static final String GET_BOOKS = "SELECT DISTINCT book_id " +
+            "FROM user_book " +
+            "WHERE user_id = ?;";
 
-    private String addBooksString = "INSERT INTO user_book VALUES ";
+    private static final String ADD_BOOKS = "INSERT INTO user_book " +
+            "VALUES ";
 
-    private String removeBooksString = "DELETE FROM user_book WHERE user_id = ? AND (";
+    private static final String REMOVE_BOOKS = "DELETE FROM user_book " +
+            "WHERE user_id = ? " +
+            "AND (";
 
     @Inject
     public Book(DatabasePoolService database) {
@@ -42,7 +47,7 @@ public class Book {
         String clientUserId = ctx.getUserPrincipal().getName();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement getBooksStatement = conn.prepareStatement(getBooksString);
+            PreparedStatement getBooksStatement = conn.prepareStatement(GET_BOOKS);
             getBooksStatement.setString(1, clientUserId);
             ResultSet resultSet = getBooksStatement.executeQuery();
 
@@ -76,7 +81,7 @@ public class Book {
             return Response.ok(currentList).build();
 
         // add list of books to insert statement
-        StringBuffer addBooksBuffer = new StringBuffer(addBooksString);
+        StringBuffer addBooksBuffer = new StringBuffer(ADD_BOOKS);
         for (BookListEntry ble : toAddList.entries) {
             addBooksBuffer.append(String.format("('%s', '%s'),", ble.bookId, clientUserId));
         }
@@ -115,7 +120,7 @@ public class Book {
             return Response.ok(currentList).build();
 
         // add list of books to remove statement
-        StringBuffer removeBooksBuffer = new StringBuffer(removeBooksString);
+        StringBuffer removeBooksBuffer = new StringBuffer(REMOVE_BOOKS);
         for (BookListEntry ble : toRemoveList.entries) {
             removeBooksBuffer.append(String.format("book_id = '%s' OR ", ble.bookId));
         }

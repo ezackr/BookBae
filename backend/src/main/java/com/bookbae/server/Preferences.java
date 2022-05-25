@@ -20,9 +20,11 @@ import jakarta.inject.Inject;
 @Path("/preferences")
 public class Preferences {
     private DatabasePoolService database;
-    private String getPreferencesString = "SELECT * FROM preference WHERE user_id = ?;";
+    private String GET_PREFERENCES = "SELECT * " +
+            "FROM preference " +
+            "WHERE user_id = ?;";
 
-    private String setPreferencesString = "UPDATE preference " +
+    private String SET_PREFERENCES = "UPDATE preference " +
             "SET low_target_age = ?, high_target_age = ?, " +
             "within_x_miles = ?, preferred_gender = ? " +
             "WHERE user_id = ?;";
@@ -40,7 +42,7 @@ public class Preferences {
         String clientUserId = ctx.getUserPrincipal().getName();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement getPreferencesStatement = conn.prepareStatement(getPreferencesString);
+            PreparedStatement getPreferencesStatement = conn.prepareStatement(GET_PREFERENCES);
             getPreferencesStatement.setString(1, clientUserId);
             ResultSet resultSet = getPreferencesStatement.executeQuery();
 
@@ -69,7 +71,7 @@ public class Preferences {
         String clientUserId = ctx.getUserPrincipal().getName();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement setPreferencesStatement = conn.prepareStatement(setPreferencesString);
+            PreparedStatement setPreferencesStatement = conn.prepareStatement(SET_PREFERENCES);
             setPreferencesStatement.setInt(1, prefs.lowerAgeLimit);
             setPreferencesStatement.setInt(2, prefs.upperAgeLimit);
             setPreferencesStatement.setInt(3, prefs.withinXMiles);
