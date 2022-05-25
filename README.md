@@ -49,12 +49,12 @@ The main BookBae project has a "Projects" tab which outlines the milestones with
 1. Generate a new, project-specific ssh key
   - On macOS or Linux, use your favorite terminal to navigate to the directory `~/.ssh`
   - On Windows, use Powershell to navigate to `~/.ssh`
-    - Regardless of what terminal environment is used on Windows, for this specific use case, the native port of OpenSSH should be used via PowerShell
+    - Regardless of what terminal environment is used on Windows (MinGW, WSL, Cygwin), for this specific use case, the native port of OpenSSH should be used via PowerShell
     - macOS and Linux operating systems provide their own ssh implementation which is almost certainly OpenSSH as well
   - `ssh-keygen -f bookbae`
     - If it asks if you wish to overwrite, you likely should decline and replace `bookbae` in the above command with another name - if you do so, note that name down for later
-  - Open the ssh config file `~/.ssh/config` for editing
 2. Configure your ssh
+  - Open the ssh config file `~/.ssh/config` for editing
   - Append the following to the file
 ```
 Host bookbae
@@ -64,12 +64,12 @@ LocalForward 4848 127.0.0.1:4848
 LocalForward 8080 127.0.0.1:8080
 ExitOnForwardFailure yes
 ```
-  - If you noted down an alternate name earlier, you should substitute it for "bookbae" in the line beginning with "IdentityFile"
-  - To get the hostname, please contact the BookBae Team
+  - If you noted down an alternate name earlier, you should substitute it for "bookbae" in the line beginning with "IdentityFile", but not the line beginning "Host"
+  - Contact the BookBae Team for the hostname
 3. Connect
   - Open the file `~/.ssh/bookbae.pub`. This is your public key. If you noted down an alternate name, substitute it. Contact the BookBae team with the contents of this public key file so they may add it to the list of accepted keys. Once they have added it, you are free to move on to the next step
   - Type `ssh bookbae` into your favorite terminal or PowerShell, depending
-  - Until you close the ssh connection, you will now be able to connect to the production glassfish server as if it were running on your local machine! Visit http://localhost:4848 to view the Admin Console
+  - Until you close the ssh connection, you will now be able to connect to the production GlassFish server as if it were running on your local machine! Visit http://localhost:4848 to view the Admin Console
 
 ### Set up Instructions (Frontend)
    
