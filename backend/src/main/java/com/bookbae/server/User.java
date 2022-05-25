@@ -25,10 +25,10 @@ import java.util.Objects;
 public class User {
     
     private DatabasePoolService database;
-    private static String retrieveUserInfoString = "SELECT * " +
+    private static final String RETRIEVE_USER_INFO = "SELECT * " +
             "FROM user_info " +
             "WHERE user_id = ?;";
-    private static String updateUserInfoString = "UPDATE user_info " +
+    private static final String UPDATE_USER_INFO = "UPDATE user_info " +
             "SET name = ?, gender = ?, fav_genre = ?," +
             "birthday = ?, bio = ?, email = ?, zipcode = ? " +
             "WHERE user_id = ?;";
@@ -50,7 +50,7 @@ public class User {
         try (Connection conn = this.database.getConnection()) {
             // retrieve user info
             String userId = ctx.getUserPrincipal().getName();
-            PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(retrieveUserInfoString);
+            PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(RETRIEVE_USER_INFO);
             retrieveUserInfoStatement.setString(1, userId);
             ResultSet resultSet = retrieveUserInfoStatement.executeQuery();
 
@@ -87,7 +87,7 @@ public class User {
         try (Connection conn = this.database.getConnection()) {
             // update user info
             String userId = ctx.getUserPrincipal().getName();
-            PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
+            PreparedStatement updateUserInfoStatement = conn.prepareStatement(UPDATE_USER_INFO);
             updateUserInfoStatement.setString(1, req.name);
             updateUserInfoStatement.setString(2, req.gender);
             updateUserInfoStatement.setString(3, req.favGenre);

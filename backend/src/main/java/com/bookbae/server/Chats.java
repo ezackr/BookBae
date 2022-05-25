@@ -27,24 +27,24 @@ import java.util.ArrayList;
 public class Chats {
     private DatabasePoolService database;
 
-    private String photoUrlBase = "https://bookbaephotos.blob.core.windows.net/userphotos/";
+    private static final String PHOTO_BASE_URL = "https://bookbaephotos.blob.core.windows.net/userphotos/";
 
-    private String getAllChatsWhereClientUserHasMutualLikeString = "SELECT like_id, liked_user_id, liker_user_id" +
-            " FROM likes" +
-            " WHERE is_mutual" +
-            " AND (liker_user_id = ? OR liked_user_id = ?);";
+    private static final String GET_ALL_CHATS_FOR_USER = "SELECT like_id, liked_user_id, liker_user_id " +
+            "FROM likes " +
+            "WHERE is_mutual " +
+            "AND (liker_user_id = ? OR liked_user_id = ?);";
 
-    private String getNameFromUserIdString = "SELECT name" +
-            " FROM user_info" +
-            " WHERE user_id = ?;";
+    private static final String GET_NAME_FROM_USERID = "SELECT name " +
+            "FROM user_info " +
+            "WHERE user_id = ?;";
 
-    private String getChatsBetweenTwoUsersString = "SELECT *" +
-            " FROM chat_line" +
-            " WHERE like_id = ?;";
+    private static final String GET_CHATS_BETWEEN_USERS = "SELECT * " +
+            "FROM chat_line " +
+            "WHERE like_id = ?;";
 
-    private String insertChatBetweenTwoUsersString = "INSERT INTO chat_line(line_text, timestamp, like_id, sender_user_id)" +
+    private static final String INSERT_CHAT_BETWEEN_USERS = "INSERT INTO chat_line(line_text, timestamp, like_id, sender_user_id) " +
             // text, timestamp, like_id, sender_user_id
-            " VALUES(?, ?, ?, ?);";
+            "VALUES(?, ?, ?, ?);";
 
     @Inject
     public Chats(DatabasePoolService database) {
@@ -60,11 +60,11 @@ public class Chats {
 
         try (Connection conn = this.database.getConnection()) {
             // get all ChatCardResponses for when user has a mutual like
-            PreparedStatement getAllChatsWhereClientUserHasMutualLikeStatement = conn.prepareStatement(
-                    getAllChatsWhereClientUserHasMutualLikeString);
-            getAllChatsWhereClientUserHasMutualLikeStatement.setString(1, clientUserId);
-            getAllChatsWhereClientUserHasMutualLikeStatement.setString(2, clientUserId);
-            ResultSet resultSet = getAllChatsWhereClientUserHasMutualLikeStatement.executeQuery();
+            PreparedStatement getAllChatsForUserStatement = conn.prepareStatement(
+                    GET_ALL_CHATS_FOR_USER);
+            getAllChatsForUserStatement.setString(1, clientUserId);
+            getAllChatsForUserStatement.setString(2, clientUserId);
+            ResultSet resultSet = getAllChatsForUserStatement.executeQuery();
 
             while (resultSet.next()) {
 
@@ -83,10 +83,10 @@ public class Chats {
                 }
 
                 // set photoUrl
-                nextChatCardResponse.photoUrl = photoUrlBase + otherUserId;
+                nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
                 // obtain display name
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
                 getNameFromUserIdStatement.setString(1, otherUserId);
                 ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
                 assert(nameResultSet.next());
@@ -115,9 +115,9 @@ public class Chats {
         ArrayList<ChatLineResponse> entities = new ArrayList<>();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement getChatsBetweenTwoUsersStatement = conn.prepareStatement(getChatsBetweenTwoUsersString);
-            getChatsBetweenTwoUsersStatement.setString(1, likeId);
-            ResultSet resultSet = getChatsBetweenTwoUsersStatement.executeQuery();
+            PreparedStatement getChatsBetweenUsersStatement = conn.prepareStatement(GET_CHATS_BETWEEN_USERS);
+            getChatsBetweenUsersStatement.setString(1, likeId);
+            ResultSet resultSet = getChatsBetweenUsersStatement.executeQuery();
             ChatLineResponse nextChatLine;
 
             while (resultSet.next()) {
@@ -145,12 +145,12 @@ public class Chats {
 
         try (Connection conn = this.database.getConnection()) {
             // text, timestamp, like_id, sender_user_id
-            PreparedStatement insertChatBetweenTwoUsersStatement = conn.prepareStatement(insertChatBetweenTwoUsersString);
-            insertChatBetweenTwoUsersStatement.setString(1, chatRequest.text);
-            insertChatBetweenTwoUsersStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-            insertChatBetweenTwoUsersStatement.setString(3, likeId);
-            insertChatBetweenTwoUsersStatement.setString(4, clientUserId);
-            insertChatBetweenTwoUsersStatement.execute();
+            PreparedStatement insertChatBetweenUsersStatement = conn.prepareStatement(INSERT_CHAT_BETWEEN_USERS);
+            insertChatBetweenUsersStatement.setString(1, chatRequest.text);
+            insertChatBetweenUsersStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            insertChatBetweenUsersStatement.setString(3, likeId);
+            insertChatBetweenUsersStatement.setString(4, clientUserId);
+            insertChatBetweenUsersStatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();

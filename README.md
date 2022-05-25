@@ -1,22 +1,30 @@
 # BookBae
 
+<a href="https://github.com/ezackr/BookBae/blob/main/UserManual.md">User Manual</a>
+
+<a href="https://github.com/ezackr/BookBae/blob/main/CONTRIBUTING.md">Developer Guidelines</a>
+
 ## Layout:
 
 The repository is primarily organized by functionality, with the main sections being frontend, backend, and database. A short description of each internal folder is provided below:
 
 ### Frontend:
+<a href="https://github.com/ezackr/BookBae/blob/main/frontend/README.md">Frontend Readme</a>
 
 The *Frontend* folder stores all code relevant to the frontend of the project. This includes JS files, CSS files, markup, and more. As a general rule, the *Frontend* folder contains the code that the client will interact with (e.g., GUI). The *Frontend* folder should **not** store any of the project's functional Backend, which the user does not see. 
 
 ### Backend:
+<a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
 
 The *Backend* folder stores all code relevant to the backend of the project. This code is more functional than the frontend and is not accessible to the user. Instead, the *Backend* folder contains the code necessary for the application to operate properly (e.g., user-matching algorithms). For this project, backend code is primarily written in Java. The *Backend* folder also contains subfolders separating the Java code from its test suites (see ./backend/README.md for more).
 
 ### Database:
+<a href="https://github.com/ezackr/BookBae/blob/main/database/README.md">Database Readme</a>
 
 The *Database* folder holds SQL to manipulate the database. This includes a SQL file to create the database, files to test the database, and more.
 
 ### Prototypes:
+<a href="https://github.com/ezackr/BookBae/blob/main/prototypes/README.md">Prototypes Readme</a>
 
 The *Prototypes* folder stores semi-relevant code that demonstrates a core project function. For example, the "googleAPI-tutorial.js" file demonstrates how to use the Google Books API to fetch information used in the app. Although the exact implementations are not used directly in the app, they depict how the  necessary tools function. 
 

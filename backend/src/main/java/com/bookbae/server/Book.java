@@ -18,22 +18,41 @@ import java.sql.SQLException;
 import java.lang.StringBuffer;
 import jakarta.inject.Inject;
 
+/**
+ * Provides endpoints for retrieving, saving and removing books from a user's bookshelf.
+ */
 @SecuredResource
 @Path("/book")
 public class Book {
     private DatabasePoolService database;
 
-    private String getBooksString = "SELECT DISTINCT book_id FROM user_book WHERE user_id = ?;";
+    private static final String GET_BOOKS = "SELECT DISTINCT book_id " +
+            "FROM user_book " +
+            "WHERE user_id = ?;";
 
-    private String addBooksString = "INSERT INTO user_book VALUES ";
+    private static final String ADD_BOOKS = "INSERT INTO user_book " +
+            "VALUES ";
 
-    private String removeBooksString = "DELETE FROM user_book WHERE user_id = ? AND (";
+    private static final String REMOVE_BOOKS = "DELETE FROM user_book " +
+            "WHERE user_id = ? " +
+            "AND (";
 
+    /**
+     * Creates a Book resource that acts on the given database.
+     * @param database
+     */
     @Inject
     public Book(DatabasePoolService database) {
         this.database = database;
     }
 
+    /**
+     * Retrieves a list of book ids for a given user.
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status that contains a list of book ids
+     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status
+     * @see <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a> for the specific values returned by the endpoint
+     */
     @Path("/get")
     @GET
     @Produces("application/json")
@@ -42,7 +61,7 @@ public class Book {
         String clientUserId = ctx.getUserPrincipal().getName();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement getBooksStatement = conn.prepareStatement(getBooksString);
+            PreparedStatement getBooksStatement = conn.prepareStatement(GET_BOOKS);
             getBooksStatement.setString(1, clientUserId);
             ResultSet resultSet = getBooksStatement.executeQuery();
 
@@ -60,7 +79,14 @@ public class Book {
         return Response.ok(newList).build();
     }
 
-    // this can add duplicates if a duplicate exists in toAddList
+    /**
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param toAddList A list of books to save to the user's bookshelf
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status that contains the most updated list of books in a user's bookshelf
+     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status
+     * @see <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a> for the specific values returned by the endpoint
+     */
     @Path("/add")
     @PUT
     @Produces("application/json")
@@ -77,7 +103,7 @@ public class Book {
             return Response.ok(currentList).build();
 
         // add list of books to insert statement
-        StringBuffer addBooksBuffer = new StringBuffer(addBooksString);
+        StringBuffer addBooksBuffer = new StringBuffer(ADD_BOOKS);
         for (BookListEntry ble : toAddList.entries) {
             addBooksBuffer.append(String.format("('%s', '%s'),", ble.bookId, clientUserId));
         }
@@ -103,6 +129,14 @@ public class Book {
         return Response.ok(currentList).build();
     }
 
+    /**
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param toRemoveList A list of books to remove from the user's bookshelf
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status that contains the most updated list of books in a user's bookshelf
+     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status
+     * @see <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a> for the specific values returned by the endpoint
+     */
     @Path("/remove")
     @PUT
     @Produces("application/json")
@@ -118,7 +152,7 @@ public class Book {
             return Response.ok(currentList).build();
 
         // add list of books to remove statement
-        StringBuffer removeBooksBuffer = new StringBuffer(removeBooksString);
+        StringBuffer removeBooksBuffer = new StringBuffer(REMOVE_BOOKS);
         for (BookListEntry ble : toRemoveList.entries) {
             removeBooksBuffer.append(String.format("book_id = '%s' OR ", ble.bookId));
         }
