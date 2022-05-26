@@ -21,42 +21,49 @@ import java.sql.Timestamp;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
-
+/**
+ * Provides endpoints for sending a chat, getting basic information on the users a user is chatting with, and retrieving all of a user's chats.
+ *
+ *<br>Click here for more details about what each endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/chats")
 public class Chats {
     private DatabasePoolService database;
-    // TODO: It would be better to not split up the database calls this way but this is simple and good enough for now
-    // return all likeids and liked_user_ids where the client user is the liker and the like is mutual
-    private String getAllChatsWhereClientUserIsLikerString = "SELECT like_id, liked_user_id" +
-            " FROM likes" +
-            " WHERE is_mutual" +
-            " AND liker_user_id = ?;";
 
-    //returns all likeids and liker_usr_ids where the client user id the liked user and the like is mutual
-    private String getAllChatsWhereClientUserIsLikedString = "SELECT like_id, liker_user_id" +
-            " FROM likes" +
-            " WHERE is_mutual" +
-            " AND liked_user_id = ?;";
+    private static final String PHOTO_BASE_URL = "https://bookbaephotos.blob.core.windows.net/userphotos/";
 
-    private String getNameFromUserIdString = "SELECT name" +
-            " FROM user_info" +
-            " WHERE user_id = ?;";
+    private static final String GET_ALL_CHATS_FOR_USER = "SELECT like_id, liked_user_id, liker_user_id " +
+            "FROM likes " +
+            "WHERE is_mutual " +
+            "AND (liker_user_id = ? OR liked_user_id = ?);";
 
-    private String getChatsBetweenTwoUsersString = "SELECT *" +
-            " FROM chat_line" +
-            " WHERE like_id = ?;";
+    private static final String GET_NAME_FROM_USERID = "SELECT name " +
+            "FROM user_info " +
+            "WHERE user_id = ?;";
 
-    private String insertChatBetweenTwoUsersString = "INSERT INTO chat_line(line_text, timestamp, like_id, sender_user_id)" +
+    private static final String GET_CHATS_BETWEEN_USERS = "SELECT * " +
+            "FROM chat_line " +
+            "WHERE like_id = ?;";
+
+    private static final String INSERT_CHAT_BETWEEN_USERS = "INSERT INTO chat_line(line_text, timestamp, like_id, sender_user_id) " +
             // text, timestamp, like_id, sender_user_id
-            " VALUES(?, ?, ?, ?);";
+            "VALUES(?, ?, ?, ?);";
 
     @Inject
     public Chats(DatabasePoolService database) {
         this.database = database;
     }
 
-    // @TODO: this is so repetitive it hurts I need to learn how to pass database parameters like connection & resultset
+    /**
+     *
+     * Retrieves basic information about the users that the client user is chatting with.
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a list of
+     *       <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatCardResponse.java">ChatCardResponse</a> objects
+     *       <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getAllChats(@Context SecurityContext ctx) {
@@ -65,58 +72,40 @@ public class Chats {
         ChatCardResponse nextChatCardResponse;
 
         try (Connection conn = this.database.getConnection()) {
-            // get all ChatCardResponses for when user is liker
-            PreparedStatement getAllChatsWhereClientUserIsLikerStatement = conn.prepareStatement(
-                    getAllChatsWhereClientUserIsLikerString);
-            getAllChatsWhereClientUserIsLikerStatement.setString(1, clientUserId);
-            ResultSet resultSet = getAllChatsWhereClientUserIsLikerStatement.executeQuery();
+            // get all ChatCardResponses for when user has a mutual like
+            PreparedStatement getAllChatsForUserStatement = conn.prepareStatement(
+                    GET_ALL_CHATS_FOR_USER);
+            getAllChatsForUserStatement.setString(1, clientUserId);
+            getAllChatsForUserStatement.setString(2, clientUserId);
+            ResultSet resultSet = getAllChatsForUserStatement.executeQuery();
+
             while (resultSet.next()) {
 
                 // create response
                 nextChatCardResponse = new ChatCardResponse();
 
                 // set like_id
-                nextChatCardResponse.setLikeId(resultSet.getString("like_id"));
+                nextChatCardResponse.likeId = resultSet.getString("like_id");
+
+                // find out whether user is liked or liker
+                String otherUserId;
+                if(resultSet.getString("liker_user_id").equals(clientUserId)) { // client user is liker
+                    otherUserId = resultSet.getString("liked_user_id"); // other user is liked
+                } else { // client user is liked
+                    otherUserId = resultSet.getString("liker_user_id"); // other user is liker
+                }
+
+                // set photoUrl
+                nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
                 // obtain display name
-                String otherUserId = resultSet.getString("liked_user_id");
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
                 getNameFromUserIdStatement.setString(1, otherUserId);
                 ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
                 assert(nameResultSet.next());
 
                 // set display name
-                nextChatCardResponse.setDisplayName(nameResultSet.getString("name"));
-                nameResultSet.close();
-
-                // add to entities
-                entities.add(nextChatCardResponse);
-            }
-
-            resultSet.close();
-
-            // get all ChatCardResponses for when user is liked
-            PreparedStatement getAllChatsWhereClientUserIsLikedStatement = conn.prepareStatement(
-                    getAllChatsWhereClientUserIsLikedString);
-            getAllChatsWhereClientUserIsLikedStatement.setString(1, clientUserId);
-            resultSet = getAllChatsWhereClientUserIsLikedStatement.executeQuery();
-            while (resultSet.next()) {
-
-                // create response
-                nextChatCardResponse = new ChatCardResponse();
-
-                // set like_id
-                nextChatCardResponse.setLikeId(resultSet.getString("like_id"));
-
-                // obtain display name
-                String otherUserId = resultSet.getString("liker_user_id");
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(getNameFromUserIdString);
-                getNameFromUserIdStatement.setString(1, otherUserId);
-                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                assert(nameResultSet.next());
-
-                // set display name
-                nextChatCardResponse.setDisplayName(nameResultSet.getString("name"));
+                nextChatCardResponse.displayName = nameResultSet.getString("name");
                 nameResultSet.close();
 
                 // add to entities
@@ -131,6 +120,15 @@ public class Chats {
         return Response.ok(entities).build();
     }
 
+    /**
+     * Retreives the messages between two users.
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param likeId The likeId of the chat between the client user and another user
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a list of
+     *               <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatLineResponse.java">ChatLineResponse</a> objects
+     *               <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @Path("/{chatId}")
     @GET
     @Produces("application/json")
@@ -139,17 +137,17 @@ public class Chats {
         ArrayList<ChatLineResponse> entities = new ArrayList<>();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement getChatsBetweenTwoUsersStatement = conn.prepareStatement(getChatsBetweenTwoUsersString);
-            getChatsBetweenTwoUsersStatement.setString(1, likeId);
-            ResultSet resultSet = getChatsBetweenTwoUsersStatement.executeQuery();
+            PreparedStatement getChatsBetweenUsersStatement = conn.prepareStatement(GET_CHATS_BETWEEN_USERS);
+            getChatsBetweenUsersStatement.setString(1, likeId);
+            ResultSet resultSet = getChatsBetweenUsersStatement.executeQuery();
             ChatLineResponse nextChatLine;
 
             while (resultSet.next()) {
                 nextChatLine = new ChatLineResponse();
-                nextChatLine.setText(resultSet.getString("line_text"));
-                nextChatLine.setNthMessage(resultSet.getInt("line_id"));
-                nextChatLine.setTimestamp(resultSet.getTimestamp("timestamp"));
-                nextChatLine.setUserId(resultSet.getString("sender_user_id"));
+                nextChatLine.text = resultSet.getString("line_text");
+                nextChatLine.nthMessage = resultSet.getInt("line_id");
+                nextChatLine.timestamp = resultSet.getTimestamp("timestamp");
+                nextChatLine.userId = resultSet.getString("sender_user_id");
                 entities.add(nextChatLine);
             }
 
@@ -160,6 +158,16 @@ public class Chats {
         return Response.ok(entities).build();
     }
 
+    /**
+     * Sends a message from the client user to another user.
+     *
+     * @param ctx A SecurityContext variable containing the client user's id
+     * @param likeId The likeId of the chat between the client user and another user
+     * @param chatRequest A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatRequest.java">ChatRequest</a> object containing text the client user wants to send to the other user
+     *
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @Path("/{chatId}")
     @PUT
     @Produces("application/json")
@@ -169,12 +177,12 @@ public class Chats {
 
         try (Connection conn = this.database.getConnection()) {
             // text, timestamp, like_id, sender_user_id
-            PreparedStatement insertChatBetweenTwoUsersStatement = conn.prepareStatement(insertChatBetweenTwoUsersString);
-            insertChatBetweenTwoUsersStatement.setString(1, chatRequest.getText());
-            insertChatBetweenTwoUsersStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-            insertChatBetweenTwoUsersStatement.setString(3, likeId);
-            insertChatBetweenTwoUsersStatement.setString(4, clientUserId);
-            insertChatBetweenTwoUsersStatement.execute();
+            PreparedStatement insertChatBetweenUsersStatement = conn.prepareStatement(INSERT_CHAT_BETWEEN_USERS);
+            insertChatBetweenUsersStatement.setString(1, chatRequest.text);
+            insertChatBetweenUsersStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            insertChatBetweenUsersStatement.setString(3, likeId);
+            insertChatBetweenUsersStatement.setString(4, clientUserId);
+            insertChatBetweenUsersStatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();

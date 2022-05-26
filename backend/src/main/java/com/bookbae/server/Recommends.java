@@ -11,25 +11,53 @@ import jakarta.ws.rs.core.SecurityContext;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Objects;
 import jakarta.inject.Inject;
 
-
+/**
+ * Provides an endpoint for getting a list of recommended users based on their preferences.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/recommends")
 public class Recommends {
     private DatabasePoolService database;
-    // user_id = client user id; for now, return all users but self
-    private String getRecommendedUsersString = "SELECT * FROM user_info WHERE user_id != ?;";
+
+    private static final String GET_USER_PREFERENCES = "SELECT * " +
+            "FROM preference " +
+            "WHERE user_id = ?;";
+
+    // not static final because we need to swap out GETDATE for CURRENT_TIMESTAMP for testing
+    private String get_recommendations = "SELECT * " +
+            "FROM user_info " +
+            "WHERE user_id != ? " +
+            "AND DATEDIFF(year, birthday, GETDATE()) >= ? " +
+            "AND DATEDIFF(year, birthday, GETDATE()) <= ? " +
+            "AND ";
 
     @Inject
     public Recommends(DatabasePoolService database) {
         this.database = database;
+
+        // GETDATE is Microsoft's syntax, CURRENT_TIMESTAMP is H2's syntax
+        if (database.isMockDatabase()) {
+            get_recommendations = get_recommendations.replace("GETDATE", "CURRENT_TIMESTAMP");
+        }
     }
 
+    /**
+     * Retreives a list of recommended users based on the client user's preferences
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing an ArrayList of
+     *         <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserResponse.java">UserResponse</a> objects.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getRecommends(@Context SecurityContext ctx) {
@@ -38,30 +66,54 @@ public class Recommends {
         UserResponse nextUserResponse;
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement getRecommendedUsersStatement = conn.prepareStatement(getRecommendedUsersString);
-            getRecommendedUsersStatement.setString(1, clientUserId);
-            ResultSet resultSet = getRecommendedUsersStatement.executeQuery();
 
-            // no users to recommend!
-            if (!resultSet.next()) {
-                //TODO: what to do in this case?
-                resultSet.close();
-                return Response.status(Response.Status.FORBIDDEN).build(); // is this the right thing to return?
+            // get user's preferences
+            PreparedStatement getUserPreferencesStatement = conn.prepareStatement(GET_USER_PREFERENCES);
+            getUserPreferencesStatement.setString(1, clientUserId);
+            ResultSet resultSet = getUserPreferencesStatement.executeQuery();
+
+            // if no preferences have been set
+            if(!resultSet.next()) {
+                return Response.ok(entries).build();
             }
 
-            do {
+            int lowerAge = resultSet.getInt("low_target_age");
+            int upperAge = resultSet.getInt("high_target_age");
+            // int withinXMiles = resultSet.getInt("within_x_miles");
+            String[] preferredGenders = resultSet.getString("preferred_gender").split("_");
+
+            // extend getRecommendsString to fit number of preferred genders
+            StringBuffer getRecommendsBuffer = new StringBuffer(get_recommendations);
+            getRecommendsBuffer.append("(");
+            for(int i = 0; i < preferredGenders.length; i++) {
+                getRecommendsBuffer.append(" gender = ? OR");
+            }
+            // remove last "OR", add ");"
+            getRecommendsBuffer.delete(getRecommendsBuffer.length() - 3, getRecommendsBuffer.length());
+            getRecommendsBuffer.append(");");
+
+            // get recommendations for the user based on their preferences
+            PreparedStatement getRecommendedsStatement = conn.prepareStatement(getRecommendsBuffer.toString());
+            getRecommendedsStatement.setString(1, clientUserId);
+            getRecommendedsStatement.setInt(2, lowerAge);
+            getRecommendedsStatement.setInt(3, upperAge);
+            for(int i = 0; i < preferredGenders.length; i++) {
+                getRecommendedsStatement.setString(4 + i, preferredGenders[i]);
+            }
+            resultSet = getRecommendedsStatement.executeQuery();
+
+            // load up user preferences into json response
+            while(resultSet.next()) {
                 nextUserResponse = new UserResponse();
-                // nextUserResponse.setEmail(resultSet.getString("email")); Do not return email!
-                nextUserResponse.setUserId(resultSet.getString("user_id"));
-                nextUserResponse.setName(resultSet.getString("name"));
-                nextUserResponse.setGender(resultSet.getString("gender"));
-                nextUserResponse.setFavGenre(resultSet.getString("fav_genre"));
+                nextUserResponse.userId = resultSet.getString("user_id");
+                nextUserResponse.name = resultSet.getString("name");
+                nextUserResponse.gender = resultSet.getString("gender");
+                nextUserResponse.favGenre = resultSet.getString("fav_genre");
                 // saves birthday as a string if not null
-                nextUserResponse.setBirthday(Objects.toString(resultSet.getDate("birthday")));
-                nextUserResponse.setBio(resultSet.getString("bio"));
-                // nextUserResponse.setZipcode(resultSet.getString("zipcode")); Do not return zipcode!
+                nextUserResponse.birthday = Objects.toString(resultSet.getDate("birthday"));
+                nextUserResponse.bio = resultSet.getString("bio");
                 entries.add(nextUserResponse);
-            } while(resultSet.next());
+            }
             resultSet.close();
 
         } catch (SQLException e) {

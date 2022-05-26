@@ -38,7 +38,6 @@ The application offers a number of API endpoints accessible from the root path. 
         - Produces: `{“email”: “<email>”, “name”: “<name>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “zipcode”: “<zipcode>”}`
     - Does Not Return USERID!
     - Birthday must be of the form "yyy-mm-dd"
-- FUTURE OPTION: /user/{userid} : gets the above object for a specific userid
 - /email?email=<email@email.com>
     - GET
       - Returns true if email is in the database, false otherwise
@@ -59,7 +58,6 @@ The application offers a number of API endpoints accessible from the root path. 
     - GET
         - Returns a list of recommended users
         - Produces: `[{“userid”: “<userid>”, “name”: “<name>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”}, ...]`
-        - Returns 403 response code if there are no users to recommend (to be changed to return empty list in future version)
     - Will not return email or zipcode to protect privacy!
 - /like
     - PUT
@@ -69,7 +67,7 @@ The application offers a number of API endpoints accessible from the root path. 
 - /chats
     - GET
         - Gets basic information on all chats the authenticated user is involved in
-        - Produces: `[{"displayName": "<name>", "photoUrl": "<url>", "lastMessage": "<msg>", "likeId": "<uuid>"}, ...]`
+        - Produces: `[{"displayName": "<name>", "photoUrl": "<url>", "likeId": "<uuid>"}, ...]`
 - /chats/{likeId}
     - GET
         - Gets the chat lines from the chat specified by likeId, userid is of the sender
@@ -91,13 +89,12 @@ The application offers a number of API endpoints accessible from the root path. 
         - Takes in a list of book ids to remove from the authenticated user's book list, returns the updated book list
         - Consumes: `[{"bookid": "<bookid>"},...]`
         - Produces: `[{"bookid": "<bookid>"},...]`
-- /preferences/get
+- /preferences
     - GET
         - Gets the preferences for the client user
         - Produces: `{"lowerAgeLimit": "<lowerAgeLimit>", "upperAgeLimit": "<upperAgeLimit>", "withinXMiles": "<withinXMiles>", "preferredGender": "<preferredGender>"}`
         - Returns 403 response code if user does not exist
         - Returns `{"lowerAgeLimit": "0", "upperAgeLimit": "0", "withinXMiles": "0", "preferredGender": ""}` if preferences have not been set yet
-- /preferences/set
     - PUT
         - Sets the preferences for the client user
         - Consumes: `{"lowerAgeLimit": "<lowerAgeLimit>", "upperAgeLimit": "<upperAgeLimit>", "withinXMiles": "<withinXMiles>", "preferredGender": "<preferredGender>"}`

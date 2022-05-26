@@ -31,7 +31,7 @@ public class EmailTest extends AbstractTest {
         var resp = emailResource.checkEmail("example@email.com");
         assertEquals(200, resp.getStatus());
         EmailResponse emailResponse = (EmailResponse) resp.getEntity();
-        assertEquals(false, emailResponse.getDoesEmailExist());
+        assertEquals(false, emailResponse.doesEmailExist);
     }
 
     @Test
@@ -40,6 +40,13 @@ public class EmailTest extends AbstractTest {
         var resp = emailResource.checkEmail("example@email.com");
         assertEquals(200, resp.getStatus());
         EmailResponse emailResponse = (EmailResponse) resp.getEntity();
-        assertEquals(true, emailResponse.getDoesEmailExist());
+        assertEquals(true, emailResponse.doesEmailExist);
+    }
+
+    @Test
+    void sqlFailureTest() {
+        Email badResource = new Email(new SQLFailService());
+        var resp = badResource.checkEmail("example@email.com");
+        assertEquals(500, resp.getStatus());
     }
 }

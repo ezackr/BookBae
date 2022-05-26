@@ -58,7 +58,7 @@ class Client {
   static async getPreferences() {
     return await axios({
       baseURL: Client.ROOT_PATH,
-      url: '/preferences/get',
+      url: '/preferences',
       method: 'get',
       headers: {Authorization: 'Bearer ' + Client.authToken},
     })
@@ -77,7 +77,7 @@ class Client {
   static async setPreferences(preferences) {
     return await axios({
       baseURL: Client.ROOT_PATH,
-      url: '/preferences/set',
+      url: '/preferences',
       method: 'put',
       headers: {Authorization: 'Bearer ' + Client.authToken},
       data: preferences,

@@ -17,20 +17,20 @@ public abstract class AbstractTest {
 
     static AccountRequest getExampleAccountRequest() {
         AccountRequest req = new AccountRequest();
-        req.setEmail("example@email.com");
-        req.setPassword("password");
+        req.email = "example@email.com";
+        req.password = "password";
         return req;
     }
 
     static UserRequest getExampleUserRequest() {
         var req = new UserRequest();
-        req.setEmail("email@uw.edu");
-        req.setName("Name Name");
-        req.setGender("F");
-        req.setFavGenre("Horror");
-        req.setBirthday("2000-01-01");
-        req.setBio("bio");
-        req.setZipcode("80210");
+        req.email = "example@email.com";
+        req.name = "Name Name";
+        req.gender = "F";
+        req.favGenre = "Horror";
+        req.birthday = "2000-01-01";
+        req.bio = "bio";
+        req.zipcode = "80210";
         return req;
     }
 
@@ -41,8 +41,8 @@ public abstract class AbstractTest {
         for (int i = 0; i < acctRequests.length; i++) {
             acctRequests[i] = new AccountRequest();
             // UUID used here to create random email and password, not for user id
-            acctRequests[i].setEmail(UUID.randomUUID().toString() + "@example.com");
-            acctRequests[i].setPassword(UUID.randomUUID().toString());
+            acctRequests[i].email = UUID.randomUUID().toString() + "@example.com";
+            acctRequests[i].password = UUID.randomUUID().toString();
         }
         return acctRequests;
     }
@@ -54,13 +54,13 @@ public abstract class AbstractTest {
 
         for (int i = 0; i < userRequests.length; i++) {
             userRequests[i] = new UserRequest();
-            userRequests[i].setEmail(acctRequests[i].getEmail());
-            userRequests[i].setName("Name " + i);
-            userRequests[i].setGender("F");
-            userRequests[i].setFavGenre("Comedy");
-            userRequests[i].setBirthday("2000-01-01");
-            userRequests[i].setBio("User " + i + " bio");
-            userRequests[i].setZipcode((rand.nextInt(89999) + 10000) + ""); //10000 - 99999 zip codes
+            userRequests[i].email = acctRequests[i].email;
+            userRequests[i].name = "Name " + i;
+            userRequests[i].gender = "F";
+            userRequests[i].favGenre = "Comedy";
+            userRequests[i].birthday = "2000-01-01";
+            userRequests[i].bio = "User " + i + " bio";
+            userRequests[i].zipcode = (rand.nextInt(89999) + 10000) + ""; //10000 - 99999 zip codes
         }
         return userRequests;
     }
