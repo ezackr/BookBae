@@ -26,6 +26,11 @@ public class DatabasePoolServiceImpl implements DatabasePoolService {
         return this.dataSource.getConnection();
     }
 
+    @Override
+    public boolean isMockDatabase() {
+        return false;
+    }
+
     private static String getConnectionUrl() {
         String serverURL = System.getProperty("bookbae.server_url");
         String dbName = System.getProperty("bookbae.database_name");

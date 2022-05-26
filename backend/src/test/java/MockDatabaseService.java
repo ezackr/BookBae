@@ -57,6 +57,11 @@ public class MockDatabaseService implements DatabasePoolService {
         return this.dataSource.getConnection();
     }
 
+    @Override
+    public boolean isMockDatabase() {
+        return true;
+    }
+
     public void init() {
         try (Connection conn = this.getConnection();
             PreparedStatement stmt = conn.prepareStatement(createTables)) {

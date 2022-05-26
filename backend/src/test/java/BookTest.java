@@ -102,4 +102,11 @@ public class BookTest extends AbstractTest {
         assertEquals(1, resultList.entries.size());
         assertEquals(true, books.entries.contains(book2));
     }
+
+    @Test
+    void sqlFailureTest() {
+        Book badResource = new Book(new SQLFailService());
+        var resp = badResource.getBooks(new MockSecurityContext(userId));
+        assertEquals(500, resp.getStatus());
+    }
 }

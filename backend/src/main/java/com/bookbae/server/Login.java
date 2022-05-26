@@ -23,11 +23,15 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class Login {
     private SecretKey key;
     private DatabasePoolService database;
-    private static String getUserIdFromEmailString = "SELECT user_id FROM user_info WHERE email = ?;";
-    private static String retrieveSaltString = "SELECT salt " +
+    private static final String GET_USER_ID_FROM_EMAIL = "SELECT user_id " +
+            "FROM user_info " +
+            "WHERE email = ?;";
+
+    private static final String RETRIEVE_SALT = "SELECT salt " +
             "FROM login_info " +
             "WHERE user_id = ?";
-    private static String checkLoginInfoString = "SELECT user_id " +
+
+    private static final String CHECK_LOGIN_INFO = "SELECT user_id " +
             "FROM login_info " +
             "WHERE user_id = ? " +
             "AND hash = ?;";
@@ -43,13 +47,13 @@ public class Login {
     @Produces("application/json")
     public Response tryLogin(AccountRequest data) {
 
-        String email = data.getEmail();
-        String password = data.getPassword();
+        String email = data.email;
+        String password = data.password;
         String userId = "";
 
         try (Connection conn = this.database.getConnection()) {
             // get user id
-            PreparedStatement getUserIdStatement = conn.prepareStatement(getUserIdFromEmailString);
+            PreparedStatement getUserIdStatement = conn.prepareStatement(GET_USER_ID_FROM_EMAIL);
             getUserIdStatement.setString(1, email);
             ResultSet resultSet = getUserIdStatement.executeQuery();
 
@@ -61,7 +65,7 @@ public class Login {
             resultSet.close();
 
             // get user's salt
-            PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
+            PreparedStatement retrieveSaltStatement = conn.prepareStatement(RETRIEVE_SALT);
             retrieveSaltStatement.setString(1, userId);
             resultSet = retrieveSaltStatement.executeQuery();
 
@@ -77,7 +81,7 @@ public class Login {
             // check if login information is correct
             String hashedPw = BCrypt.hashpw(password, salt);
 
-            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
+            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(CHECK_LOGIN_INFO);
             checkLoginInfoStatement.setString(1, userId);
             checkLoginInfoStatement.setString(2, hashedPw);
             resultSet = checkLoginInfoStatement.executeQuery();

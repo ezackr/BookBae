@@ -17,13 +17,18 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 @Path("/create")
 public class CreateAccount {
 
-    private static String checkIfUserAlreadyExistsString = "SELECT * FROM user_info WHERE email = ?;";
+    private static final String CHECK_IF_USER_ALREADY_EXISTS = "SELECT * " +
+            "FROM user_info " +
+            "WHERE email = ?;";
 
-    private static String insertUserInfoString = "INSERT INTO user_info" +
+    private static final String INSERT_USER_INFO = "INSERT INTO user_info" +
             " VALUES(?, NULL, NULL, NULL, NULL, ?, NULL, NULL, NULL);";
-    private static String insertLoginInfoString = "INSERT INTO login_info VALUES (?, ?, ?);";
+    private static final String INSERT_LOGIN_INFO = "INSERT INTO login_info " +
+            "VALUES (?, ?, ?);";
 
-    private static String insertNullPreferencesString = "INSERT INTO preference VALUES(0, 0, 0, '', ?);";
+    private static final String INSERT_NULL_PREFERENCES = "INSERT INTO preference " +
+            "VALUES(0, 0, 0, 'M_F_NB', ?);";
+
     private DatabasePoolService database;
 
     @Inject
@@ -37,16 +42,15 @@ public class CreateAccount {
     public Response tryCreate(AccountRequest req) {
 
         // new account data
-        String email = req.getEmail();
-        String password = req.getPassword();
+        String email = req.email;
+        String password = req.password;
         String salt = BCrypt.gensalt();
         String hashedPw = BCrypt.hashpw(password, salt);
         String userId = UUID.randomUUID().toString();
 
         try (Connection conn = this.database.getConnection()) {
-            // TODO: we can probably get rid of this now that there's an email endpoint
             // Check if email exists in db first
-            PreparedStatement checkIfUserAlreadyExistsStatement = conn.prepareStatement(checkIfUserAlreadyExistsString);
+            PreparedStatement checkIfUserAlreadyExistsStatement = conn.prepareStatement(CHECK_IF_USER_ALREADY_EXISTS);
             checkIfUserAlreadyExistsStatement.setString(1, email);
             ResultSet resultSet = checkIfUserAlreadyExistsStatement.executeQuery();
 
@@ -58,19 +62,19 @@ public class CreateAccount {
             resultSet.close();
 
             // insert user into db with default NULL for unset values
-            PreparedStatement insertUserStatement = conn.prepareStatement(insertUserInfoString);
+            PreparedStatement insertUserStatement = conn.prepareStatement(INSERT_USER_INFO);
             insertUserStatement.setString(1, userId);
             insertUserStatement.setString(2, email);
             insertUserStatement.executeUpdate();
 
-            PreparedStatement insertLoginInfoStatement = conn.prepareStatement(insertLoginInfoString);
+            PreparedStatement insertLoginInfoStatement = conn.prepareStatement(INSERT_LOGIN_INFO);
             insertLoginInfoStatement.setString(1, salt);
             insertLoginInfoStatement.setString(2, hashedPw);
             insertLoginInfoStatement.setString(3, userId);
             insertLoginInfoStatement.executeUpdate();
 
             // insert user into preferences
-            PreparedStatement insertNullPreferencesStatement = conn.prepareStatement(insertNullPreferencesString);
+            PreparedStatement insertNullPreferencesStatement = conn.prepareStatement(INSERT_NULL_PREFERENCES);
             insertNullPreferencesStatement.setString(1, userId);
             insertNullPreferencesStatement.executeUpdate();
 

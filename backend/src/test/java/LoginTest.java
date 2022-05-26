@@ -53,22 +53,22 @@ public class LoginTest extends AbstractTest {
 
     @Test
     void wrongEmailLoginTest() {
-        accountRequest.setEmail("wrongemail@gmail.com");
+        accountRequest.email = "wrongemail@gmail.com";
         var resp = loginResource.tryLogin(accountRequest);
         assertEquals(403, resp.getStatus());
     }
 
     @Test
     void wrongPasswordLoginTest() {
-        accountRequest.setPassword("wrongpassword");
+        accountRequest.password = "wrongpassword";
         var resp = loginResource.tryLogin(accountRequest);
         assertEquals(403, resp.getStatus());
     }
 
     @Test
     void sqlFailureTest() {
-        loginResource = new Login(new SQLFailService(), keys);
-        var resp = loginResource.tryLogin(accountRequest);
+        Login badResource = new Login(new SQLFailService(), keys);
+        var resp = badResource.tryLogin(accountRequest);
         assertEquals(500, resp.getStatus());
     }
 

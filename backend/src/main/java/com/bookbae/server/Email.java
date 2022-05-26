@@ -16,7 +16,9 @@ import jakarta.inject.Inject;
 public class Email {
     private DatabasePoolService database;
 
-    private String checkEmailExistsString = "SELECT * FROM user_info WHERE email = ?;";
+    private static final String CHECK_EMAIL_EXISTS = "SELECT *" +
+            " FROM user_info" +
+            " WHERE email = ?;";
     @Inject
     public Email(DatabasePoolService database) {
         this.database = database;
@@ -30,7 +32,7 @@ public class Email {
             return Response.status(404).build();
         }
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement checkEmailExistsStatement = conn.prepareStatement(checkEmailExistsString);
+            PreparedStatement checkEmailExistsStatement = conn.prepareStatement(CHECK_EMAIL_EXISTS);
             checkEmailExistsStatement.setString(1, email);
             ResultSet resultSet = checkEmailExistsStatement.executeQuery();
 
@@ -42,9 +44,10 @@ public class Email {
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return Response.serverError().build();
         }
         EmailResponse resp = new EmailResponse();
-        resp.setDoesEmailExist(emailIsInDatabase);
+        resp.doesEmailExist = emailIsInDatabase;
         return Response.ok(resp).build();
     }
 }

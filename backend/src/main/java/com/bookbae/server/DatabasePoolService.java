@@ -5,4 +5,5 @@ import java.sql.SQLException;
 
 public interface DatabasePoolService {
     public Connection getConnection() throws SQLException;
+    public boolean isMockDatabase();
 }
