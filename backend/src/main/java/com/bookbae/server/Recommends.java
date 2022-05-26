@@ -18,7 +18,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 import jakarta.inject.Inject;
 
-
+/**
+ * Provides an endpoint for getting a list of recommended users based on their preferences.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/recommends")
 public class Recommends {
@@ -46,6 +50,14 @@ public class Recommends {
         }
     }
 
+    /**
+     * Retreives a list of recommended users based on the client user's preferences
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing an ArrayList of
+     *         <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserResponse.java">UserResponse</a> objects.
+     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getRecommends(@Context SecurityContext ctx) {

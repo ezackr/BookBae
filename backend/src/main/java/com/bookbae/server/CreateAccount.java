@@ -14,6 +14,11 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * Provides an endpoint for creating an account.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @Path("/create")
 public class CreateAccount {
 
@@ -36,6 +41,12 @@ public class CreateAccount {
         this.database = database;
     }
 
+    /**
+     * Creates a user account using the email and password contained in req
+     * @param req An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/AccountRequest.java">AccountRequest</a> object containing the email and password of the user to be created
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @POST
     @Consumes("application/json")
     @Produces("application/json")

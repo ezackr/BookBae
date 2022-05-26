@@ -16,6 +16,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import jakarta.inject.Inject;
 
+/**
+ * Provides endpoints for getting and setting a user's preferences.
+ *
+ * <br>Click here for more details about what each endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/preferences")
 public class Preferences {
@@ -34,6 +39,14 @@ public class Preferences {
         this.database = database;
     }
 
+    /**
+     * Retreives the preferences of the client user
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a
+     *            <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/PreferencesMessage.java">PreferencesMessage</a> object
+     *            <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getPreferences(@Context SecurityContext ctx) {
@@ -65,6 +78,15 @@ public class Preferences {
         return Response.ok(prefs).build();
     }
 
+    /**
+     * Sets the preferences of the client user
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param prefs A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/PreferencesMessage.java">PreferencesMessage</a> object
+     *              containing the desired preferences
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @PUT
     @Consumes("application/json")
     public Response setPreferences(@Context SecurityContext ctx, PreferencesMessage prefs) {

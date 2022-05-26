@@ -21,7 +21,11 @@ import java.sql.Timestamp;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
-
+/**
+ * Provides endpoints for sending a chat, getting basic information on the users a user is chatting with, and retrieving all of a user's chats.
+ *
+ *<br>Click here for more details about what each endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/chats")
 public class Chats {
@@ -51,6 +55,15 @@ public class Chats {
         this.database = database;
     }
 
+    /**
+     *
+     * Retrieves basic information about the users that the client user is chatting with.
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a list of
+     *       <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatCardResponse.java">ChatCardResponse</a> objects
+     *       <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getAllChats(@Context SecurityContext ctx) {
@@ -107,6 +120,15 @@ public class Chats {
         return Response.ok(entities).build();
     }
 
+    /**
+     * Retreives the messages between two users.
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param likeId The UUID of the chat between the client user and another user
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a list of
+     *               <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatLineResponse.java">ChatLineResponse</a> objects
+     *               <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @Path("/{chatId}")
     @GET
     @Produces("application/json")
@@ -136,6 +158,16 @@ public class Chats {
         return Response.ok(entities).build();
     }
 
+    /**
+     * Sends a message from the client user to another user.
+     *
+     * @param ctx A SecurityContext variable containing the client user's id
+     * @param likeId The UUID of the chat between the client user and another user
+     * @param chatRequest A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatRequest.java">ChatRequest</a> object containing text the client user wants to send to the other user
+     *
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @Path("/{chatId}")
     @PUT
     @Produces("application/json")
