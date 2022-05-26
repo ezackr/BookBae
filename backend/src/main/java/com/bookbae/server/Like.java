@@ -16,6 +16,11 @@ import java.sql.PreparedStatement;
 import java.util.UUID;
 import jakarta.inject.Inject;
 
+/**
+ * Provides an endpoint for one user to like another user.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/like")
 public class Like {
@@ -50,6 +55,13 @@ public class Like {
         this.database = database;
     }
 
+    /**
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param likeRequest A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/LikeRequest.java">LikeRequest</a> object containing the likeId of the user to be liked
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @PUT
     @Consumes("application/json")
     public Response doLike(@Context SecurityContext ctx, LikeRequest likeRequest) {
@@ -110,6 +122,7 @@ public class Like {
         return Response.ok().build();
     }
 
+    //TODO: @Joshua what are we doing with this?
     private void onMutualLike(String likerId, String likedId) {
         //make chat
         return;

@@ -20,6 +20,8 @@ import jakarta.inject.Inject;
 
 /**
  * Provides endpoints for retrieving, saving and removing books from a user's bookshelf.
+ *
+ * <br>Click here for more details about what each endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
  */
 @SecuredResource
 @Path("/book")
@@ -47,11 +49,13 @@ public class Book {
     }
 
     /**
-     * Retrieves a list of book ids for a given user.
+     * Retrieves a list of book ids for a given user.<br>
+     *
      * @param ctx A SecurityContext variable containing the user's id
-     * @return If successful, returns a jakarta ResponseBuilder with an OK status that contains a list of book ids
-     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status
-     * @see <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a> for the specific values returned by the endpoint
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a
+     *             <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a> object
+     *             representing the books in a user's bookshelf.
+     *             <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status
      */
     @Path("/get")
     @GET
@@ -81,11 +85,13 @@ public class Book {
 
     /**
      *
+     * Adds a list of books to the client user's bookshelf
      * @param ctx A SecurityContext variable containing the user's id
-     * @param toAddList A list of books to save to the user's bookshelf
-     * @return If successful, returns a jakarta ResponseBuilder with an OK status that contains the most updated list of books in a user's bookshelf
-     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status
-     * @see <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a> for the specific values returned by the endpoint
+     * @param toAddList A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a>
+     *                 object representing the books that should be added to the client user's bookshelf
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a>
+     *             object representing the most updated list of books in a user's bookshelf
+     *             <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status
      */
     @Path("/add")
     @PUT
@@ -130,12 +136,13 @@ public class Book {
     }
 
     /**
-     *
+     * Removes a list of books from the client user's bookshelf
      * @param ctx A SecurityContext variable containing the user's id
-     * @param toRemoveList A list of books to remove from the user's bookshelf
-     * @return If successful, returns a jakarta ResponseBuilder with an OK status that contains the most updated list of books in a user's bookshelf
-     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status
-     * @see <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a> for the specific values returned by the endpoint
+     * @param toRemoveList A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a> object
+     *                     representing the books to remove from the user's bookshelf
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a>
+     *               object representing the most updated list of books in a user's bookshelf.
+     *               <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status
      */
     @Path("/remove")
     @PUT

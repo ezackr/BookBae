@@ -12,6 +12,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import jakarta.inject.Inject;
 
+/**
+ * Provides an endpoint to check if an email exists.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @Path("/email")
 public class Email {
     private DatabasePoolService database;
@@ -24,6 +29,12 @@ public class Email {
         this.database = database;
     }
 
+    /**
+     * Check if a given email is already in use.
+     *
+     * @param email The email to check
+     * @return An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/EmailResponse.java">Email Response</a> object containing a boolean specifying whether or not the email exists
+     */
     @GET
     @Produces("application/json")
     public Response checkEmail(@QueryParam("email") String email) {

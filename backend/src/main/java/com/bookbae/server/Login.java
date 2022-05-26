@@ -19,6 +19,11 @@ import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.LoginResponse;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * Provides an endpoint for a user to log in.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @Path("/login")
 public class Login {
     private SecretKey key;
@@ -41,14 +46,23 @@ public class Login {
         this.database = database;
         this.key = keys.getKey();
     }
-    
+
+    /**
+     * Attempts to log a user in with a given email and password.
+     *
+     * @param req An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/AccountRequest.java">AccountRequest</a>
+     *            object containing an email and password
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a
+     *               <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/LoginResponse.java">LoginResponse</a> object
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response tryLogin(AccountRequest data) {
+    public Response tryLogin(AccountRequest req) {
 
-        String email = data.email;
-        String password = data.password;
+        String email = req.email;
+        String password = req.password;
         String userId = "";
 
         try (Connection conn = this.database.getConnection()) {

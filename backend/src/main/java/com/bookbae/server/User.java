@@ -20,6 +20,11 @@ import com.bookbae.server.json.UserResponse;
 import com.bookbae.server.json.UserRequest;
 import java.util.Objects;
 
+/**
+ * Provides endpoints for getting information about a user and alternating information about a user.
+ *
+ * <br>Click here for more details about what each endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/user")
 public class User {
@@ -38,6 +43,13 @@ public class User {
         this.database = database;
     }
 
+    /**
+     * Retreives basic information about the client user
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserResponse.java">UserResponse</a> object
+     *      containing basic information about the client user, but not their user id
+     *      <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getUser(@Context SecurityContext ctx) {
@@ -76,6 +88,15 @@ public class User {
         return Response.ok(resp).build();
     }
 
+    /**
+     * Sets a number of attributes for the client user.
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param req An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserRequest.java">UserRequest</a> object containing attributes to set for the client user
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserResponse.java">UserResponse</a> object
+     *         containing the attributes set for the client user, including the generated user id
+     *          <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
