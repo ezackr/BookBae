@@ -124,7 +124,7 @@ public class Chats {
      * Retreives the messages between two users.
      *
      * @param ctx A SecurityContext variable containing the user's id
-     * @param likeId The UUID of the chat between the client user and another user
+     * @param likeId The likeId of the chat between the client user and another user
      * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a list of
      *               <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatLineResponse.java">ChatLineResponse</a> objects
      *               <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
@@ -162,7 +162,7 @@ public class Chats {
      * Sends a message from the client user to another user.
      *
      * @param ctx A SecurityContext variable containing the client user's id
-     * @param likeId The UUID of the chat between the client user and another user
+     * @param likeId The likeId of the chat between the client user and another user
      * @param chatRequest A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/ChatRequest.java">ChatRequest</a> object containing text the client user wants to send to the other user
      *
      * @return If successful, returns a jakarta ResponseBuilder with an OK status.

@@ -53,7 +53,7 @@ public class Book {
      *
      * @param ctx A SecurityContext variable containing the user's id
      * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a
-     *             <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">BookList</a> object
+     *             <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a> object
      *             representing the books in a user's bookshelf.
      *             <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status
      */
@@ -87,9 +87,9 @@ public class Book {
      *
      * Adds a list of books to the client user's bookshelf
      * @param ctx A SecurityContext variable containing the user's id
-     * @param toAddList A <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">BookList</a>
+     * @param toAddList A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a>
      *                 object representing the books that should be added to the client user's bookshelf
-     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">BookList</a>
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a>
      *             object representing the most updated list of books in a user's bookshelf
      *             <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status
      */
@@ -138,9 +138,9 @@ public class Book {
     /**
      * Removes a list of books from the client user's bookshelf
      * @param ctx A SecurityContext variable containing the user's id
-     * @param toRemoveList A <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">BookList</a> object
+     * @param toRemoveList A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a> object
      *                     representing the books to remove from the user's bookshelf
-     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">BookList</a>
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/BookList.java">BookList</a>
      *               object representing the most updated list of books in a user's bookshelf.
      *               <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status
      */

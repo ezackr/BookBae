@@ -56,7 +56,7 @@ public class Recommends {
      * @param ctx A SecurityContext variable containing the user's id
      * @return If successful, returns a jakarta ResponseBuilder with an OK status containing an ArrayList of
      *         <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserResponse.java">UserResponse</a> objects.
-     *         If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
      */
     @GET
     @Produces("application/json")

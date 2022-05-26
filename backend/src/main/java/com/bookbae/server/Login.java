@@ -50,10 +50,10 @@ public class Login {
     /**
      * Attempts to log a user in with a given email and password.
      *
-     * @param req An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/AccountRequest.java">Account Request</a>
+     * @param req An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/AccountRequest.java">AccountRequest</a>
      *            object containing an email and password
      * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a
-     *               <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/LoginResponse.java">Login Response</a> object
+     *               <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/LoginResponse.java">LoginResponse</a> object
      *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
      */
     @POST

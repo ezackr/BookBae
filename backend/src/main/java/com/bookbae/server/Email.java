@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import jakarta.inject.Inject;
 
 /**
- * Provides an endpoint to check if an email exsits.
+ * Provides an endpoint to check if an email exists.
  *
  * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
  */
