@@ -9,6 +9,7 @@ import {
 import Client from '../Client.js';
 
 const HomeScreen = ({navigation}) => {
+  const [rerender, setRerender] = React.useState(false);
   const outOfMatches = {key: 'empty', name: 'no more matches'};
   const [matches, setMatches] = React.useState([outOfMatches]);
 
@@ -35,6 +36,7 @@ const HomeScreen = ({navigation}) => {
     if (matches[matches.length - 1].key !== 'empty') {
       matches.pop();
     }
+    setRerender(!rerender);
     console.log('after: ' + matches[matches.length - 1].name);
   };
 
@@ -44,9 +46,16 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.title}>BookBae</Text>
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
-        <Text>{matches[matches.length - 1].name}</Text>
+        <ProfileCard profile={matches[matches.length - 1]} />
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
+        <Pressable
+          style={matchStyles.button}
+          onPress={() => {
+            onMatch();
+          }}>
+          <Image source={require('../images/deny.png')} />
+        </Pressable>
         <Pressable
           style={matchStyles.button}
           onPress={() => {
@@ -74,7 +83,7 @@ const ProfileCard = ({profile}) => {
           source={require('../images/title2.jpeg')}
         />
       </SafeAreaView>
-      <Text style={matchStyles.frontName}>Alan, 29</Text>
+      <Text style={matchStyles.frontName}>{profile.name}</Text>
       <SafeAreaView style={matchStyles.bookDisplay}>
         <Image
           style={matchStyles.book}
@@ -111,7 +120,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 20,
   },
   title: {
     color: 'black',
@@ -123,9 +131,10 @@ const styles = StyleSheet.create({
 
 const matchStyles = StyleSheet.create({
   matchBox: {
-    height: 500,
+    height: 475,
     width: 300,
-    backgroundColor: '#ffe9a1',
+    backgroundColor: 'white',
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -147,6 +156,7 @@ const matchStyles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    backgroundColor: 'white',
+    margin: 20,
+    paddingBottom: 10,
   },
 });
