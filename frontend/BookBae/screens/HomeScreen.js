@@ -101,14 +101,16 @@ const ProfileCard = ({profile}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fffdd3',
+    backgroundColor: '#ffe9c1',
     alignItems: 'center',
     justifyContent: 'center',
   },
   topMenu: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#a53f3f',
+    alignSelf: 'stretch',
   },
   matchMenu: {
     flex: 6,
@@ -125,6 +127,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 48,
     fontWeight: 'bold',
+    paddingLeft: 20,
     padding: 10,
   },
 });
@@ -137,6 +140,8 @@ const matchStyles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
+    elevation: 15,
+    shadowColor: '#7c0a02',
   },
   frontName: {
     color: 'black',
