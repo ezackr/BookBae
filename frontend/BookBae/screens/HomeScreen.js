@@ -4,36 +4,39 @@ import {
   Text,
   SafeAreaView,
   Image,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import Client from '../Client.js';
 
 const HomeScreen = ({navigation}) => {
-  const [matches, setMatches] = React.useState([]);
-
-  const getMatchData = async () => {
-    if (matches.length === 0) {
-      Client.getPotentialMatches().then(data => {
-        for (let i = 0; i < data.length; i++) {
-          let match = data[i];
-          if ('name' in match) {
-            setMatches(prevState => {
-              prevState.push({
-                key: i,
-                name: match.name,
-              });
-              return [...prevState];
-            });
-          }
-        }
-        console.log('matches: ' + matches);
-      });
-    }
-  };
+  const outOfMatches = {key: 'empty', name: 'no more matches'};
+  const [matches, setMatches] = React.useState([outOfMatches]);
 
   React.useEffect(() => {
-    getMatchData();
-  });
+    Client.getPotentialMatches().then(data => {
+      setMatches([outOfMatches]);
+      for (let i = 0; i < data.length; i++) {
+        let match = data[i];
+        if ('name' in match) {
+          setMatches(prevState => {
+            prevState.push({
+              key: i + 1,
+              name: match.name,
+            });
+            return [...prevState];
+          });
+        }
+      }
+    });
+  }, []);
+
+  const onMatch = () => {
+    console.log('before: ' + matches[matches.length - 1].name);
+    if (matches[matches.length - 1].key !== 'empty') {
+      matches.pop();
+    }
+    console.log('after: ' + matches[matches.length - 1].name);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -41,25 +44,16 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.title}>BookBae</Text>
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
-        {matches.map(match => (
-          <Text key={match.key} style={styles.bodyText}>
-            {match.name}
-          </Text>
-        ))}
+        <Text>{matches[matches.length - 1].name}</Text>
       </SafeAreaView>
       <SafeAreaView style={styles.bottomMenu}>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.5}
-          onPress={getMatchData}>
-          <Image source={require('../images/deny.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.5}
-          onPress={getMatchData}>
+        <Pressable
+          style={matchStyles.button}
+          onPress={() => {
+            onMatch();
+          }}>
           <Image source={require('../images/accept.png')} />
-        </TouchableOpacity>
+        </Pressable>
       </SafeAreaView>
     </SafeAreaView>
   );
@@ -125,14 +119,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 10,
   },
-  bodyText: {
-    color: 'black',
-    fontSize: 18,
-  },
-  button: {
-    height: 50,
-    margin: 10,
-  },
 });
 
 const matchStyles = StyleSheet.create({
@@ -159,5 +145,8 @@ const matchStyles = StyleSheet.create({
     height: 175,
     width: 125,
     margin: 10,
+  },
+  button: {
+    backgroundColor: 'white',
   },
 });

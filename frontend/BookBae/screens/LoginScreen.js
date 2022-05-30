@@ -18,7 +18,7 @@ const LoginScreen = ({navigation}) => {
     if (success) {
       navigation.navigate('TabNavigation');
     } else {
-      console.log('error');
+      console.log('login-error');
     }
   };
 

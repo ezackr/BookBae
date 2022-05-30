@@ -22,8 +22,8 @@ const EnterBooksScreen = ({route, navigation}) => {
   const onPress = () => {
     console.log(bookCover);
     navigation.navigate('EnterBioScreen', {
-        ...route.params,
-        books: bookList
+      ...route.params,
+      books: bookList,
     });
   };
 
