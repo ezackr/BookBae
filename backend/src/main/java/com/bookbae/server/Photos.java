@@ -4,21 +4,22 @@ import com.bookbae.server.security.SecuredResource;
 import com.bookbae.server.json.PhotoResponse;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.inject.Inject;
+import java.io.BufferedOutputStream;
 import java.io.InputStream;
-import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.models.BlobHttpHeaders;
 import com.azure.storage.blob.models.AccessTier;
+import com.azure.storage.blob.specialized.AppendBlobClient;
 
 /**
  * Allows a user to set their profile photo.
@@ -34,26 +35,18 @@ public class Photos {
     }
 
     @POST
-    @Consumes("image/jpeg")
+    @Consumes("multipart/form-data")
     @Produces("application/json")
-    public Response putPhoto(@Context SecurityContext ctx, @Context HttpHeaders headers, InputStream stream) {
-        //TODO: jpeg sanitization?
-        BlobClient client = this.blob.getClient(ctx.getUserPrincipal().getName());
-        BufferedInputStream bstream = new BufferedInputStream(stream);
-        long length = headers.getLength();
+    public Response putPhoto(@Context SecurityContext ctx, @FormParam("photo") InputStream stream) 
+            throws IOException {
+        AppendBlobClient client = this.blob.getClient(ctx.getUserPrincipal().getName())
+            .getAppendBlobClient();
         BlobHttpHeaders blobHeaders = new BlobHttpHeaders().setContentType("image/jpeg");
-        client.uploadWithResponse(bstream, length, null,
-                                  blobHeaders, null, AccessTier.HOT, null, 
+        client.createWithResponse(blobHeaders, null, null, 
                                   Duration.of(1l, ChronoUnit.MINUTES), null);
-        //TODO: error handling for that
+        stream.transferTo(new BufferedOutputStream(client.getBlobOutputStream()));
         PhotoResponse resp = new PhotoResponse();
         resp.url = client.getBlobUrl();
         return Response.ok(resp).build();
     }
-
-    /*@GET
-    @Produces("application/json")
-    public Response getPhoto(@Context SecurityContext ctx) {
-
-    }*/
 }

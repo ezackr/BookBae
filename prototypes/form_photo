@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+if [ "$#" -ne 3 ]; then
+  exit 1
+fi
+set -x
+URL="http://localhost:8080"
+JSON="Content-Type: application/json"
+JWT_REQ='{ "email": "'$1'", "password": "'$2'"}'
+JWT_RESP=$(curl -s -d "$JWT_REQ" -H "$JSON" $URL/api/v1/login)
+AUTH_TOKEN=$(echo $JWT_RESP | python3 -c "import sys, json; print(json.load(sys.stdin)['authToken'])")
+AUTH_HEADER="Authorization: Bearer "$AUTH_TOKEN
+PHOTO_RESP=$(curl -s --form photo=@"$3" -H "$AUTH_HEADER" $URL/api/v1/photos)
