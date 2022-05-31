@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, StyleSheet, Text, TextInput, Pressable, Image } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import Client from '../../Client'
 
 const EnterPhotoScreen = ({route, navigation}) => {
 
@@ -11,7 +12,7 @@ const EnterPhotoScreen = ({route, navigation}) => {
     //add image uploading function
     //change profileSource to have the image link for displaying
     const onUploadPress = () => {
-        launchImageLibrary(null, (response) => {
+        launchImageLibrary(null, async (response) => {
             console.log('image picker closed');
 
             if (response.didCancel) {
@@ -19,8 +20,12 @@ const EnterPhotoScreen = ({route, navigation}) => {
             } else if (response.error) {
                 console.log('ImagePicker Error: ' + response.error);
             } else {
-                console.log(response.assets[0]);
-                updatePhoto(response.assets[0]);
+                const image = response.assets[0];
+                console.log(image);
+                updatePhoto(image);
+                await Client.logIn(route.params.email, route.params.password);
+                const url = await Client.setPhoto(image);
+                console.log(url);
             }
         })
     }
