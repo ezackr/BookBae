@@ -246,7 +246,7 @@ class Client {
         method: 'get',
         params: {email: email}
       })
-        .then(response => response.data.emailexists)
+        .then(response => response.data.doesEmailExist)
         .catch(response => {
           console.log(response)
           return null
