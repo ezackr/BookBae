@@ -35,7 +35,6 @@ const HomeScreen = ({navigation}) => {
       // collects/organizes user info for all potential matches.
       for (let i = 0; i < data.length; i++) {
         let match = data[i];
-        console.log(match);
         // does not add user if they do not have a 'name' or 'userId'.
         if ('name' in match && 'userId' in match) {
           // set default profile parameters.
@@ -53,7 +52,7 @@ const HomeScreen = ({navigation}) => {
           // adds age.
           if ('birthday' in match) {
             // calculates user age using their birthday.
-            let birthYear = parseInt(match.birthday.split('-'));
+            let birthYear = parseInt(match.birthday.split('-')[0]);
             if (!isNaN(birthYear)) {
               let currentYear = new Date().getFullYear();
               let age = currentYear - birthYear;
@@ -97,6 +96,7 @@ const HomeScreen = ({navigation}) => {
     setRerender(!rerender); // forces rerender
   };
 
+  // renders three main sections: topMenu, matchMenu, bottomMenu
   return (
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.topMenu}>
@@ -128,6 +128,7 @@ const HomeScreen = ({navigation}) => {
 export default HomeScreen;
 
 const ProfileCard = ({profile}) => {
+  // displays data for a given profile.
   return (
     <SafeAreaView style={matchStyles.matchBox}>
       <SafeAreaView style={matchStyles.header}>
