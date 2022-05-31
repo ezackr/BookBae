@@ -57,7 +57,7 @@ The application offers a number of API endpoints accessible from the root path. 
 - /recommends
     - GET
         - Returns a list of recommended users
-        - Produces: `[{“userid”: “<userid>”, “name”: “<name>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”}, ...]`
+        - Produces: `[{“userid”: “<userid>”, “name”: “<name>”, “gender”: “<gender>”, “favGenre”: “<favGenre>”, “birthday”: “<birthday>”, “bio”: “<bio>”, “bookList”: “<booklist>”}, ...]`
     - Will not return email or zipcode to protect privacy!
 - /like
     - PUT
