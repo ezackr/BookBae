@@ -162,7 +162,7 @@ const ProfileCard = ({profile}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffe9c1',
+    backgroundColor: '#f2deca',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#a53f3f',
+    backgroundColor: '#7c0a02',
     alignSelf: 'stretch',
     paddingRight: 10,
   },
