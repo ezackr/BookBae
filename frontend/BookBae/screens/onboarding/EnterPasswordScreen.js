@@ -27,7 +27,7 @@ const EnterPasswordScreen = ({route, navigation}) => {
         if (strength.id > 0) {
             console.log(password)
             Client.createUser(route.params.email, password);
-            navigation.navigate('EnterPhotoScreen', {
+            navigation.navigate('EnterNameScreen', {
                 ...route.params,
                 password: password
             })
