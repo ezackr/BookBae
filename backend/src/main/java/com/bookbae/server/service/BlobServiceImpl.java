@@ -17,6 +17,7 @@ public class BlobServiceImpl implements BlobService {
             .getBlobContainerClient("userphotos");
     }
 
+    @Override
     public synchronized BlobClient getClient(String blobName) {
         return container.getBlobClient(blobName);
     }    

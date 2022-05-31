@@ -16,6 +16,7 @@ public class SecretKeyServiceImpl implements SecretKeyService {
         rand.nextBytes(keyBytes);
     }
 
+    @Override
     public SecretKey getKey() {
         return Keys.hmacShaKeyFor(keyBytes);
     }
