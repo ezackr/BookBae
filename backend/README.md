@@ -41,7 +41,7 @@ The application offers a number of API endpoints accessible from the root path. 
 - /email?email=<email@email.com>
     - GET
       - Returns true if email is in the database, false otherwise
-      - Produces: `{“emailexists”: “<boolean>}`
+      - Produces: `{“doesEmailExist”: “<boolean>}`
     - Returns 404 response code if email is null
 - /create
     - POST
