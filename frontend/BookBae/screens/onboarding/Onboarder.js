@@ -33,7 +33,6 @@ const Onboarder = () => {
             <Stack.Screen name="EnterZipcodeScreen" component={EnterZipcodeScreen} />
             <Stack.Screen name="EnterGenreScreen" component={EnterGenreScreen} />
             <Stack.Screen name="EnterBooksScreen" component={EnterBooksScreen} />
-            <Stack.Screen name="EnterPhotoScreen" component={EnterPhotoScreen} />
             <Stack.Screen name="EnterBioScreen" component={EnterBioScreen} />
             <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
         </Stack.Navigator>
