@@ -117,6 +117,9 @@ const HomeScreen = ({navigation}) => {
         <Pressable
           style={matchStyles.button}
           onPress={() => {
+            if (matches[matches.length - 1].userId !== 'empty') {
+              // Client.sendLike(matches[matches.length - 1].userId);
+            }
             updateMatch();
           }}>
           <Image
@@ -162,7 +165,7 @@ const ProfileCard = ({profile}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2deca',
+    backgroundColor: '#fffdd1',
     alignItems: 'center',
     justifyContent: 'center',
   },
