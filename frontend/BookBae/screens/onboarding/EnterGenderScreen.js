@@ -1,35 +1,40 @@
 import React, {useState} from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, Pressable} from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 
 const EnterGenderScreen = ({route, navigation}) => {
+  const genders = [
+    {label: 'female', value: 'f'},
+    {label: 'male', value: 'm'},
+    {label: 'non-binary', value: 'n'},
+  ];
 
-    const genders = [{ label: 'female', value: 'f'}, {label: 'male', value: 'm'}, {label: 'non-binary', value: 'n'}]
+  const [option, setOption] = useState('f');
 
-    const [option, setOption] = useState('f');
+  //add necessary function to store gender
+  const onPress = () => {
+    console.log(option);
+    navigation.navigate('EnterBirthdayScreen', {
+      ...route.params,
+      gender: option,
+    });
+  };
 
-    //add necessary function to store gender
-    const onPress = () => {
-        console.log(option)
-        navigation.navigate('EnterBirthdayScreen', {
-            ...route.params,
-            gender: option
-        })
-    }
-
-    return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Enter Your Gender</Text>
-            <RadioForm radio_props={genders} onPress={(value) => {setOption(value)}}/>
-            <Pressable
-                style={styles.button}
-                onPress={onPress}>
-                <Text style={styles.buttonText}>Next</Text>
-             </Pressable>
-        </SafeAreaView>
-    );
-
-}
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Enter Your Gender</Text>
+      <RadioForm
+        radio_props={genders}
+        onPress={value => {
+          setOption(value);
+        }}
+      />
+      <Pressable style={styles.button} onPress={onPress}>
+        <Text style={styles.buttonText}>Next</Text>
+      </Pressable>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   title: {
@@ -45,28 +50,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 1,
-      padding: 10,
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
-   button: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: 12,
-      paddingHorizontal: 32,
-      borderRadius: 4,
-      elevation: 3,
-      backgroundColor: '#BD2A2A',
-      marginTop: 5,
-      marginBottom: 5,
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: '#BD2A2A',
+    marginTop: 5,
+    marginBottom: 5,
   },
   buttonText: {
-      fontSize: 16,
-      lineHeight: 21,
-      fontWeight: 'bold',
-      letterSpacing: 0.25,
-      color: 'white',
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });
 
