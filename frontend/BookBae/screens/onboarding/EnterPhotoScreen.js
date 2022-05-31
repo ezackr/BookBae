@@ -27,7 +27,6 @@ const EnterPhotoScreen = ({route, navigation}) => {
 
     //we probably don't need to do anything here, we can store image as it is added in onUploadPress
     const onPress = () => {
-        console.log(profileSource)
         navigation.navigate('EnterNameScreen', {
             email: route.params.email,
             password: route.params.password,
