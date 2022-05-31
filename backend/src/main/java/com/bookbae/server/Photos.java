@@ -20,7 +20,9 @@ import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.models.BlobHttpHeaders;
 import com.azure.storage.blob.models.AccessTier;
 
-
+/**
+ * Allows a user to set their profile photo.
+ */
 @SecuredResource
 @Path("/photos")
 public class Photos {
