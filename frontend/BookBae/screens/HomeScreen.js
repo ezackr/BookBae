@@ -1,11 +1,34 @@
 import React from 'react';
-import {Image, Pressable, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {
+  Alert,
+  Image,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  Modal,
+  TextInput,
+} from 'react-native';
+import RadioForm from 'react-native-simple-radio-button';
 import Client from '../Client.js';
 
 /**
  * Main App screen used to suggest matches to users.
  */
 const HomeScreen = ({navigation}) => {
+  // creates options for preferences menu.
+  // gender options:
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const genders = [
+    {label: 'Female', value: 'F_'},
+    {label: 'Male', value: 'M_'},
+    {label: 'Non-Binary', value: 'NB_'},
+  ];
+  const [option, setOption] = React.useState(null);
+  // age options:
+  const [lowerAge, setLowerAge] = React.useState(null);
+  const [upperAge, setUpperAge] = React.useState(null);
+
   const [rerender, setRerender] = React.useState(false); // used to force screen to rerender.
   // default message if user is out of matches.
   const outOfMatches = {
@@ -91,14 +114,72 @@ const HomeScreen = ({navigation}) => {
     setRerender(!rerender); // forces rerender
   };
 
-  // renders three main sections: topMenu, matchMenu, bottomMenu
+  // very basic preference input validation.
+  const validateInput = () => {
+    // ensures that preferences are a valid age range.
+    return lowerAge <= upperAge;
+  };
+
+  // renders three main sections: topMenu, matchMenu, bottomMenu (also contains preferences menu)
   return (
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.topMenu}>
         <Text style={styles.title}>BookBae</Text>
-        <Pressable style={styles.button} onPress={() => console.log('hello')}>
+        <Pressable
+          style={styles.button}
+          onPress={() => setModalVisible(!modalVisible)}>
           <Text style={styles.buttonText}>Preferences</Text>
         </Pressable>
+      </SafeAreaView>
+      <SafeAreaView>
+        <Modal animationType="slide" visible={modalVisible}>
+          <SafeAreaView style={styles.preferencesMenu}>
+            <Pressable
+              style={styles.button}
+              onPress={() => {
+                // checks if age preferences are valid.
+                if (validateInput()) {
+                  // sends input to database.
+                  Client.setPreferences({
+                    lowerAgeLimit: lowerAge,
+                    upperAgeLimit: upperAge,
+                    withinXMiles: 100,
+                    preferredGender: option,
+                  });
+                  // closes preferences menu.
+                  setModalVisible(!modalVisible);
+                }
+              }}>
+              <Text style={styles.buttonText}>Done</Text>
+            </Pressable>
+            <Text style={styles.preferencesText}>Select Gender:</Text>
+            <RadioForm
+              radio_props={genders}
+              initial={-1}
+              onPress={value => {
+                setOption(value);
+              }}
+            />
+            <Text style={styles.preferencesText}>Select Age Range:</Text>
+            <SafeAreaView style={{flexDirection: 'row'}}>
+              <TextInput
+                style={styles.preferencesInput}
+                numberOfLines={1}
+                onChangeText={setLowerAge}
+                value={lowerAge}
+                keyboardType="number-pad"
+              />
+              <Text style={styles.preferencesText}>To</Text>
+              <TextInput
+                style={styles.preferencesInput}
+                numberOfLines={1}
+                onChangeText={setUpperAge}
+                value={upperAge}
+                keyboardType="number-pad"
+              />
+            </SafeAreaView>
+          </SafeAreaView>
+        </Modal>
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
         <ProfileCard profile={matches[matches.length - 1]} />
@@ -163,12 +244,14 @@ const ProfileCard = ({profile}) => {
 };
 
 const styles = StyleSheet.create({
+  // defines entire container
   container: {
     flex: 1,
     backgroundColor: '#fffdd1',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  // title and preferences button
   topMenu: {
     flex: 1,
     flexDirection: 'row',
@@ -177,17 +260,42 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     paddingRight: 10,
   },
+  // profile card area
   matchMenu: {
     flex: 6,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // match/deny buttons
   bottomMenu: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // preferences popup menu
+  preferencesMenu: {
+    backgroundColor: '#fffdd1',
+    height: '100%',
+    padding: 10,
+  },
+  // text within preferences menu
+  preferencesText: {
+    fontSize: 24,
+    fontFamily: 'sans-serif-medium',
+    paddingTop: 10,
+    color: 'black',
+  },
+  // age text input styling
+  preferencesInput: {
+    height: 40,
+    backgroundColor: 'white',
+    width: '12.5%',
+    margin: 10,
+    borderWidth: 1,
+    padding: 10,
+  },
+  // BookBae title
   title: {
     color: 'white',
     fontSize: 48,
@@ -195,6 +303,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     padding: 10,
   },
+  // all normal (non-icon) buttons
   button: {
     alignItems: 'center',
     alignSelf: 'center',
@@ -206,6 +315,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
+  // text for normal buttons.
   buttonText: {
     fontSize: 18,
     lineHeight: 21,
@@ -216,6 +326,7 @@ const styles = StyleSheet.create({
 });
 
 const matchStyles = StyleSheet.create({
+  // size of profile card container
   matchBox: {
     height: 475,
     width: 300,
@@ -226,6 +337,7 @@ const matchStyles = StyleSheet.create({
     elevation: 15,
     shadowColor: '#7c0a02',
   },
+  // container for name and age
   header: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -233,6 +345,7 @@ const matchStyles = StyleSheet.create({
     alignSelf: 'stretch',
     padding: 10,
   },
+  // user name
   name: {
     color: 'black',
     fontSize: 32,
@@ -241,14 +354,17 @@ const matchStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
+  // user age/gender
   age: {
     color: '#242526',
     fontSize: 24,
   },
+  // container for user bio
   bioContainer: {
     flex: 3,
     alignSelf: 'stretch',
   },
+  // user bio
   bioText: {
     fontSize: 24,
     color: 'black',
@@ -257,6 +373,7 @@ const matchStyles = StyleSheet.create({
     alignSelf: 'stretch',
     padding: 10,
   },
+  // user books at bottom of profile card
   bookDisplay: {
     flex: 3,
     flexDirection: 'row',
@@ -264,16 +381,19 @@ const matchStyles = StyleSheet.create({
     alignItems: 'flex-end',
     padding: 5,
   },
+  // books in book display
   book: {
     height: 175,
     width: 125,
     margin: 10,
     borderRadius: 10,
   },
+  // icon buttons
   button: {
     margin: 20,
     paddingBottom: 10,
   },
+  // button image size
   buttonIcon: {
     height: 115,
     width: 115,
