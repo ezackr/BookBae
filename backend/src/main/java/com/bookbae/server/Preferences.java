@@ -16,13 +16,20 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import jakarta.inject.Inject;
 
+/**
+ * Provides endpoints for getting and setting a user's preferences.
+ *
+ * <br>Click here for more details about what each endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/preferences")
 public class Preferences {
     private DatabasePoolService database;
-    private String getPreferencesString = "SELECT * FROM preference WHERE user_id = ?;";
+    private String GET_PREFERENCES = "SELECT * " +
+            "FROM preference " +
+            "WHERE user_id = ?;";
 
-    private String setPreferencesString = "UPDATE preference " +
+    private String SET_PREFERENCES = "UPDATE preference " +
             "SET low_target_age = ?, high_target_age = ?, " +
             "within_x_miles = ?, preferred_gender = ? " +
             "WHERE user_id = ?;";
@@ -32,7 +39,14 @@ public class Preferences {
         this.database = database;
     }
 
-    @Path("/get")
+    /**
+     * Retreives the preferences of the client user
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a
+     *            <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/PreferencesMessage.java">PreferencesMessage</a> object
+     *            <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getPreferences(@Context SecurityContext ctx) {
@@ -41,7 +55,7 @@ public class Preferences {
         String clientUserId = ctx.getUserPrincipal().getName();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement getPreferencesStatement = conn.prepareStatement(getPreferencesString);
+            PreparedStatement getPreferencesStatement = conn.prepareStatement(GET_PREFERENCES);
             getPreferencesStatement.setString(1, clientUserId);
             ResultSet resultSet = getPreferencesStatement.executeQuery();
 
@@ -64,14 +78,22 @@ public class Preferences {
         return Response.ok(prefs).build();
     }
 
-    @Path("/set")
+    /**
+     * Sets the preferences of the client user
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param prefs A <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/PreferencesMessage.java">PreferencesMessage</a> object
+     *              containing the desired preferences
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status.
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @PUT
     @Consumes("application/json")
     public Response setPreferences(@Context SecurityContext ctx, PreferencesMessage prefs) {
         String clientUserId = ctx.getUserPrincipal().getName();
 
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement setPreferencesStatement = conn.prepareStatement(setPreferencesString);
+            PreparedStatement setPreferencesStatement = conn.prepareStatement(SET_PREFERENCES);
             setPreferencesStatement.setInt(1, prefs.lowerAgeLimit);
             setPreferencesStatement.setInt(2, prefs.upperAgeLimit);
             setPreferencesStatement.setInt(3, prefs.withinXMiles);
@@ -79,10 +101,6 @@ public class Preferences {
             setPreferencesStatement.setString(5, clientUserId);
             setPreferencesStatement.executeUpdate();
 
-//            PreparedStatement checkStatement = conn.prepareStatement("SELECT * FROM preference;");
-//            ResultSet resultSet = checkStatement.executeQuery();
-//            System.out.println(resultSet.next());
-//            System.out.println(resultSet.getString("preferred_gender"));
 
         } catch (SQLException e) {
             e.printStackTrace();

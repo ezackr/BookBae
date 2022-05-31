@@ -12,16 +12,29 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import jakarta.inject.Inject;
 
+/**
+ * Provides an endpoint to check if an email exists.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @Path("/email")
 public class Email {
     private DatabasePoolService database;
 
-    private String checkEmailExistsString = "SELECT * FROM user_info WHERE email = ?;";
+    private static final String CHECK_EMAIL_EXISTS = "SELECT *" +
+            " FROM user_info" +
+            " WHERE email = ?;";
     @Inject
     public Email(DatabasePoolService database) {
         this.database = database;
     }
 
+    /**
+     * Check if a given email is already in use.
+     *
+     * @param email The email to check
+     * @return An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/EmailResponse.java">Email Response</a> object containing a boolean specifying whether or not the email exists
+     */
     @GET
     @Produces("application/json")
     public Response checkEmail(@QueryParam("email") String email) {
@@ -30,7 +43,7 @@ public class Email {
             return Response.status(404).build();
         }
         try (Connection conn = this.database.getConnection()) {
-            PreparedStatement checkEmailExistsStatement = conn.prepareStatement(checkEmailExistsString);
+            PreparedStatement checkEmailExistsStatement = conn.prepareStatement(CHECK_EMAIL_EXISTS);
             checkEmailExistsStatement.setString(1, email);
             ResultSet resultSet = checkEmailExistsStatement.executeQuery();
 
@@ -42,9 +55,10 @@ public class Email {
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return Response.serverError().build();
         }
         EmailResponse resp = new EmailResponse();
-        resp.setDoesEmailExist(emailIsInDatabase);
+        resp.doesEmailExist = emailIsInDatabase;
         return Response.ok(resp).build();
     }
 }

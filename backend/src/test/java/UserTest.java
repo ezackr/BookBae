@@ -42,7 +42,7 @@ public class UserTest extends AbstractTest {
         var resp = userResource.getUser(new MockSecurityContext(userId));
         var entity = (UserResponse) resp.getEntity();
         assertEquals(200, resp.getStatus());
-        assertEquals(accountRequest.getEmail() , entity.getEmail());
+        assertEquals(accountRequest.email, entity.email);
     }
 
     @Test
@@ -72,19 +72,19 @@ public class UserTest extends AbstractTest {
 
         //ensure response values are correct
         var getRespEntity = (UserResponse) getResp.getEntity();
-        assertEquals(userReq.getEmail(), getRespEntity.getEmail());
-        assertEquals(userReq.getName(), getRespEntity.getName());
-        assertEquals(userReq.getGender(), getRespEntity.getGender());
-        assertEquals(userReq.getFavGenre(), getRespEntity.getFavGenre());
-        assertEquals(userReq.getBirthday(), getRespEntity.getBirthday());
-        assertEquals(userReq.getBio(), getRespEntity.getBio());
-        assertEquals(userReq.getZipcode(), getRespEntity.getZipcode());
+        assertEquals(userReq.email, getRespEntity.email);
+        assertEquals(userReq.name, getRespEntity.name);
+        assertEquals(userReq.gender, getRespEntity.gender);
+        assertEquals(userReq.favGenre, getRespEntity.favGenre);
+        assertEquals(userReq.birthday, getRespEntity.birthday);
+        assertEquals(userReq.bio, getRespEntity.bio);
+        assertEquals(userReq.zipcode, getRespEntity.zipcode);
     }
 
     @Test
     void sqlFailureTest() {
-        userResource = new User(new SQLFailService());
-        var resp = userResource.getUser(new MockSecurityContext(UUID.randomUUID().toString()));
+        User badResource = new User(new SQLFailService());
+        var resp = badResource.getUser(new MockSecurityContext(UUID.randomUUID().toString()));
         assertEquals(500, resp.getStatus());
     }
 }

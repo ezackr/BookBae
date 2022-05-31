@@ -18,12 +18,9 @@ On your first use of the app, you will need to create an account. Press the "Cre
 
 Upon entering the Home Screen, the user is prompted with an overview of other user's profiles, known as the swiping screen. If a user likes their proposed match, they can swipe right for "interested" and swipe left for "not interested". If two users both swipe right on each other, they are notified of the new match and can navigate to the chat section to begin a conversation (WORK IN PROGRESS).
 
-## Known Bugs/Deficiencies:
-A list of known bugs can be viewed at the following link: https://docs.google.com/document/d/1kywHLT3OdfBRYAaiAyOP3Fqx1QtKbCcWqFymZPzjE6k/edit?usp=sharing
+## Bugs/Deficiencies:
+A list of known bugs can be viewed by navigating to the "Issues" tab in the repository.
 
-This document is managed by the TeamBookBae shared account and documents both developer-observed bugs and user-documented bugs (see below).
-
-## How to Report a Bug:
-To report a bug, please fill out the following form: https://forms.gle/xE5qQRQcvD9FFVWVA
+To add a bug, click "New Issue" and follow the Bug Report template provided to describe the error.
 
 

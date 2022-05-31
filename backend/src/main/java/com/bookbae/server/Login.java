@@ -19,15 +19,24 @@ import com.bookbae.server.json.AccountRequest;
 import com.bookbae.server.json.LoginResponse;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * Provides an endpoint for a user to log in.
+ *
+ * <br>Click here for more details about what the endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @Path("/login")
 public class Login {
     private SecretKey key;
     private DatabasePoolService database;
-    private static String getUserIdFromEmailString = "SELECT user_id FROM user_info WHERE email = ?;";
-    private static String retrieveSaltString = "SELECT salt " +
+    private static final String GET_USER_ID_FROM_EMAIL = "SELECT user_id " +
+            "FROM user_info " +
+            "WHERE email = ?;";
+
+    private static final String RETRIEVE_SALT = "SELECT salt " +
             "FROM login_info " +
             "WHERE user_id = ?";
-    private static String checkLoginInfoString = "SELECT user_id " +
+
+    private static final String CHECK_LOGIN_INFO = "SELECT user_id " +
             "FROM login_info " +
             "WHERE user_id = ? " +
             "AND hash = ?;";
@@ -37,19 +46,28 @@ public class Login {
         this.database = database;
         this.key = keys.getKey();
     }
-    
+
+    /**
+     * Attempts to log a user in with a given email and password.
+     *
+     * @param req An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/AccountRequest.java">AccountRequest</a>
+     *            object containing an email and password
+     * @return If successful, returns a jakarta ResponseBuilder with an OK status containing a
+     *               <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/LoginResponse.java">LoginResponse</a> object
+     *         <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response tryLogin(AccountRequest data) {
+    public Response tryLogin(AccountRequest req) {
 
-        String email = data.getEmail();
-        String password = data.getPassword();
+        String email = req.email;
+        String password = req.password;
         String userId = "";
 
         try (Connection conn = this.database.getConnection()) {
             // get user id
-            PreparedStatement getUserIdStatement = conn.prepareStatement(getUserIdFromEmailString);
+            PreparedStatement getUserIdStatement = conn.prepareStatement(GET_USER_ID_FROM_EMAIL);
             getUserIdStatement.setString(1, email);
             ResultSet resultSet = getUserIdStatement.executeQuery();
 
@@ -61,7 +79,7 @@ public class Login {
             resultSet.close();
 
             // get user's salt
-            PreparedStatement retrieveSaltStatement = conn.prepareStatement(retrieveSaltString);
+            PreparedStatement retrieveSaltStatement = conn.prepareStatement(RETRIEVE_SALT);
             retrieveSaltStatement.setString(1, userId);
             resultSet = retrieveSaltStatement.executeQuery();
 
@@ -77,7 +95,7 @@ public class Login {
             // check if login information is correct
             String hashedPw = BCrypt.hashpw(password, salt);
 
-            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(checkLoginInfoString);
+            PreparedStatement checkLoginInfoStatement = conn.prepareStatement(CHECK_LOGIN_INFO);
             checkLoginInfoStatement.setString(1, userId);
             checkLoginInfoStatement.setString(2, hashedPw);
             resultSet = checkLoginInfoStatement.executeQuery();

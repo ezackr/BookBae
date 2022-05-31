@@ -20,15 +20,20 @@ import com.bookbae.server.json.UserResponse;
 import com.bookbae.server.json.UserRequest;
 import java.util.Objects;
 
+/**
+ * Provides endpoints for getting information about a user and alternating information about a user.
+ *
+ * <br>Click here for more details about what each endpoint takes as input and gives as output: <a href="https://github.com/ezackr/BookBae/blob/main/backend/README.md">Backend Readme</a>
+ */
 @SecuredResource
 @Path("/user")
 public class User {
     
     private DatabasePoolService database;
-    private static String retrieveUserInfoString = "SELECT * " +
+    private static final String RETRIEVE_USER_INFO = "SELECT * " +
             "FROM user_info " +
             "WHERE user_id = ?;";
-    private static String updateUserInfoString = "UPDATE user_info " +
+    private static final String UPDATE_USER_INFO = "UPDATE user_info " +
             "SET name = ?, gender = ?, fav_genre = ?," +
             "birthday = ?, bio = ?, email = ?, zipcode = ? " +
             "WHERE user_id = ?;";
@@ -38,6 +43,13 @@ public class User {
         this.database = database;
     }
 
+    /**
+     * Retreives basic information about the client user
+     * @param ctx A SecurityContext variable containing the user's id
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserResponse.java">UserResponse</a> object
+     *      containing basic information about the client user, but not their user id
+     *      <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @GET
     @Produces("application/json")
     public Response getUser(@Context SecurityContext ctx) {
@@ -50,7 +62,7 @@ public class User {
         try (Connection conn = this.database.getConnection()) {
             // retrieve user info
             String userId = ctx.getUserPrincipal().getName();
-            PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(retrieveUserInfoString);
+            PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(RETRIEVE_USER_INFO);
             retrieveUserInfoStatement.setString(1, userId);
             ResultSet resultSet = retrieveUserInfoStatement.executeQuery();
 
@@ -61,13 +73,13 @@ public class User {
             }
 
              // populate resp object
-             resp.setEmail(resultSet.getString("email"));
-             resp.setName(resultSet.getString("name"));
-             resp.setGender(resultSet.getString("gender"));
-             resp.setFavGenre(resultSet.getString("fav_genre"));
-             resp.setBirthday(Objects.toString(resultSet.getDate("birthday"))); // saves birthday as a string if not null
-             resp.setBio(resultSet.getString("bio"));
-             resp.setZipcode(resultSet.getString("zipcode"));
+             resp.email = resultSet.getString("email");
+             resp.name = resultSet.getString("name");
+             resp.gender = resultSet.getString("gender");
+             resp.favGenre = resultSet.getString("fav_genre");
+             resp.birthday = Objects.toString(resultSet.getDate("birthday")); // saves birthday as a string if not null
+             resp.bio = resultSet.getString("bio");
+             resp.zipcode = resultSet.getString("zipcode");
              resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,6 +88,15 @@ public class User {
         return Response.ok(resp).build();
     }
 
+    /**
+     * Sets a number of attributes for the client user.
+     *
+     * @param ctx A SecurityContext variable containing the user's id
+     * @param req An <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserRequest.java">UserRequest</a> object containing attributes to set for the client user
+     * @return If successful, returns a <a href="https://github.com/ezackr/BookBae/blob/main/backend/src/main/java/com/bookbae/server/json/UserResponse.java">UserResponse</a> object
+     *         containing the attributes set for the client user, including the generated user id
+     *          <br>If unsuccessful, returns a jakarta ResponseBuilder with a server error status.
+     */
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
@@ -87,14 +108,14 @@ public class User {
         try (Connection conn = this.database.getConnection()) {
             // update user info
             String userId = ctx.getUserPrincipal().getName();
-            PreparedStatement updateUserInfoStatement = conn.prepareStatement(updateUserInfoString);
-            updateUserInfoStatement.setString(1, req.getName());
-            updateUserInfoStatement.setString(2, req.getGender());
-            updateUserInfoStatement.setString(3, req.getFavGenre());
-            updateUserInfoStatement.setDate(4, java.sql.Date.valueOf(req.getBirthday()));
-            updateUserInfoStatement.setString(5, req.getBio());
-            updateUserInfoStatement.setString(6, req.getEmail());
-            updateUserInfoStatement.setString(7, req.getZipcode());
+            PreparedStatement updateUserInfoStatement = conn.prepareStatement(UPDATE_USER_INFO);
+            updateUserInfoStatement.setString(1, req.name);
+            updateUserInfoStatement.setString(2, req.gender);
+            updateUserInfoStatement.setString(3, req.favGenre);
+            updateUserInfoStatement.setDate(4, java.sql.Date.valueOf(req.birthday));
+            updateUserInfoStatement.setString(5, req.bio);
+            updateUserInfoStatement.setString(6, req.email);
+            updateUserInfoStatement.setString(7, req.zipcode);
             updateUserInfoStatement.setString(8, userId);
             updateUserInfoStatement.executeUpdate();
         } catch (SQLException e) {
