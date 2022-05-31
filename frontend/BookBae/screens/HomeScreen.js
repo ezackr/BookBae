@@ -146,12 +146,11 @@ const ProfileCard = ({profile}) => {
       <SafeAreaView style={matchStyles.bookDisplay}>
         <Image
           style={matchStyles.book}
-          source={require('../images/title3.jpg')}
+          source={require('../images/title1.jpg')}
         />
-        <Text>{profile.books[0]}</Text>
         <Image
           style={matchStyles.book}
-          source={{ uri: profile.books[0]}}
+          source={require('../images/title3.jpg')}
         />
       </SafeAreaView>
     </SafeAreaView>
