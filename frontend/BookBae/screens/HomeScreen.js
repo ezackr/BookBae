@@ -16,6 +16,7 @@ const HomeScreen = ({navigation}) => {
     gender: '',
     bio: 'Try re-loading the app or come again later! \nCheck out some of our favorite books in the meantime:',
     favGenre: '',
+    books: ['../images/title1.png', '../images/title3.png'],
   };
   const [matches, setMatches] = React.useState([outOfMatches]); // list of matches.
 
@@ -40,6 +41,7 @@ const HomeScreen = ({navigation}) => {
             gender: '',
             bio: match.name + ' does not have a bio yet.',
             favGenre: 'N/A',
+            books: ['../images/nobook.png', '../images/nobook.png'],
           };
 
           // add user profile parameters if possible.
@@ -144,11 +146,12 @@ const ProfileCard = ({profile}) => {
       <SafeAreaView style={matchStyles.bookDisplay}>
         <Image
           style={matchStyles.book}
-          source={require('../images/title1.jpg')}
+          source={require('../images/title3.jpg')}
         />
+        <Text>{profile.books[0]}</Text>
         <Image
           style={matchStyles.book}
-          source={require('../images/title3.jpg')}
+          source={{ uri: profile.books[0]}}
         />
       </SafeAreaView>
     </SafeAreaView>
