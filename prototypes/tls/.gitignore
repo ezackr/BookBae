@@ -1,0 +1,6 @@
+*.key
+*.csr
+*.srl
+*.pem
+*.p12
+bookbae.crt
