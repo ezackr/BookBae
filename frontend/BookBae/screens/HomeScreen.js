@@ -20,7 +20,7 @@ const HomeScreen = ({navigation}) => {
     name: 'No Matches Found',
     age: '',
     gender: '',
-    bio: 'Try re-loading the screen or come again later!',
+    bio: 'Try re-loading the screen or come again later! \nCheck out some of our favorite books:',
     favGenre: '',
   };
   const [matches, setMatches] = React.useState([outOfMatches]); // list of matches.
@@ -73,6 +73,11 @@ const HomeScreen = ({navigation}) => {
             matchInfo.favGenre = match.favGenre;
           }
 
+          // updates name to solely include first name.
+          if (match.name.split(' ').length > 1) {
+            matchInfo.name = match.name.split(' ')[0];
+          }
+
           // add new user data to the end of the array.
           setMatches(prevState => {
             prevState.push(matchInfo);
@@ -84,12 +89,12 @@ const HomeScreen = ({navigation}) => {
   }, []);
 
   const onMatch = () => {
-    console.log('before: ' + matches[matches.length - 1].name);
+    // if only remaining "profile" is the default message, do not change.
     if (matches[matches.length - 1].key !== 'empty') {
+      // otherwise, go to next profile.
       matches.pop();
     }
-    setRerender(!rerender);
-    console.log('after: ' + matches[matches.length - 1].name);
+    setRerender(!rerender); // forces rerender
   };
 
   return (
@@ -125,6 +130,16 @@ export default HomeScreen;
 const ProfileCard = ({profile}) => {
   return (
     <SafeAreaView style={matchStyles.matchBox}>
+      <SafeAreaView style={matchStyles.header}>
+        <Text style={matchStyles.name}>{profile.name}</Text>
+        <Text style={matchStyles.age}>
+          {profile.age}
+          {profile.gender}
+        </Text>
+      </SafeAreaView>
+      <SafeAreaView style={matchStyles.bioContainer}>
+        <Text style={matchStyles.bioText}>{profile.bio}</Text>
+      </SafeAreaView>
       <SafeAreaView style={matchStyles.bookDisplay}>
         <Image
           style={matchStyles.book}
@@ -132,18 +147,7 @@ const ProfileCard = ({profile}) => {
         />
         <Image
           style={matchStyles.book}
-          source={require('../images/title2.jpeg')}
-        />
-      </SafeAreaView>
-      <Text style={matchStyles.frontName}>{profile.name} {profile.age}{profile.gender}</Text>
-      <SafeAreaView style={matchStyles.bookDisplay}>
-        <Image
-          style={matchStyles.book}
           source={require('../images/title3.jpg')}
-        />
-        <Image
-          style={matchStyles.book}
-          source={require('../images/title4.jpeg')}
         />
       </SafeAreaView>
     </SafeAreaView>
@@ -190,27 +194,53 @@ const matchStyles = StyleSheet.create({
     width: 300,
     backgroundColor: 'white',
     borderRadius: 25,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     elevation: 15,
     shadowColor: '#7c0a02',
   },
-  frontName: {
+  header: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    padding: 10,
+  },
+  name: {
     color: 'black',
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  age: {
+    color: '#242526',
+    fontSize: 24,
+  },
+  bioContainer: {
+    flex: 3,
+    alignSelf: 'stretch',
+  },
+  bioText: {
+    fontSize: 24,
+    color: 'black',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    padding: 10,
   },
   bookDisplay: {
+    flex: 3,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    padding: 5,
   },
   book: {
     height: 175,
     width: 125,
     margin: 10,
+    borderRadius: 10,
   },
   button: {
     margin: 20,
