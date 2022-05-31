@@ -6,22 +6,17 @@ import {
   Text,
   TextInput,
   Pressable,
-  Image,
   FlatList,
 } from 'react-native';
 import axios from 'axios';
 
 const EnterBooksScreen = ({route, navigation}) => {
-  const bookCover =
-    'https://www.pngitem.com/pimgs/m/19-191625_icon-plus-png-gray-plus-icon-png-transparent.png';
-
   const [text, setText] = React.useState(null);
   const [bookList, setBookList] = React.useState([]);
   const [idList, setIdList] = React.useState([]);
 
   // we probably don't need to do anything here, we can store books as they are added in onChangeText
   const onPress = () => {
-    console.log(bookCover);
     navigation.navigate('EnterBioScreen', {
       ...route.params,
       books: idList,

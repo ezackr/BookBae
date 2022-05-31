@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  Image,
-  Pressable,
-} from 'react-native';
+import {StyleSheet, Text, SafeAreaView, Image, Pressable} from 'react-native';
 import Client from '../Client.js';
 
 /**
