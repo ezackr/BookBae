@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, SafeAreaView, Image, Pressable} from 'react-native';
+import {Image, Pressable, SafeAreaView, StyleSheet, Text} from 'react-native';
 import Client from '../Client.js';
 
 /**
@@ -51,8 +51,7 @@ const HomeScreen = ({navigation}) => {
             let birthYear = parseInt(match.birthday.split('-')[0]);
             if (!isNaN(birthYear)) {
               let currentYear = new Date().getFullYear();
-              let age = currentYear - birthYear;
-              matchInfo.age = age;
+              matchInfo.age = currentYear - birthYear;
             }
           }
           // adds gender.
@@ -97,6 +96,9 @@ const HomeScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.topMenu}>
         <Text style={styles.title}>BookBae</Text>
+        <Pressable style={styles.button} onPress={() => console.log('hello')}>
+          <Text style={styles.buttonText}>Preferences</Text>
+        </Pressable>
       </SafeAreaView>
       <SafeAreaView style={styles.matchMenu}>
         <ProfileCard profile={matches[matches.length - 1]} />
@@ -167,9 +169,10 @@ const styles = StyleSheet.create({
   topMenu: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-evenly',
     backgroundColor: '#a53f3f',
     alignSelf: 'stretch',
+    paddingRight: 10,
   },
   matchMenu: {
     flex: 6,
@@ -183,11 +186,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    color: 'black',
+    color: 'white',
     fontSize: 48,
-    fontWeight: 'bold',
+    fontFamily: 'sans-serif-medium',
     paddingLeft: 20,
     padding: 10,
+  },
+  button: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: '#BD2A2A',
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  buttonText: {
+    fontSize: 18,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });
 
@@ -213,6 +234,7 @@ const matchStyles = StyleSheet.create({
     color: 'black',
     fontSize: 32,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif-medium',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
