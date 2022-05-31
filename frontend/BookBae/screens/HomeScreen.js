@@ -105,14 +105,20 @@ const HomeScreen = ({navigation}) => {
           onPress={() => {
             updateMatch();
           }}>
-          <Image source={require('../images/deny.png')} />
+          <Image
+            style={matchStyles.buttonIcon}
+            source={require('../images/deny.png')}
+          />
         </Pressable>
         <Pressable
           style={matchStyles.button}
           onPress={() => {
             updateMatch();
           }}>
-          <Image source={require('../images/accept.png')} />
+          <Image
+            style={matchStyles.buttonIcon}
+            source={require('../images/accept.png')}
+          />
         </Pressable>
       </SafeAreaView>
     </SafeAreaView>
@@ -240,5 +246,9 @@ const matchStyles = StyleSheet.create({
   button: {
     margin: 20,
     paddingBottom: 10,
+  },
+  buttonIcon: {
+    height: 115,
+    width: 115,
   },
 });
