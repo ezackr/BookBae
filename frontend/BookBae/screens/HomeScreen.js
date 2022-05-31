@@ -14,7 +14,7 @@ const HomeScreen = ({navigation}) => {
     name: 'No Matches Found',
     age: '',
     gender: '',
-    bio: 'Try re-loading the screen or come again later! \nCheck out some of our favorite books:',
+    bio: 'Try re-loading the app or come again later! \nCheck out some of our favorite books in the meantime:',
     favGenre: '',
   };
   const [matches, setMatches] = React.useState([outOfMatches]); // list of matches.
@@ -81,7 +81,7 @@ const HomeScreen = ({navigation}) => {
     });
   }, []);
 
-  const onMatch = () => {
+  const updateMatch = () => {
     // if only remaining "profile" is the default message, do not change.
     if (matches[matches.length - 1].key !== 'empty') {
       // otherwise, go to next profile.
@@ -103,14 +103,14 @@ const HomeScreen = ({navigation}) => {
         <Pressable
           style={matchStyles.button}
           onPress={() => {
-            onMatch();
+            updateMatch();
           }}>
           <Image source={require('../images/deny.png')} />
         </Pressable>
         <Pressable
           style={matchStyles.button}
           onPress={() => {
-            onMatch();
+            updateMatch();
           }}>
           <Image source={require('../images/accept.png')} />
         </Pressable>
