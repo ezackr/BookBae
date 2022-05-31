@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import moment from 'moment'
+import moment from 'moment';
+import { AgeFromDate } from 'age-calculator';
 
 const EnterBirthdayScreen = ({route, navigation}) => {
 
-    const [date, setDate] = useState(new Date())
-    const [open, setOpen] = useState(false)
+    const [date, setDate] = useState(new Date());
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState('');
 
     //add necessary function to store birthday
     const onPress = () => {
-        console.log(date)
-        navigation.navigate('EnterZipcodeScreen', {
-            ...route.params,
-            birthday: moment(date).format('YYYY-MM-DD')
-        })
+        const age = new AgeFromDate(date).age;
+        if (age < 18) {
+            setMessage('You must be at least 18 years old to use this app.')
+        } else {
+            console.log(date)
+            navigation.navigate('EnterZipcodeScreen', {
+                ...route.params,
+                birthday: moment(date).format('YYYY-MM-DD')
+            })
+        }
     }
 
     return (
@@ -34,6 +41,7 @@ const EnterBirthdayScreen = ({route, navigation}) => {
                   setOpen(false)
                 }}
               />
+              <Text> {message} </Text>
             <Pressable
                 style={styles.button}
                 onPress={onPress}>
