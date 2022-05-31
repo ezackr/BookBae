@@ -2,7 +2,7 @@
 <network-security-config>
     <base-config>
         <trust-anchors>
-            <certificates src="@raw/bookbaeCA.crt"/>
+            <certificates src="@raw/bookbaeca"/>
             <certificates src="system"/>
         </trust-anchors>
     </base-config>

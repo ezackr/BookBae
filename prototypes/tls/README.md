@@ -11,7 +11,7 @@
   - imports the system's trusted CA's to Glassfish's trusted CA's
   - only need to do this once
   - or, if it causes issues, empty the cacerts.jks file of imported certificates and re-import the (possibly-updated) system certificates
-- `openssl pkcs12 -export -in bookbae.crt -inkey key.pem -out bookbae.p12 -name bookbae -CAfile bookbaeCA.crt -caname "Bookbae CA"`
+- `openssl pkcs12 -export -in bookbae.crt -inkey bookbae.key -out bookbae.p12 -name bookbae -CAfile bookbaeCA.crt -caname "Bookbae CA"`
   - creates a package of our certificates that may be imported by Glassfish
 - `keytool -importkeystore -deststorepass changeit -destkeystore keystore.jks -srckeystore bookbae.p12 -srcstoretype PKCS12 -srcstorepass changeit -alias bookbae`
   - Imports the keys into the Glassfish keystore
@@ -26,5 +26,5 @@
     - certname must be the same as the alias set in the keytool importkeystore command that operated on bookbae.p12
   - `stop-domain`
   - `start-domain`
-- `cp -pv bookbaeCA.crt ../../frontend/BookBae/android/app/src/main/res/raw/`
+- `cp -pv bookbaeCA.crt ../../frontend/BookBae/android/app/src/main/res/raw/bookbaeca`
   - Move the CA Certificate to the Android app build so it can incorporate it
