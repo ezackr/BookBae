@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, StyleSheet, Text, TextInput, Pressable, Image } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+//import { launchImageLibrary } from 'react-native-image-picker';
 
 const EnterPhotoScreen = ({route, navigation}) => {
 
