@@ -52,9 +52,9 @@ class Client {
   }
 
   /**
-  * Gets user matching preferences
-  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}}, or null for failure
-  */
+   * Gets user matching preferences
+   * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}}, or null for failure
+   */
   static async getPreferences() {
     return await axios({
       baseURL: Client.ROOT_PATH,
@@ -70,10 +70,10 @@ class Client {
   }
 
   /**
-  * Sets user matching preferences
-  * @param {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} preferences
-  * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} new preferences, or null for failure
-  */
+   * Sets user matching preferences
+   * @param {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} preferences
+   * @return {{lowerAgeLimit, upperAgeLimit, withinXMiles, preferredGender}} new preferences, or null for failure
+   */
   static async setPreferences(preferences) {
     return await axios({
       baseURL: Client.ROOT_PATH,
@@ -195,10 +195,10 @@ class Client {
   }
 
   /**
-  * Gets the messages associated with the given user
-  * @param {string} matchId - the ID of the user to get messages from
-  * @return [{"userid": "<userid>", "timestamp": "<timestamp>", "text": "<text>", "nthMessage": "<nthMessage>"}, ...]
-  */
+   * Gets the messages associated with the given user
+   * @param {string} matchId - the ID of the user to get messages from
+   * @return [{"userid": "<userid>", "timestamp": "<timestamp>", "text": "<text>", "nthMessage": "<nthMessage>"}, ...]
+   */
   static async getMessages(matchId) {
     return await axios({
       baseURL: Client.ROOT_PATH,
@@ -214,18 +214,18 @@ class Client {
   }
 
   /**
-  * Sends the given message to the given user
-  * @param {string} matchId - the ID of the user to send the message to
-  * @param {string} message - the message to send
-  * @return {boolean} true iff message was sent successfully
-  */
+   * Sends the given message to the given user
+   * @param {string} matchId - the ID of the user to send the message to
+   * @param {string} message - the message to send
+   * @return {boolean} true iff message was sent successfully
+   */
   static async sendMessage(matchId, message) {
     return await axios({
       baseURL: Client.ROOT_PATH,
       url: '/chats/' + matchId,
       method: 'post',
       headers: {Authorization: 'Bearer ' + Client.authToken},
-      data: {text: message}
+      data: {text: message},
     })
       .then(response => true)
       .catch(response => {
@@ -253,43 +253,45 @@ class Client {
         });
     }
 
-    /**
-    * Gets the list of IDs representing the user's books
-    * @return {[string]} the user's book IDs, or null for failed request
-    */
-    static async getBooks() {
-      return await axios({
-        baseURL: Client.ROOT_PATH,
-        url: '/book/get',
-        method: 'get',
-        headers: {Authorization: 'Bearer ' + Client.authToken},
-      })
-        .then(response => response.data.map((bookObj) => bookObj.bookid))
-        .catch(response => {
-          console.log(response)
-          return null
-        });
-    }
+  /**
+   * Gets the list of IDs representing the user's books
+   * @return {[string]} the user's book IDs, or null for failed request
+   */
+  static async getBooks() {
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/book/get',
+      method: 'get',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+    })
+      .then(response => response.data.map(bookObj => bookObj.bookid))
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
+  }
 
-    /**
-    * Adds the given books to the user's account
-    * @param {[string]} the IDs of the books to add
-    * @return {[string]} updated list of user's book IDs, or null for failed request
-    */
-    static async addBooks(books) {
-      return await axios({
-        baseURL: Client.ROOT_PATH,
-        url: '/book/add',
-        method: 'put',
-        headers: {Authorization: 'Bearer ' + Client.authToken},
-        data: books.map((book) => {return {bookid: book}})
-      })
-        .then(response => response.data.map((bookObj) => bookObj.bookid))
-        .catch(response => {
-          console.log(response)
-          return null
-        });
-    }
+  /**
+   * Adds the given books to the user's account
+   * @param {[string]} the IDs of the books to add
+   * @return {[string]} updated list of user's book IDs, or null for failed request
+   */
+  static async addBooks(books) {
+    return await axios({
+      baseURL: Client.ROOT_PATH,
+      url: '/book/add',
+      method: 'put',
+      headers: {Authorization: 'Bearer ' + Client.authToken},
+      data: books.map(book => {
+        return {bookid: book};
+      }),
+    })
+      .then(response => response.data.map(bookObj => bookObj.bookid))
+      .catch(response => {
+        console.log(response);
+        return null;
+      });
+  }
 
     /**
     * Removes the given books from the user's account
