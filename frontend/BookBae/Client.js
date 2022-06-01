@@ -246,7 +246,7 @@ class Client {
         method: 'get',
         params: {email: email}
       })
-        .then(response => response.data.emailexists)
+        .then(response => response.data.doesEmailExist)
         .catch(response => {
           console.log(response)
           return null
@@ -305,6 +305,33 @@ class Client {
         data: books.map((book) => {return {bookid: book}})
       })
         .then(response => response.data.map((bookObj) => bookObj.bookid))
+        .catch(response => {
+          console.log(response)
+          return null
+        });
+    }
+
+    static async setPhoto(photo) {
+
+      const data = new FormData();
+      data.append('photo', {
+        name: photo.fileName,
+        type: photo.type,
+        uri: photo.uri
+      });
+
+
+      return await axios({
+        baseURL: Client.ROOT_PATH,
+        url: '/photos',
+        method: 'post',
+        headers: {
+          Authorization: 'Bearer ' + Client.authToken,
+          'Content-Type': 'multipart/form-data'
+        },
+        data: data
+      })
+        .then(response => response.data)
         .catch(response => {
           console.log(response)
           return null

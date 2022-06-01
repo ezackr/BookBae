@@ -6,14 +6,20 @@ import {
   TextInput,
   Pressable,
 } from 'react-native';
+import Client from '../../Client'
 
 const EnterEmailScreen = ({route, navigation}) => {
   const [email, onChangeText] = React.useState(null);
+  const [emailStatus, updateEmailStatus] = React.useState('')
 
   // add necessary function to store email
-  const onPress = () => {
-    console.log(email);
-    navigation.navigate('EnterPasswordScreen', {email: email,});
+  const onPress = async () => {
+    const emailInUse = await Client.emailIsUsed(email);
+    console.log(emailInUse);
+    if (!emailInUse) {
+      navigation.navigate('EnterPasswordScreen', {email: email,});
+    }
+    updateEmailStatus(emailInUse ? 'There is already an account associated with this email address.' : '');
   };
 
   return (
@@ -26,6 +32,7 @@ const EnterEmailScreen = ({route, navigation}) => {
         value={email}
         placeholder="xxx@xx.x"
       />
+      <Text> {emailStatus} </Text>
       <Pressable style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>Next</Text>
       </Pressable>

@@ -225,7 +225,7 @@ describe('Client', () => {
         });
 
         test('returns boolean response', async () => {
-            mock.onGet(Client.ROOT_PATH + '/email').replyOnce(200, {emailexists: true});
+            mock.onGet(Client.ROOT_PATH + '/email').replyOnce(200, {doesEmailExist: true});
             const used = await Client.emailIsUsed('myemail@email.com');
             expect(used).toBe(true);
         })

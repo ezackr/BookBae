@@ -1,25 +1,44 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
 import Client from '../../Client'
+import { passwordStrength } from 'check-password-strength'
 
 const EnterPasswordScreen = ({route, navigation}) => {
 
-    const [password, onChangeText] = React.useState(null);
+    const [password, updatePassword] = React.useState(null);
 
-    //add necessary function to store password
+    // example strength:
+    //    "id": 1,
+    //    "value": "Strong",
+    //    "contains": ['lowercase', 'uppercase', 'symbol', 'number'],
+    //    "length": 15
+    // Possible values are "Too weak, Weak, Medium, & Strong.
+    const [strength, updateStrength] = React.useState(passwordStrength(''));
+
+    // Update value of text box (password) and check whether
+    // password meets strength requirements
+    const onChangeText = (newPassword) => {
+        updatePassword(newPassword);
+        updateStrength(passwordStrength(newPassword));
+    }
+
+    // Proceed to next screen iff password is not 'Too weak'
     const onPress = () => {
-        console.log(password)
-        Client.createUser(route.params.email, password);
-        navigation.navigate('EnterNameScreen', {
-            ...route.params,
-            password: password
-        })
+        if (strength.id > 0) {
+            console.log(password)
+            Client.createUser(route.params.email, password);
+            navigation.navigate('EnterNameScreen', {
+                ...route.params,
+                password: password
+            })
+        }
     }
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Enter Your Password</Text>
             <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={password} placeholder="xxxxxxxx"/>
+            <Text> {strength.value} </Text>
             <Pressable
                 style={styles.button}
                 onPress={onPress}>
