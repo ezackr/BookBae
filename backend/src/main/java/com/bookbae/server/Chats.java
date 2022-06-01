@@ -102,9 +102,9 @@ public class Chats {
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
                 // obtain display name
-                getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
-                getNameFromUserIdStatement.setString(1, otherUserId);
-                resultSet = getNameFromUserIdStatement.executeQuery();
+//                getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
+//                getNameFromUserIdStatement.setString(1, otherUserId);
+//                resultSet = getNameFromUserIdStatement.executeQuery();
                 // assert(resultSet.next());
 
                 // set display name
