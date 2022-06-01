@@ -315,6 +315,11 @@ class Client {
         });
     }
 
+    /**
+    * Sets the user profile photo to the given photo.
+    * @param photo should have fileName, type, and uri fields
+    * @return the url where the uploaded photo can be accessed
+    */
     static async setPhoto(photo) {
       const data = new FormData();
       data.append('photo', {
