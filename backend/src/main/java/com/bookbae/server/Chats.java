@@ -105,7 +105,7 @@ public class Chats {
                 assert(nameResultSet.next());
 
                 // set display name
-                nextChatCardResponse.displayName = nameResultSet.getString("name");
+                nextChatCardResponse.displayName = nameResultSet.getString(1);
                 nameResultSet.close();
 
                 // add to entities

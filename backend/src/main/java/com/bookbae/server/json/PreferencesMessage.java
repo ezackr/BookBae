@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PreferencesMessage {
     @JsonProperty
-    public int lowerAgeLimit;
+    public Integer lowerAgeLimit;
 
     @JsonProperty
-    public int upperAgeLimit;
+    public Integer upperAgeLimit;
 
     @JsonProperty
-    public int withinXMiles;
+    public Integer withinXMiles;
 
     @JsonProperty
     public String preferredGender;
