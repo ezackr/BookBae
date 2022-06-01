@@ -103,7 +103,7 @@ public class Chats {
                 PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID + "'" + otherUserId + "'");
                 // getNameFromUserIdStatement.setString(1, otherUserId);
                 ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                assert(nameResultSet.next());
+                // assert(nameResultSet.next());
 
                 // set display name
                 nextChatCardResponse.displayName = nameResultSet.getString("name");
