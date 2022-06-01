@@ -6,9 +6,11 @@ import {
   Text,
   Modal,
   TextInput,
+  FlatList,
 } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import Client from '../Client.js';
+import axios from 'axios';
 import {styles, matchStyles} from './HomeScreenStyles';
 
 /**
@@ -38,7 +40,7 @@ const HomeScreen = ({navigation}) => {
     gender: '',
     bio: 'Try re-loading the app or come again later! \nCheck out some of our favorite books in the meantime:',
     favGenre: '',
-    books: ['../images/title1.png', '../images/title3.png'],
+    books: ['tmNNfSkfTlcC', 'ZPD4DwAAQBAJ'],
   };
   const [matches, setMatches] = React.useState([outOfMatches]); // list of matches.
 
@@ -219,24 +221,31 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen;
 
+/**
+ * Displays all relevant profile information for a potential match.
+ */
 const ProfileCard = ({profile}) => {
   // track books as they load in. Default to 'nobook.png'
-  const [bookList, setBookList] = React.useState([
-    require('../images/nobook.png'),
-    require('../images/nobook.png'),
-  ]);
+  const [bookList, setBookList] = React.useState([]);
 
   React.useEffect(() => {
-    console.log(profile);
     // load in data from profile when valid.
+    console.log(profile);
     if (profile) {
-      // default to nobooks.
-      let newBookList = [
-        require('../images/nobook.png'),
-        require('../images/nobook.png'),
-      ];
+      for (let i = 0; i < 2 && i < profile.books.length; i++) {
+        if (profile.books[i]) {
+          axios
+            .get(
+              'https://www.googleapis.com/books/v1/volumes/' + profile.books[i],
+            )
+            .then(data => {
+              let newBookList = bookList;
+              newBookList[i] = data.data;
+              setBookList(newBookList);
+            });
+        }
+      }
       console.log(profile.books);
-      setBookList(newBookList);
     }
   }, [profile]);
 
@@ -254,15 +263,27 @@ const ProfileCard = ({profile}) => {
         <Text style={matchStyles.bioText}>{profile.bio}</Text>
       </SafeAreaView>
       <SafeAreaView style={matchStyles.bookDisplay}>
-        <Image
-          style={matchStyles.book}
-          source={bookList[0]}
-        />
-        <Image
-          style={matchStyles.book}
-          source={bookList[1]}
+        <FlatList
+          horizontal={true}
+          data={bookList}
+          extraData={bookList}
+          renderItem={({item}) => <BookItem book={item} />}
         />
       </SafeAreaView>
+    </SafeAreaView>
+  );
+};
+
+/**
+ * BookItem to be put in display.
+ */
+const BookItem = ({book}) => {
+  return (
+    <SafeAreaView>
+      <Image
+        style={matchStyles.book}
+        source={{uri: book.volumeInfo.imageLinks.smallThumbnail}}
+      />
     </SafeAreaView>
   );
 };
