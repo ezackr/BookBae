@@ -63,7 +63,7 @@ const HomeScreen = ({navigation}) => {
             gender: '',
             bio: match.name + ' does not have a bio yet.',
             favGenre: 'N/A',
-            books: ['../images/nobook.png', '../images/nobook.png'],
+            books: [],
           };
 
           // add user profile parameters if possible.
@@ -87,6 +87,10 @@ const HomeScreen = ({navigation}) => {
           // adds favorite genre.
           if ('favGenre' in match) {
             matchInfo.favGenre = match.favGenre;
+          }
+          // adds books.
+          if ('books' in match) {
+            // matchInfo.books = match.books;
           }
 
           // updates name to solely include first name.
@@ -216,6 +220,26 @@ const HomeScreen = ({navigation}) => {
 export default HomeScreen;
 
 const ProfileCard = ({profile}) => {
+  // track books as they load in. Default to 'nobook.png'
+  const [bookList, setBookList] = React.useState([
+    require('../images/nobook.png'),
+    require('../images/nobook.png'),
+  ]);
+
+  React.useEffect(() => {
+    console.log(profile);
+    // load in data from profile when valid.
+    if (profile) {
+      // default to nobooks.
+      let newBookList = [
+        require('../images/nobook.png'),
+        require('../images/nobook.png'),
+      ];
+      console.log(profile.books);
+      setBookList(newBookList);
+    }
+  }, [profile]);
+
   // displays data for a given profile.
   return (
     <SafeAreaView style={matchStyles.matchBox}>
@@ -232,11 +256,11 @@ const ProfileCard = ({profile}) => {
       <SafeAreaView style={matchStyles.bookDisplay}>
         <Image
           style={matchStyles.book}
-          source={require('../images/title1.jpg')}
+          source={bookList[0]}
         />
         <Image
           style={matchStyles.book}
-          source={require('../images/title3.jpg')}
+          source={bookList[1]}
         />
       </SafeAreaView>
     </SafeAreaView>
