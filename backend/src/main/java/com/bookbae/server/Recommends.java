@@ -1,7 +1,9 @@
 package com.bookbae.server;
 
 import com.bookbae.server.security.SecuredResource;
+import com.bookbae.server.security.ProxySecurityContext;
 import com.bookbae.server.json.UserResponse;
+import com.bookbae.server.json.BookList;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.GET;
@@ -28,6 +30,9 @@ import jakarta.inject.Inject;
 public class Recommends {
     private DatabasePoolService database;
 
+    private static final String GET_USER_FAV_GENRE = "SELECT fav_genre " +
+            "FROM user_info " +
+            "WHERE user_id = ?;";
     private static final String GET_USER_PREFERENCES = "SELECT * " +
             "FROM preference " +
             "WHERE user_id = ?;";
@@ -39,6 +44,8 @@ public class Recommends {
             "AND DATEDIFF(year, birthday, GETDATE()) >= ? " +
             "AND DATEDIFF(year, birthday, GETDATE()) <= ? " +
             "AND ";
+
+    private static final String ORDER_BY = " ORDER BY CASE WHEN fav_genre = ? THEN 1 ELSE 2 END, fav_genre;";
 
     @Inject
     public Recommends(DatabasePoolService database) {
@@ -67,10 +74,17 @@ public class Recommends {
 
         try (Connection conn = this.database.getConnection()) {
 
+            // get user's favorite genre
+            PreparedStatement getUserFavGenreStatement = conn.prepareStatement(GET_USER_FAV_GENRE);
+            getUserFavGenreStatement.setString(1, clientUserId);
+            ResultSet resultSet = getUserFavGenreStatement.executeQuery();
+            resultSet.next();
+            String favGenre = resultSet.getString("fav_genre");
+
             // get user's preferences
             PreparedStatement getUserPreferencesStatement = conn.prepareStatement(GET_USER_PREFERENCES);
             getUserPreferencesStatement.setString(1, clientUserId);
-            ResultSet resultSet = getUserPreferencesStatement.executeQuery();
+            resultSet = getUserPreferencesStatement.executeQuery();
 
             // if no preferences have been set
             if(!resultSet.next()) {
@@ -88,9 +102,10 @@ public class Recommends {
             for(int i = 0; i < preferredGenders.length; i++) {
                 getRecommendsBuffer.append(" gender = ? OR");
             }
-            // remove last "OR", add ");"
+            // remove last "OR", add ")", add ordering
             getRecommendsBuffer.delete(getRecommendsBuffer.length() - 3, getRecommendsBuffer.length());
-            getRecommendsBuffer.append(");");
+            getRecommendsBuffer.append(")");
+            getRecommendsBuffer.append(ORDER_BY);
 
             // get recommendations for the user based on their preferences
             PreparedStatement getRecommendedsStatement = conn.prepareStatement(getRecommendsBuffer.toString());
@@ -100,9 +115,13 @@ public class Recommends {
             for(int i = 0; i < preferredGenders.length; i++) {
                 getRecommendedsStatement.setString(4 + i, preferredGenders[i]);
             }
+            getRecommendedsStatement.setString(4 + preferredGenders.length, favGenre);
             resultSet = getRecommendedsStatement.executeQuery();
 
-            // load up user preferences into json response
+            // resource to get other user's bookshelves
+            Book bookResource = new Book(this.database);
+
+            // load up users into json response
             while(resultSet.next()) {
                 nextUserResponse = new UserResponse();
                 nextUserResponse.userId = resultSet.getString("user_id");
@@ -112,6 +131,12 @@ public class Recommends {
                 // saves birthday as a string if not null
                 nextUserResponse.birthday = Objects.toString(resultSet.getDate("birthday"));
                 nextUserResponse.bio = resultSet.getString("bio");
+
+                // get other user's books
+                ProxySecurityContext pCtx = new ProxySecurityContext(ctx, nextUserResponse.userId);
+                BookList userBooks = (BookList) bookResource.getBooks(pCtx).getEntity();
+                nextUserResponse.bookList = userBooks;
+
                 entries.add(nextUserResponse);
             }
             resultSet.close();

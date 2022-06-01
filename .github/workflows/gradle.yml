@@ -37,5 +37,5 @@ jobs:
       env:
         ORG_GRADLE_PROJECT_PASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_PASSWORD }}
       with:
-        arguments: integrationTest
+        arguments: build
         build-root-directory: backend

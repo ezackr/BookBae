@@ -30,6 +30,9 @@ public class UserResponse {
     @JsonProperty("userid")
     public String userId;
 
+    @JsonProperty("bookList")
+    public BookList bookList;
+
     public UserResponse() {}
 
     public UserResponse(UserRequest req) {

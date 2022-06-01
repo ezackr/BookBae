@@ -234,24 +234,24 @@ class Client {
       });
   }
 
-  /**
-   * Returns whether email is used
-   * @param {string} email - the email to check
-   * @return true iff there is already an account associated with email, null if request fails
-   */
-  static async emailIsUsed(email) {
-    return await axios({
-      baseURL: Client.ROOT_PATH,
-      url: '/email',
-      method: 'get',
-      params: {email: email},
-    })
-      .then(response => response.data.emailexists)
-      .catch(response => {
-        console.log(response);
-        return null;
-      });
-  }
+    /**
+    * Returns whether email is used
+    * @param {string} email - the email to check
+    * @return true iff there is already an account associated with email, null if request fails
+    */
+    static async emailIsUsed(email) {
+      return await axios({
+        baseURL: Client.ROOT_PATH,
+        url: '/email',
+        method: 'get',
+        params: {email: email}
+      })
+        .then(response => response.data.doesEmailExist)
+        .catch(response => {
+          console.log(response)
+          return null
+        });
+    }
 
   /**
    * Gets the list of IDs representing the user's books
@@ -293,27 +293,52 @@ class Client {
       });
   }
 
-  /**
-   * Removes the given books from the user's account
-   * @param {[string]} the IDs of the books to remove
-   * @return {[string]} updated list of user's book IDs, or null for failed request
-   */
-  static async removeBooks(books) {
-    return await axios({
-      baseURL: Client.ROOT_PATH,
-      url: '/book/remove',
-      method: 'put',
-      headers: {Authorization: 'Bearer ' + Client.authToken},
-      data: books.map(book => {
-        return {bookid: book};
-      }),
-    })
-      .then(response => response.data.map(bookObj => bookObj.bookid))
-      .catch(response => {
-        console.log(response);
-        return null;
+    /**
+    * Removes the given books from the user's account
+    * @param {[string]} the IDs of the books to remove
+    * @return {[string]} updated list of user's book IDs, or null for failed request
+    */
+    static async removeBooks(books) {
+      return await axios({
+        baseURL: Client.ROOT_PATH,
+        url: '/book/remove',
+        method: 'put',
+        headers: {Authorization: 'Bearer ' + Client.authToken},
+        data: books.map((book) => {return {bookid: book}})
+      })
+        .then(response => response.data.map((bookObj) => bookObj.bookid))
+        .catch(response => {
+          console.log(response)
+          return null
+        });
+    }
+
+    static async setPhoto(photo) {
+
+      const data = new FormData();
+      data.append('photo', {
+        name: photo.fileName,
+        type: photo.type,
+        uri: photo.uri
       });
-  }
+
+
+      return await axios({
+        baseURL: Client.ROOT_PATH,
+        url: '/photos',
+        method: 'post',
+        headers: {
+          Authorization: 'Bearer ' + Client.authToken,
+          'Content-Type': 'multipart/form-data'
+        },
+        data: data
+      })
+        .then(response => response.data)
+        .catch(response => {
+          console.log(response)
+          return null
+        });
+    }
 }
 
 export default Client;

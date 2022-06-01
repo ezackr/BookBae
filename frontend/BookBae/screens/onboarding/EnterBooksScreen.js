@@ -17,7 +17,7 @@ const EnterBooksScreen = ({route, navigation}) => {
 
   // we probably don't need to do anything here, we can store books as they are added in onChangeText
   const onPress = () => {
-    navigation.navigate('EnterBioScreen', {
+    navigation.navigate('EnterPhotoScreen', {
       ...route.params,
       books: idList,
     });

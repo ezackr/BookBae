@@ -35,7 +35,7 @@ public class Chats {
 
     private static final String GET_ALL_CHATS_FOR_USER = "SELECT like_id, liked_user_id, liker_user_id " +
             "FROM likes " +
-            "WHERE is_mutual " +
+            "WHERE is_mutual = 'y' " +
             "AND (liker_user_id = ? OR liked_user_id = ?);";
 
     private static final String GET_NAME_FROM_USERID = "SELECT name " +
