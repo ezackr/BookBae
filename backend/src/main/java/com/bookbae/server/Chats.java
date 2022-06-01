@@ -95,23 +95,20 @@ public class Chats {
                     otherUserId = resultSet.getString("liker_user_id"); // other user is liker
                 }
 
-                // set photoUrl
+                nextChatCardResponse.displayName = "Other user";
+
+                        // set photoUrl
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
-
-                // obtain display name
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
-                getNameFromUserIdStatement.setString(1, otherUserId);
-                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                assert(nameResultSet.next());
-
-                // set display name
-                nextChatCardResponse.displayName = nameResultSet.getString(1);
-                nameResultSet.close();
 
                 // add to entities
                 entities.add(nextChatCardResponse);
             }
             resultSet.close();
+
+            // Maybe it doesn't like the nested resultsets? Try without nested resultsets
+//            for(int i = 0; i < entities.length; i++) {
+//                entities.get(i)
+//            }
 
         } catch (SQLException e) {
             e.printStackTrace();
