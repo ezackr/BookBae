@@ -78,17 +78,17 @@ The application offers a number of API endpoints accessible from the root path. 
 - /book/get
     - GET
         - Gets a list of book ids for the authenticated user
-        - Produces: `[{"bookid": "<bookid>"},...]`
+        - Produces: `{entries: [{bookId: 'bookid1'}, {bookId: 'bookid2', ...]`
 - /book/add
     - PUT
         - Takes in a list of book ids to add to the authenticated user's book list, returns the updated book list
-        - Consumes: `[{"bookid": "<bookid>"},...]`
-        - Produces: `[{"bookid": "<bookid>"},...]`
+        - Consumes: `{entries: [{bookId: 'bookid1'}, {bookId: 'bookid2', ...]`
+        - Produces: `{entries: [{bookId: 'bookid1'}, {bookId: 'bookid2', ...]`
 - /book/remove
     - PUT
         - Takes in a list of book ids to remove from the authenticated user's book list, returns the updated book list
-        - Consumes: `[{"bookid": "<bookid>"},...]`
-        - Produces: `[{"bookid": "<bookid>"},...]`
+        - Consumes: `{entries: [{bookId: 'bookid1'}, {bookId: 'bookid2', ...]`
+        - Produces: `{entries: [{bookId: 'bookid1'}, {bookId: 'bookid2', ...]`
 - /preferences
     - GET
         - Gets the preferences for the client user
