@@ -37,6 +37,7 @@ public class User {
             "SET name = ?, gender = ?, fav_genre = ?," +
             "birthday = ?, bio = ?, email = ?, zipcode = ? " +
             "WHERE user_id = ?;";
+    private static final String PHOTO_URL_BASE = "https://bookbaephotos.blob.core.windows.net/userphotos/";
 
     @Inject
     public User(DatabasePoolService database) {
@@ -62,6 +63,7 @@ public class User {
         try (Connection conn = this.database.getConnection()) {
             // retrieve user info
             String userId = ctx.getUserPrincipal().getName();
+            resp.photoUrl = PHOTO_URL_BASE + userId.toUpperCase();
             PreparedStatement retrieveUserInfoStatement = conn.prepareStatement(RETRIEVE_USER_INFO);
             retrieveUserInfoStatement.setString(1, userId);
             ResultSet resultSet = retrieveUserInfoStatement.executeQuery();
@@ -80,6 +82,7 @@ public class User {
              resp.birthday = Objects.toString(resultSet.getDate("birthday")); // saves birthday as a string if not null
              resp.bio = resultSet.getString("bio");
              resp.zipcode = resultSet.getString("zipcode");
+
              resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,9 +108,11 @@ public class User {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         UserResponse resp = new UserResponse(req);
+
         try (Connection conn = this.database.getConnection()) {
             // update user info
             String userId = ctx.getUserPrincipal().getName();
+            resp.photoUrl = PHOTO_URL_BASE + userId.toUpperCase();
             PreparedStatement updateUserInfoStatement = conn.prepareStatement(UPDATE_USER_INFO);
             updateUserInfoStatement.setString(1, req.name);
             updateUserInfoStatement.setString(2, req.gender);
