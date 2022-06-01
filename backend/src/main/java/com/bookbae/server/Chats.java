@@ -79,6 +79,8 @@ public class Chats {
             getAllChatsForUserStatement.setString(2, clientUserId);
             ResultSet resultSet = getAllChatsForUserStatement.executeQuery();
 
+            PreparedStatement getNameFromUserIdStatement;
+
             while (resultSet.next()) {
 
                 // create response
@@ -100,14 +102,14 @@ public class Chats {
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
                 // obtain display name
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
+                getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
                 getNameFromUserIdStatement.setString(1, otherUserId);
-                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                assert(nameResultSet.next());
+                resultSet = getNameFromUserIdStatement.executeQuery();
+                assert(resultSet.next());
 
                 // set display name
-                nextChatCardResponse.displayName = nameResultSet.getString("name");
-                nameResultSet.close();
+                nextChatCardResponse.displayName = resultSet.getString("name");
+                getAllChatsForUserStatement.clearParameters();
 
                 // add to entities
                 entities.add(nextChatCardResponse);
