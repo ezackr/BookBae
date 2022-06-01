@@ -40,7 +40,7 @@ public class Chats {
 
     private String GET_NAME_FROM_USERID = "SELECT * " +
             "FROM user_info " +
-            "WHERE user_id = ";
+            "WHERE user_id = ?;";
 
     private static final String GET_CHATS_BETWEEN_USERS = "SELECT * " +
             "FROM chat_line " +
@@ -100,10 +100,10 @@ public class Chats {
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
                 // obtain display name
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID + "'" + otherUserId + "'");
-                // getNameFromUserIdStatement.setString(1, otherUserId);
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
+                getNameFromUserIdStatement.setString(1, otherUserId);
                 ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                // assert(nameResultSet.next());
+                assert(nameResultSet.next());
 
                 // set display name
                 nextChatCardResponse.displayName = nameResultSet.getString("name");
