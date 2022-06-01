@@ -79,6 +79,7 @@ public class Chats {
             getAllChatsForUserStatement.setString(2, clientUserId);
             ResultSet resultSet = getAllChatsForUserStatement.executeQuery();
 
+            ArrayList<String> otherUserIds = new ArrayList<String>(); //work around bc server dislikes nested resultsets
             while (resultSet.next()) {
 
                 // create response
@@ -95,9 +96,10 @@ public class Chats {
                     otherUserId = resultSet.getString("liker_user_id"); // other user is liker
                 }
 
-                nextChatCardResponse.displayName = "Other user";
+                // save user id to set display names later
+                otherUserIds.add(otherUserId);
 
-                        // set photoUrl
+                // set photoUrl
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
                 // add to entities
@@ -106,9 +108,16 @@ public class Chats {
             resultSet.close();
 
             // Maybe it doesn't like the nested resultsets? Try without nested resultsets
-//            for(int i = 0; i < entities.length; i++) {
-//                entities.get(i)
-//            }
+            for(int i = 0; i < entities.size(); i++) {
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
+                getNameFromUserIdStatement.setString(1, otherUserIds.get(i));
+                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
+                assert(nameResultSet.next());
+
+                // set display name
+                entities.get(i).displayName = nameResultSet.getString(1);
+                nameResultSet.close();
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
