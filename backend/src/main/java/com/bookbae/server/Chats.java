@@ -108,8 +108,9 @@ public class Chats {
                 assert(resultSet.next());
 
                 // set display name
-                nextChatCardResponse.displayName = resultSet.getString("name");
-                getAllChatsForUserStatement.clearParameters();
+//                nextChatCardResponse.displayName = resultSet.getString("name");
+//                getAllChatsForUserStatement.clearParameters();
+                nextChatCardResponse.displayName = "Other User";
 
                 // add to entities
                 entities.add(nextChatCardResponse);
