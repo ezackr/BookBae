@@ -13,6 +13,7 @@ const EnterBioScreen = ({route, navigation}) => {
 
   //add necessary function to store bio
   const onPress = async () => {
+    console.log('about to finish onboarding')
     console.log(route.params);
     await Client.logIn(route.params.email, route.params.password);
     const userInfo = await Client.setUserInfo({
@@ -25,9 +26,15 @@ const EnterBioScreen = ({route, navigation}) => {
       favGenre: route.params.genre,
       bio: bio,
     });
+    console.log('books to upload');
+    console.log(route.params.books);
     const bookInfo = await Client.addBooks(route.params.books);
-    console.log(userInfo);
+    //console.log(userInfo);
+    console.log('empty list');
     console.log(bookInfo);
+    const newBookInfo = await Client.getBooks();
+    console.log('new book info:');
+    console.log(newBookInfo);
     navigation.navigate('TabNavigation');
   };
 
