@@ -32,14 +32,8 @@ const EnterPhotoScreen = ({route, navigation}) => {
 
     //we probably don't need to do anything here, we can store image as it is added in onUploadPress
     const onPress = () => {
-        navigation.navigate('EnterNameScreen', {
-            email: route.params.email,
-            password: route.params.password,
-            gender: route.params.gender,
-            birthday: route.params.birthday,
-            zipcode: route.params.zipcode,
-            genre: route.params.genre,
-            books: route.params.books
+        navigation.navigate('EnterBioScreen', {
+            ...route.params
         })
     }
 
