@@ -38,9 +38,9 @@ public class Chats {
             "WHERE is_mutual = 'y' " +
             "AND (liker_user_id = ? OR liked_user_id = ?);";
 
-    private static final String GET_NAME_FROM_USERID = "SELECT * " +
+    private String GET_NAME_FROM_USERID = "SELECT * " +
             "FROM user_info " +
-            "WHERE user_id = ?;";
+            "WHERE user_id = ";
 
     private static final String GET_CHATS_BETWEEN_USERS = "SELECT * " +
             "FROM chat_line " +
@@ -95,12 +95,13 @@ public class Chats {
                     otherUserId = resultSet.getString("liker_user_id"); // other user is liker
                 }
 
+                System.out.println(otherUserId);
                 // set photoUrl
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
                 // obtain display name
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
-                getNameFromUserIdStatement.setString(1, "68e6ddb3-51d5-4c60-b48f-1ed97f944a18");//otherUserId);
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID + otherUserId);
+                // getNameFromUserIdStatement.setString(1, otherUserId);
                 ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
                 assert(nameResultSet.next());
 
