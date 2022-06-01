@@ -115,9 +115,18 @@ const HomeScreen = ({navigation}) => {
   };
 
   // very basic preference input validation.
-  const validateInput = () => {
+  const setPreferences = () => {
     // ensures that preferences are a valid age range.
-    return lowerAge <= upperAge;
+    let lower = parseInt(lowerAge, 10);
+    let upper = parseInt(upperAge, 10);
+    if (!isNaN(lower) && !isNaN(upper) && lower <= upper) {
+      Client.setPreferences({
+        lowerAgeLimit: lowerAge,
+        upperAgeLimit: upperAge,
+        withinXMiles: 100,
+        preferredGender: option,
+      });
+    }
   };
 
   // renders three main sections: topMenu, matchMenu, bottomMenu (also contains preferences menu)
@@ -137,18 +146,10 @@ const HomeScreen = ({navigation}) => {
             <Pressable
               style={styles.button}
               onPress={() => {
-                // checks if age preferences are valid.
-                if (validateInput()) {
-                  // sends input to database.
-                  Client.setPreferences({
-                    lowerAgeLimit: lowerAge,
-                    upperAgeLimit: upperAge,
-                    withinXMiles: 100,
-                    preferredGender: option,
-                  });
-                  // closes preferences menu.
-                  setModalVisible(!modalVisible);
-                }
+                // sends input to database.
+                setPreferences();
+                // closes preferences menu.
+                setModalVisible(!modalVisible);
               }}>
               <Text style={styles.buttonText}>Done</Text>
             </Pressable>
