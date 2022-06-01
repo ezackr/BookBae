@@ -38,7 +38,7 @@ public class Chats {
             "WHERE is_mutual = 'y' " +
             "AND (liker_user_id = ? OR liked_user_id = ?);";
 
-    private static final String GET_NAME_FROM_USERID = "SELECT name " +
+    private static final String GET_NAME_FROM_USERID = "SELECT * " +
             "FROM user_info " +
             "WHERE user_id = ?;";
 
@@ -79,7 +79,6 @@ public class Chats {
             getAllChatsForUserStatement.setString(2, clientUserId);
             ResultSet resultSet = getAllChatsForUserStatement.executeQuery();
 
-            ArrayList<String> otherUserIds = new ArrayList<String>(); //work around bc server dislikes nested resultsets
             while (resultSet.next()) {
 
                 // create response
@@ -96,28 +95,23 @@ public class Chats {
                     otherUserId = resultSet.getString("liker_user_id"); // other user is liker
                 }
 
-                // save user id to set display names later
-                otherUserIds.add(otherUserId);
-
                 // set photoUrl
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
+
+                // obtain display name
+                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
+                getNameFromUserIdStatement.setString(1, otherUserId);
+                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
+                assert(nameResultSet.next());
+
+                // set display name
+                nextChatCardResponse.displayName = nameResultSet.getString(1);
+                nameResultSet.close();
 
                 // add to entities
                 entities.add(nextChatCardResponse);
             }
             resultSet.close();
-
-            // Maybe it doesn't like the nested resultsets? Try without nested resultsets
-            for(int i = 0; i < entities.size(); i++) {
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
-                getNameFromUserIdStatement.setString(1, otherUserIds.get(i));
-                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                assert(nameResultSet.next());
-
-                // set display name
-                entities.get(i).displayName = nameResultSet.getString(1);
-                nameResultSet.close();
-            }
 
         } catch (SQLException e) {
             e.printStackTrace();
