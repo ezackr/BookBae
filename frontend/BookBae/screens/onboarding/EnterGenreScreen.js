@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker'
 
 const EnterGenreScreen = ({route, navigation}) => {
 
-    const [selectedValue, setSelectedValue] = useState("java");
+    const [selectedValue, setSelectedValue] = useState("fantasy");
 
     //add necessary function to store favorite genre
     const onPress = () => {

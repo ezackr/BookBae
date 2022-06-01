@@ -3,22 +3,28 @@ import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-nati
 
 const EnterNameScreen = ({route, navigation}) => {
 
-    const [name, onChangeText] = React.useState(null);
+    const [name, onChangeText] = React.useState('');
+    const [message, updateMessage] = React.useState('');
 
     //add necessary function to store zipcode
     const onPress = () => {
-        console.log(name)
-        console.log(route.params.birthday)
-        navigation.navigate('EnterGenderScreen', {
-            ...route.params,
-            name: name
-        })
+        if (name.length > 0) {
+            console.log(name)
+            console.log(route.params.birthday)
+            navigation.navigate('EnterGenderScreen', {
+                ...route.params,
+                name: name
+            })
+        } else {
+            updateMessage('Please enter a name.');
+        }
     }
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Enter Your Name:</Text>
             <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={name} placeholder="Herbert Ferdinand"/>
+            <Text> {message} </Text>
             <Pressable
                 style={styles.button}
                 onPress={onPress}>

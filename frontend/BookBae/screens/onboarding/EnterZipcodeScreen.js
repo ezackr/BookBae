@@ -3,22 +3,28 @@ import { SafeAreaView, StyleSheet, Text, TextInput, Pressable } from 'react-nati
 
 const EnterZipcodeScreen = ({route, navigation}) => {
 
-    const [zipcode, onChangeText] = React.useState(null);
+    const [zipcode, onChangeText] = React.useState('');
+    const [message, updateMessage] = React.useState('');
 
     //add necessary function to store zipcode
     const onPress = () => {
-        console.log(zipcode)
-        console.log(route.params.birthday)
-        navigation.navigate('EnterGenreScreen', {
-            ...route.params,
-            zipcode: zipcode
-        })
+        if (zipcode.length === 5) {
+            console.log(zipcode)
+            console.log(route.params.birthday)
+            navigation.navigate('EnterGenreScreen', {
+                ...route.params,
+                zipcode: zipcode
+            })
+        } else {
+            updateMessage('Please enter a valid zip code.');
+        }
     }
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Enter Your Zipcode</Text>
             <TextInput style={styles.input} multiline={true} onChangeText={onChangeText} value={zipcode} placeholder="xxxxx"/>
+            <Text> {message} </Text>
             <Pressable
                 style={styles.button}
                 onPress={onPress}>
