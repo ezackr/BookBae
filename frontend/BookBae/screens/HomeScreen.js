@@ -175,7 +175,7 @@ const HomeScreen = ({navigation}) => {
                 value={lowerAge}
                 keyboardType="number-pad"
               />
-              <Text style={styles.preferencesText}>To</Text>
+              <Text style={styles.preferencesText}>to</Text>
               <TextInput
                 style={styles.preferencesInput}
                 numberOfLines={1}
@@ -229,27 +229,28 @@ const ProfileCard = ({profile}) => {
   const [bookList, setBookList] = React.useState([]);
 
   React.useEffect(() => {
-    // load in data from profile when valid.
-    console.log(profile);
     // checks if profile is null.
     if (profile) {
       // loops over AT MOST 2 books in profile.books
       for (let i = 0; i < 2 && i < profile.books.length; i++) {
+        // try/catch block to set new book covers.
         try {
+          // get new book.
           axios
             .get(
               'https://www.googleapis.com/books/v1/volumes/' + profile.books[i],
             )
             .then(data => {
+              // add book to end of list.
               let newBookList = bookList;
               newBookList[i] = data.data.volumeInfo.imageLinks.smallThumbnail;
               setBookList(newBookList);
             });
         } catch (error) {
+          // log error if necessary
           console.log(error);
         }
       }
-      console.log(profile.books);
     }
   }, [profile]);
 
@@ -282,13 +283,6 @@ const ProfileCard = ({profile}) => {
  * BookItem to be put in display.
  */
 const BookItem = ({book}) => {
-  const [cover, setCover] = React.useState(null);
-
-  React.useEffect(() => {
-    console.log('hellO!');
-    console.log(book);
-  });
-
   return (
     <SafeAreaView>
       <Image
