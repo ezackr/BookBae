@@ -24,6 +24,7 @@ class Client {
     })
       .then(response => response.data)
       .catch(response => {
+        console.log('failed to get user info')
         console.log(response);
         return null;
       });
@@ -264,7 +265,7 @@ class Client {
       method: 'get',
       headers: {Authorization: 'Bearer ' + Client.authToken},
     })
-      .then(response => response.data.map(bookObj => bookObj.bookid))
+      .then(response => response.data.entries.map(bookObj => bookObj.bookId))
       .catch(response => {
         console.log(response);
         return null;
@@ -277,16 +278,17 @@ class Client {
    * @return {[string]} updated list of user's book IDs, or null for failed request
    */
   static async addBooks(books) {
+    const bookList = {entries: books.map(book => {return {bookId: book};})};
     return await axios({
       baseURL: Client.ROOT_PATH,
       url: '/book/add',
       method: 'put',
       headers: {Authorization: 'Bearer ' + Client.authToken},
-      data: books.map(book => {
-        return {bookid: book};
-      }),
+      data: bookList,
     })
-      .then(response => response.data.map(bookObj => bookObj.bookid))
+      .then(response => {
+        return response.data.entries.map(bookObj => bookObj.bookId);
+      })
       .catch(response => {
         console.log(response);
         return null;
@@ -304,24 +306,27 @@ class Client {
         url: '/book/remove',
         method: 'put',
         headers: {Authorization: 'Bearer ' + Client.authToken},
-        data: books.map((book) => {return {bookid: book}})
+        data: {entries: books.map((book) => {return {bookId: book}})}
       })
-        .then(response => response.data.map((bookObj) => bookObj.bookid))
+        .then(response => response.data.entries.map((bookObj) => bookObj.bookId))
         .catch(response => {
           console.log(response)
           return null
         });
     }
 
+    /**
+    * Sets the user profile photo to the given photo.
+    * @param photo should have fileName, type, and uri fields
+    * @return the url where the uploaded photo can be accessed
+    */
     static async setPhoto(photo) {
-
       const data = new FormData();
       data.append('photo', {
         name: photo.fileName,
         type: photo.type,
         uri: photo.uri
       });
-
 
       return await axios({
         baseURL: Client.ROOT_PATH,
