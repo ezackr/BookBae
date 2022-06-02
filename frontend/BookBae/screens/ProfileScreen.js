@@ -35,11 +35,11 @@ const ProfileScreen = () => {
     <SafeAreaView style={styles.bookDisplay}>
       <Image
         style={styles.book}
-        source={require('../images/title2.jpeg')}
+        source={require('../images/title1.jpg')}
       />
       <Image
         style={styles.book}
-        source={require('../images/title4.jpeg')}
+        source={require('../images/title3.jpg')}
       />
     </SafeAreaView>
     </SafeAreaView>
