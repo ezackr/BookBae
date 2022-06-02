@@ -7,7 +7,7 @@ import {
   TextInput,
   Pressable,
   FlatList,
-  Image
+  Image,
 } from 'react-native';
 import axios from 'axios';
 
@@ -19,19 +19,19 @@ const EnterBooksScreen = ({route, navigation}) => {
   // Pass the ids of the selected books on to the next onboarding screen
   const onPress = () => {
     console.log('leave books');
-    const idList = bookList.map(book => book.id);
+    const coverList = bookList.map(book => book.volumeInfo.imageLinks.smallThumbnail);
     navigation.navigate('EnterPhotoScreen', {
       ...route.params,
-      books: idList,
+      books: coverList,
     });
   };
 
   // Adds a book to the user's list
-  const addNewBook = (book) => {
+  const addNewBook = book => {
     setBookList(prevState => {
       prevState.push(book);
       return [...prevState];
-    })
+    });
   };
 
   // Displays search results;
@@ -44,10 +44,8 @@ const EnterBooksScreen = ({route, navigation}) => {
       });
   };
 
-
   return (
     <SafeAreaView style={styles.container}>
-
       <Text style={styles.title}>Start Typing a Book Title:</Text>
 
       {/* search bar */}
@@ -69,7 +67,9 @@ const EnterBooksScreen = ({route, navigation}) => {
         <FlatList
           data={searchResults}
           extraData={searchResults}
-          renderItem={({item}) => <BookListItem book={item} onClick={() => addNewBook(item)}/>}
+          renderItem={({item}) => (
+            <BookListItem book={item} onClick={() => addNewBook(item)} />
+          )}
         />
       </View>
 
@@ -94,13 +94,16 @@ const EnterBooksScreen = ({route, navigation}) => {
 const BookListItem = ({book, onClick}) => {
   return (
     <Pressable onPress={onClick}>
-        <View style={{flexDirection: 'row'}}>
-          <Image style={styles.image} source={{uri: book.volumeInfo.imageLinks.smallThumbnail}}/>
-          <Text style = {styles.book}> {book.volumeInfo.title} </Text>
-        </View>
+      <View style={{flexDirection: 'row'}}>
+        <Image
+          style={styles.image}
+          source={{uri: book.volumeInfo.imageLinks.smallThumbnail}}
+        />
+        <Text style={styles.book}> {book.volumeInfo.title} </Text>
+      </View>
     </Pressable>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   title: {

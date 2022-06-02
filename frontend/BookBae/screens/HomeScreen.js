@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import Client from '../Client.js';
-import axios from 'axios';
 import {styles, matchStyles} from './HomeScreenStyles';
 
 /**
@@ -93,49 +92,26 @@ const HomeScreen = ({navigation}) => {
           if ('favGenre' in match) {
             matchInfo.favGenre = match.favGenre;
           }
+          // adds books.
+          if ('bookList' in match) {
+            let books = [];
+            if (match.bookList.entries.length >= 2) {
+              for (let j = 0; j < 2; j++) {
+                books[j] = match.bookList.entries[j].bookId;
+              }
+            }
+            matchInfo.books = books;
+          }
 
           // updates name to solely include first name.
           if (match.name.split(' ').length > 1) {
             matchInfo.name = match.name.split(' ')[0];
           }
 
-          // handles adding books.
-          if ('books' in match) {
-            // matchInfo.books = match.books;
-            // add new user data to the end of the array.
-            let coverList = [];
-            for (let j = 0; j < 2 && j < match.books.length; i++) {
-              // try/catch block to set new book covers.
-              try {
-                // get new book.
-                axios
-                  .get(
-                    'https://www.googleapis.com/books/v1/volumes/' +
-                      match.books[i],
-                  )
-                  .then(bookData => {
-                    // add book to end of list.
-                    coverList[j] =
-                      bookData.data.volumeInfo.imageLinks.smallThumbnail;
-                  });
-              } catch (error) {
-                // log error if necessary
-                console.log(error);
-              }
-            }
-            matchInfo.books = coverList;
-            setMatches(prevState => {
-              prevState.push(matchInfo);
-              return [...prevState];
-            });
-          } else {
-            // other option must be separate to avoid missing a promise.
-            // add new user data to the end of the array.
-            setMatches(prevState => {
-              prevState.push(matchInfo);
-              return [...prevState];
-            });
-          }
+          setMatches(prevState => {
+            prevState.push(matchInfo);
+            return [...prevState];
+          });
         }
       }
     });
