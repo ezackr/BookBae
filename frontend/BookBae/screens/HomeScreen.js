@@ -1,16 +1,17 @@
 import React from 'react';
 import {
-  Alert,
   Image,
   Pressable,
   SafeAreaView,
-  StyleSheet,
   Text,
   Modal,
   TextInput,
+  FlatList,
 } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import Client from '../Client.js';
+import axios from 'axios';
+import {styles, matchStyles} from './HomeScreenStyles';
 
 /**
  * Main App screen used to suggest matches to users.
@@ -39,7 +40,11 @@ const HomeScreen = ({navigation}) => {
     gender: '',
     bio: 'Try re-loading the app or come again later! \nCheck out some of our favorite books in the meantime:',
     favGenre: '',
-    books: ['../images/title1.png', '../images/title3.png'],
+    books: [
+      // default cover links for "Design Patterns" and "The Anthropocene Reviewed"
+      'http://books.google.com/books/content?id=tmNNfSkfTlcC&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE71W9IUGyrL1thP-LPEsEi3H6vvCOF5Um7wV8xg8969MQeFRA7taYchYCh6tgtu2RczvrSoDYoAX6Dlm5-sNHpq2tzJoBmJi8P3Zs7KFV03-1HVFHqp7DsgHfmxS2_6HZRCgbg6A&source=gbs_api',
+      'http://books.google.com/books/publisher/content?id=ZPD4DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE73rvbRxqCCY7Oddo4zG0vGaY_SmuiM3_hen2TBKRa_aqMem38LpZIqZ5VWggsE9_yFLuGkEd8g5BsfWbMhffsoR6Wgj7mcnv2A7M7ZufvSt-aec1rvorwAOxtIxUPtFH-SLigKI&source=gbs_api',
+    ],
   };
   const [matches, setMatches] = React.useState([outOfMatches]); // list of matches.
 
@@ -66,7 +71,6 @@ const HomeScreen = ({navigation}) => {
             favGenre: 'N/A',
             books: ['../images/nobook.png', '../images/nobook.png'],
           };
-
           // add user profile parameters if possible.
           // adds age.
           if ('birthday' in match) {
@@ -95,11 +99,43 @@ const HomeScreen = ({navigation}) => {
             matchInfo.name = match.name.split(' ')[0];
           }
 
-          // add new user data to the end of the array.
-          setMatches(prevState => {
-            prevState.push(matchInfo);
-            return [...prevState];
-          });
+          // handles adding books.
+          if ('books' in match) {
+            // matchInfo.books = match.books;
+            // add new user data to the end of the array.
+            let coverList = [];
+            for (let j = 0; j < 2 && j < match.books.length; i++) {
+              // try/catch block to set new book covers.
+              try {
+                // get new book.
+                axios
+                  .get(
+                    'https://www.googleapis.com/books/v1/volumes/' +
+                      match.books[i],
+                  )
+                  .then(bookData => {
+                    // add book to end of list.
+                    coverList[j] =
+                      bookData.data.volumeInfo.imageLinks.smallThumbnail;
+                  });
+              } catch (error) {
+                // log error if necessary
+                console.log(error);
+              }
+            }
+            matchInfo.books = coverList;
+            setMatches(prevState => {
+              prevState.push(matchInfo);
+              return [...prevState];
+            });
+          } else {
+            // other option must be separate to avoid missing a promise.
+            // add new user data to the end of the array.
+            setMatches(prevState => {
+              prevState.push(matchInfo);
+              return [...prevState];
+            });
+          }
         }
       }
     });
@@ -170,7 +206,7 @@ const HomeScreen = ({navigation}) => {
                 value={lowerAge}
                 keyboardType="number-pad"
               />
-              <Text style={styles.preferencesText}>To</Text>
+              <Text style={styles.preferencesText}>to</Text>
               <TextInput
                 style={styles.preferencesInput}
                 numberOfLines={1}
@@ -216,7 +252,19 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen;
 
+/**
+ * Displays all relevant profile information for a potential match.
+ */
 const ProfileCard = ({profile}) => {
+  // track books as they load in. Default to 'nobook.png'
+  const [bookList, setBookList] = React.useState([]);
+
+  React.useEffect(() => {
+    if (profile) {
+      setBookList(profile.books);
+    }
+  }, [profile]);
+
   // displays data for a given profile.
   return (
     <SafeAreaView style={matchStyles.matchBox}>
@@ -231,172 +279,27 @@ const ProfileCard = ({profile}) => {
         <Text style={matchStyles.bioText}>{profile.bio}</Text>
       </SafeAreaView>
       <SafeAreaView style={matchStyles.bookDisplay}>
-        <Image
-          style={matchStyles.book}
-          source={require('../images/title1.jpg')}
-        />
-        <Image
-          style={matchStyles.book}
-          source={require('../images/title3.jpg')}
+        <FlatList
+          horizontal={true}
+          data={bookList}
+          extraData={bookList}
+          renderItem={({item}) => <BookItem book={item} />}
         />
       </SafeAreaView>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  // defines entire container
-  container: {
-    flex: 1,
-    backgroundColor: '#fffdd1',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  // title and preferences button
-  topMenu: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    backgroundColor: '#7c0a02',
-    alignSelf: 'stretch',
-    paddingRight: 10,
-  },
-  // profile card area
-  matchMenu: {
-    flex: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  // match/deny buttons
-  bottomMenu: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  // preferences popup menu
-  preferencesMenu: {
-    backgroundColor: '#fffdd1',
-    height: '100%',
-    padding: 10,
-  },
-  // text within preferences menu
-  preferencesText: {
-    fontSize: 24,
-    fontFamily: 'sans-serif-medium',
-    paddingTop: 10,
-    color: 'black',
-  },
-  // age text input styling
-  preferencesInput: {
-    height: 40,
-    backgroundColor: 'white',
-    width: '12.5%',
-    margin: 10,
-    borderWidth: 1,
-    padding: 10,
-  },
-  // BookBae title
-  title: {
-    color: 'white',
-    fontSize: 48,
-    fontFamily: 'sans-serif-medium',
-    paddingLeft: 20,
-    padding: 10,
-  },
-  // all normal (non-icon) buttons
-  button: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: '#BD2A2A',
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  // text for normal buttons.
-  buttonText: {
-    fontSize: 18,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: 'white',
-  },
-});
-
-const matchStyles = StyleSheet.create({
-  // size of profile card container
-  matchBox: {
-    height: 475,
-    width: 300,
-    backgroundColor: 'white',
-    borderRadius: 25,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    elevation: 15,
-    shadowColor: '#7c0a02',
-  },
-  // container for name and age
-  header: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    alignSelf: 'stretch',
-    padding: 10,
-  },
-  // user name
-  name: {
-    color: 'black',
-    fontSize: 32,
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif-medium',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-  },
-  // user age/gender
-  age: {
-    color: '#242526',
-    fontSize: 24,
-  },
-  // container for user bio
-  bioContainer: {
-    flex: 3,
-    alignSelf: 'stretch',
-  },
-  // user bio
-  bioText: {
-    fontSize: 24,
-    color: 'black',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    alignSelf: 'stretch',
-    padding: 10,
-  },
-  // user books at bottom of profile card
-  bookDisplay: {
-    flex: 3,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'flex-end',
-    padding: 5,
-  },
-  // books in book display
-  book: {
-    height: 175,
-    width: 125,
-    margin: 10,
-    borderRadius: 10,
-  },
-  // icon buttons
-  button: {
-    margin: 20,
-    paddingBottom: 10,
-  },
-  // button image size
-  buttonIcon: {
-    height: 115,
-    width: 115,
-  },
-});
+/**
+ * BookItem to be put in display.
+ */
+const BookItem = ({book}) => {
+  return (
+    <SafeAreaView>
+      <Image
+        style={matchStyles.book}
+        source={{uri: book}}
+      />
+    </SafeAreaView>
+  );
+};
