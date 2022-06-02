@@ -35,7 +35,7 @@ CREATE TABLE preference
 
 CREATE TABLE user_book
 (
-    book_id VARCHAR(12) NOT NULL,
+    book_id VARCHAR(2048) NOT NULL,
     user_id UNIQUEIDENTIFIER default NEWID() NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 );
