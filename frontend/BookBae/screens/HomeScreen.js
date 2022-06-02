@@ -94,24 +94,19 @@ const HomeScreen = ({navigation}) => {
           }
           // adds books.
           if ('bookList' in match) {
-            console.log(match.bookList.entries);
-            /*
-            let coverList = match.bookList.entries;
             let books = [];
-            if (coverList.length >= 2) {
+            if (match.bookList.entries.length >= 2) {
               for (let j = 0; j < 2; j++) {
-                books[j] = coverList[j].bookId;
+                books[j] = match.bookList.entries[j].bookId;
               }
             }
             matchInfo.books = books;
-             */
           }
 
           // updates name to solely include first name.
           if (match.name.split(' ').length > 1) {
             matchInfo.name = match.name.split(' ')[0];
           }
-          console.log(match);
 
           setMatches(prevState => {
             prevState.push(matchInfo);
