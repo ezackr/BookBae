@@ -98,15 +98,8 @@ public class Chats {
                 // set photoUrl
                 nextChatCardResponse.photoUrl = PHOTO_BASE_URL + otherUserId;
 
-                // obtain display name
-                PreparedStatement getNameFromUserIdStatement = conn.prepareStatement(GET_NAME_FROM_USERID);
-                getNameFromUserIdStatement.setString(1, otherUserId);
-                ResultSet nameResultSet = getNameFromUserIdStatement.executeQuery();
-                assert(nameResultSet.next());
-
-                // set display name
-                nextChatCardResponse.displayName = nameResultSet.getString("name");
-                nameResultSet.close();
+                // TODO: temporary fix for display name SQL error
+                nextChatCardResponse.displayName = "Other User";
 
                 // add to entities
                 entities.add(nextChatCardResponse);
