@@ -231,18 +231,22 @@ const ProfileCard = ({profile}) => {
   React.useEffect(() => {
     // load in data from profile when valid.
     console.log(profile);
+    // checks if profile is null.
     if (profile) {
+      // loops over AT MOST 2 books in profile.books
       for (let i = 0; i < 2 && i < profile.books.length; i++) {
-        if (profile.books[i]) {
+        try {
           axios
             .get(
               'https://www.googleapis.com/books/v1/volumes/' + profile.books[i],
             )
             .then(data => {
               let newBookList = bookList;
-              newBookList[i] = data.data;
+              newBookList[i] = data.data.volumeInfo.imageLinks.smallThumbnail;
               setBookList(newBookList);
             });
+        } catch (error) {
+          console.log(error);
         }
       }
       console.log(profile.books);
@@ -278,11 +282,18 @@ const ProfileCard = ({profile}) => {
  * BookItem to be put in display.
  */
 const BookItem = ({book}) => {
+  const [cover, setCover] = React.useState(null);
+
+  React.useEffect(() => {
+    console.log('hellO!');
+    console.log(book);
+  });
+
   return (
     <SafeAreaView>
       <Image
         style={matchStyles.book}
-        source={{uri: book.volumeInfo.imageLinks.smallThumbnail}}
+        source={{uri: book}}
       />
     </SafeAreaView>
   );
