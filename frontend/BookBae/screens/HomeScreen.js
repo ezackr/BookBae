@@ -40,7 +40,11 @@ const HomeScreen = ({navigation}) => {
     gender: '',
     bio: 'Try re-loading the app or come again later! \nCheck out some of our favorite books in the meantime:',
     favGenre: '',
-    books: ['tmNNfSkfTlcC', 'ZPD4DwAAQBAJ'],
+    books: [
+      // default cover links for "Design Patterns" and "The Anthropocene Reviewed"
+      'http://books.google.com/books/content?id=tmNNfSkfTlcC&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE71W9IUGyrL1thP-LPEsEi3H6vvCOF5Um7wV8xg8969MQeFRA7taYchYCh6tgtu2RczvrSoDYoAX6Dlm5-sNHpq2tzJoBmJi8P3Zs7KFV03-1HVFHqp7DsgHfmxS2_6HZRCgbg6A&source=gbs_api',
+      'http://books.google.com/books/publisher/content?id=ZPD4DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE73rvbRxqCCY7Oddo4zG0vGaY_SmuiM3_hen2TBKRa_aqMem38LpZIqZ5VWggsE9_yFLuGkEd8g5BsfWbMhffsoR6Wgj7mcnv2A7M7ZufvSt-aec1rvorwAOxtIxUPtFH-SLigKI&source=gbs_api',
+    ],
   };
   const [matches, setMatches] = React.useState([outOfMatches]); // list of matches.
 
@@ -65,9 +69,8 @@ const HomeScreen = ({navigation}) => {
             gender: '',
             bio: match.name + ' does not have a bio yet.',
             favGenre: 'N/A',
-            books: [],
+            books: ['../images/nobook.png', '../images/nobook.png'],
           };
-
           // add user profile parameters if possible.
           // adds age.
           if ('birthday' in match) {
@@ -90,21 +93,49 @@ const HomeScreen = ({navigation}) => {
           if ('favGenre' in match) {
             matchInfo.favGenre = match.favGenre;
           }
-          // adds books.
-          if ('books' in match) {
-            // matchInfo.books = match.books;
-          }
 
           // updates name to solely include first name.
           if (match.name.split(' ').length > 1) {
             matchInfo.name = match.name.split(' ')[0];
           }
 
-          // add new user data to the end of the array.
-          setMatches(prevState => {
-            prevState.push(matchInfo);
-            return [...prevState];
-          });
+          // handles adding books.
+          if ('books' in match) {
+            // matchInfo.books = match.books;
+            // add new user data to the end of the array.
+            let coverList = [];
+            for (let j = 0; j < 2 && j < match.books.length; i++) {
+              // try/catch block to set new book covers.
+              try {
+                // get new book.
+                axios
+                  .get(
+                    'https://www.googleapis.com/books/v1/volumes/' +
+                      match.books[i],
+                  )
+                  .then(bookData => {
+                    // add book to end of list.
+                    coverList[j] =
+                      bookData.data.volumeInfo.imageLinks.smallThumbnail;
+                  });
+              } catch (error) {
+                // log error if necessary
+                console.log(error);
+              }
+            }
+            matchInfo.books = coverList;
+            setMatches(prevState => {
+              prevState.push(matchInfo);
+              return [...prevState];
+            });
+          } else {
+            // other option must be separate to avoid missing a promise.
+            // add new user data to the end of the array.
+            setMatches(prevState => {
+              prevState.push(matchInfo);
+              return [...prevState];
+            });
+          }
         }
       }
     });
@@ -229,28 +260,8 @@ const ProfileCard = ({profile}) => {
   const [bookList, setBookList] = React.useState([]);
 
   React.useEffect(() => {
-    // checks if profile is null.
     if (profile) {
-      // loops over AT MOST 2 books in profile.books
-      for (let i = 0; i < 2 && i < profile.books.length; i++) {
-        // try/catch block to set new book covers.
-        try {
-          // get new book.
-          axios
-            .get(
-              'https://www.googleapis.com/books/v1/volumes/' + profile.books[i],
-            )
-            .then(data => {
-              // add book to end of list.
-              let newBookList = bookList;
-              newBookList[i] = data.data.volumeInfo.imageLinks.smallThumbnail;
-              setBookList(newBookList);
-            });
-        } catch (error) {
-          // log error if necessary
-          console.log(error);
-        }
-      }
+      setBookList(profile.books);
     }
   }, [profile]);
 
