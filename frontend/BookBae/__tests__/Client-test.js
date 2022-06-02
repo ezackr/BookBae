@@ -245,13 +245,13 @@ describe('Client', () => {
         });
 
         test('returns book IDs as a list of strings', async () => {
-            mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(200, [{bookid: '1234'}, {bookid: '2345'}, {bookid: '3456'}]);
+            mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(200, {entries: [{bookId: '1234'}, {bookId: '2345'}, {bookId: '3456'}]});
             const books = await Client.getBooks();
             expect(books).toStrictEqual(['1234', '2345', '3456']);
         });
 
         test('returns empty list when there are no books', async () => {
-            mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(200, []);
+            mock.onGet(Client.ROOT_PATH + '/book/get').replyOnce(200, {entries: []});
             const books = await Client.getBooks();
             expect(books).toStrictEqual([]);
         });
@@ -268,17 +268,17 @@ describe('Client', () => {
             Client.authToken = 'myauthtoken';
             await Client.addBooks(['1234', '2345']);
             expect(mock.history.put[0].headers.Authorization).toBe('Bearer myauthtoken');
-            expect(mock.history.put[0].data).toBe(JSON.stringify([{bookid: '1234'}, {bookid: '2345'}]));
+            expect(mock.history.put[0].data).toBe(JSON.stringify({entries: [{bookId: '1234'}, {bookId: '2345'}]}));
         })
 
         test('returns updated book IDs as a list of strings', async () => {
-            mock.onPut(Client.ROOT_PATH + '/book/add').replyOnce(200, [{bookid: '1234'}, {bookid: '2345'}, {bookid: '3456'}]);
+            mock.onPut(Client.ROOT_PATH + '/book/add').replyOnce(200, {entries: [{bookId: '1234'}, {bookId: '2345'}, {bookId: '3456'}]});
             const books = await Client.addBooks([]);
             expect(books).toStrictEqual(['1234', '2345', '3456']);
         });
 
         test('returns empty list when there are no books', async () => {
-            mock.onPut(Client.ROOT_PATH + '/book/add').replyOnce(200, []);
+            mock.onPut(Client.ROOT_PATH + '/book/add').replyOnce(200, {entries: []});
             const books = await Client.addBooks([]);
             expect(books).toStrictEqual([]);
         });
@@ -295,17 +295,17 @@ describe('Client', () => {
             Client.authToken = 'myauthtoken';
             await Client.removeBooks(['1234', '2345']);
             expect(mock.history.put[0].headers.Authorization).toBe('Bearer myauthtoken');
-            expect(mock.history.put[0].data).toBe(JSON.stringify([{bookid: '1234'}, {bookid: '2345'}]));
+            expect(mock.history.put[0].data).toBe(JSON.stringify({entries: [{bookId: '1234'}, {bookId: '2345'}]}));
         })
 
         test('returns updated book IDs as a list of strings', async () => {
-            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(200, [{bookid: '1234'}, {bookid: '2345'}, {bookid: '3456'}]);
+            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(200, {entries: [{bookId: '1234'}, {bookId: '2345'}, {bookId: '3456'}]});
             const books = await Client.removeBooks([]);
             expect(books).toStrictEqual(['1234', '2345', '3456']);
         });
 
         test('returns empty list when there are no books', async () => {
-            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(200, []);
+            mock.onPut(Client.ROOT_PATH + '/book/remove').replyOnce(200, {entries: []});
             const books = await Client.removeBooks([]);
             expect(books).toStrictEqual([]);
         });
