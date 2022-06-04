@@ -3,6 +3,10 @@ package com.bookbae.server.security;
 import java.security.Principal;
 import io.jsonwebtoken.Claims;
 
+/**
+ * Provides an implementation of {@link java.security.Principal Principal}
+ * for {@link com.bookbae.server.security.JWTSecurityContext JWTSecurityContext} to construct.
+ */
 public class JWSBackedPrincipal implements Principal {
     String subject;
     public JWSBackedPrincipal(Claims claims) {

@@ -17,6 +17,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 
+/**
+ * Filters requests on bound root resource classes to reject them if they do not contain
+ * an appropriately set and valid JWT.
+ * @see com.bookbae.server.security.SecuredResource
+ */
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 @SecuredResource

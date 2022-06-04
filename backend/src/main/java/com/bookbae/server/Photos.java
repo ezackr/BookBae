@@ -18,8 +18,12 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.models.BlobHttpHeaders;
+import com.azure.storage.blob.models.AccessTier;
 import com.azure.storage.blob.specialized.AppendBlobClient;
 
+/**
+ * Allows a user to set their profile photo.
+ */
 @SecuredResource
 @Path("/photos")
 public class Photos {
